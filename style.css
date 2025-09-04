@@ -15,14 +15,26 @@ body {
 .stats{
     width: 15vw;
     height: 95vh;
-    display: grid;
+    display: block;
     border: 5px solid black;
     border-radius: 10px;
-    justify-items: center;
+    justify-items: left;
     padding: 2px;
     margin-right: 20px;
 }
-
+.stats div{
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+.stats-Container{
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 5px;
+}
+.statsIcons{
+    height: 1em;
+    width: 1em;
+}
 .top{
     width: 78vw;
     height: 95vh;
