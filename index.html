@@ -12,19 +12,38 @@
             <div class="stats">
                 <H3><u>Stats</u></H3>
                 <div class="containerSmFlex">
-                    <strong>Sessions Logged: </strong><span class="statSesh">0</span>
+                    <strong>Sessions Logged: </strong><span class="statSesh">0</span><br>
+                    <strong>Brain Time: </strong><span class="statSesh">0</span> minutes
                 </div>
-                <div class="containerSmFlex">
-                    <img src="./assets/BetaCoin.png" alt="Beta" class="coinsIcons">
-                    x<span class="coinsBeta">70</span>
+                <div class="stats-Container">
+                    <p><u>Energy</u></p>
+                    <div class="containerSmFlex">
+                        <strong>Beta Power: </strong>
+                        <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="powerBeta">0.0</span> kJ
+                    </div>
+                    <div class="containerSmFlex">                        
+                        <strong>Alpha Power: </strong>
+                        <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="powerAlpha">0.0</span> kJ
+                    </div>
+                    <div class="containerSmFlex">
+                        <strong>Theta Power: </strong>
+                        <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="powerTheta">0.0</span> kJ
+                    </div>
                 </div>
-                <div class="containerSmFlex">
-                    <img src="./assets/AlphaCoin.png" alt="Alpha" class="coinsIcons">
-                    x<span class="coinsAlpha">70</span>
-                </div>
-                <div class="containerSmFlex">
-                    <img src="./assets/ThetaCoin.png" alt="Theta" class="coinsIcons">
-                    x<span class="coinsTheta">70</span>
+                <div class="stats-Container">
+                    <p><u>Coins</u></p>
+                    <div class="containerSmFlex">
+                        <strong>Beta Coins: </strong>
+                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">70</span>
+                    </div>
+                    <div class="containerSmFlex">                        
+                        <strong>Alpha Coins: </strong>
+                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">70</span>
+                    </div>
+                    <div class="containerSmFlex">
+                        <strong>Theta Coins: </strong>
+                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">70</span>
+                    </div>
                 </div>
                 <div class="util-buttons">
                     <button class="util-button" onclick="save()">
@@ -51,21 +70,21 @@
                                 <div>
                                     <img src="./assets/BetaLeaf.png" alt="Beta" class="leafIcons" draggable="false">
                                 </div>
-                                <h5>Cost: <span class="costBeta">5</span></h5>
+                                <h5>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="costBeta">5</span></h5>
                             </div>
                             <div class="leaf" onclick="buyAlpha()">
                                 <h5>Current Boost: + <span class="boostAlphaVal">0</span>%</h5>
                                 <div>
                                     <img src="./assets/AlphaLeaf.png" alt="Alpha" class="leafIcons" draggable="false">
                                 </div>
-                                <h5>Cost: <span class="costAlpha">5</span></h5>
+                                <h5>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="costAlpha">5</span></h5>
                             </div>
                             <div class="leaf" onclick="buyTheta()">
                                 <h5>Current Boost: + <span class="boostThetaVal">0</span>%</h5>
                                 <div>
                                     <img src="./assets/ThetaLeaf.png" alt="Theta" class="leafIcons" draggable="false">
                                 </div>
-                                <h5>Cost: <span class="costTheta">5</span></h5>
+                                <h5>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="costTheta">5</span></h5>
                             </div>
                         </div>
                     </div>
@@ -125,7 +144,7 @@
                         <div>
                             <img src="./assets/BetaMint2.png" alt="Beta Mint" class="batIcons" draggable="false">
                             Consumes: 1W
-                            Produces: 1 Coin / 15 minutes
+                            Produces: 0.15 Coins / second
                         </div>
                         <div class="mintAction">
                             <div class="ContainerSmFlex">
@@ -144,7 +163,7 @@
                             </div>
                             <div class="mintCoins">
                                 <img src="./assets/BetaCoin.png" alt="Beta" class="coinsIcons">
-                                <h2>x<span class="coinsBeta">7</span></h2>
+                                <h2>x<span class="coinsBeta">70</span></h2>
                             </div>
                         </div>    
                     </div>
@@ -171,7 +190,7 @@
                             </div>
                             <div class="mintCoins">
                                 <img src="./assets/AlphaCoin.png" alt="Alpha" class="coinsIcons">
-                                <h2>x<span class="coinsAlpha">7</span></h2>
+                                <h2>x<span class="coinsAlpha">70</span></h2>
                             </div>
                         </div>    
                     </div>
@@ -198,7 +217,7 @@
                             </div>
                             <div class="mintCoins">
                                 <img src="./assets/ThetaCoin.png" alt="Theta" class="coinsIcons">
-                                <h2>x<span class="coinsTheta">7</span></h2>
+                                <h2>x<span class="coinsTheta">70</span></h2>
                             </div>
                         </div>    
                     </div>
