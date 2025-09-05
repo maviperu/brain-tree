@@ -34,15 +34,15 @@
                     <p><u>Coins</u></p>
                     <div class="containerSmFlex">
                         <strong>Beta Coins: </strong>
-                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">70</span>
+                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">7000</span>
                     </div>
                     <div class="containerSmFlex">                        
                         <strong>Alpha Coins: </strong>
-                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">70</span>
+                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">7000</span>
                     </div>
                     <div class="containerSmFlex">
                         <strong>Theta Coins: </strong>
-                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">70</span>
+                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">7000</span>
                     </div>
                 </div>
                 <div class="util-buttons">
@@ -65,26 +65,26 @@
                         <h3>Tree Upgrades</h3>
                         <p>Add leaves to your tree to get more out of each session!</p>
                         <div class="treeUpgrades">
-                            <div class="leaf" disbaled onclick="buyBeta()">
+                            <div class="leaf" onclick="buyBetaLeaf()">
                                 <h5>Current Boost: + <span class="boostBetaVal">0</span>%</h5>
                                 <div>
                                     <img src="./assets/BetaLeaf.png" alt="Beta" class="leafIcons" draggable="false">
                                 </div>
-                                <h5>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="costBeta">5</span></h5>
+                                <h5>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="costLeafBeta">5</span></h5>
                             </div>
-                            <div class="leaf" onclick="buyAlpha()">
+                            <div class="leaf" onclick="buyAlphaLeaf()">
                                 <h5>Current Boost: + <span class="boostAlphaVal">0</span>%</h5>
                                 <div>
                                     <img src="./assets/AlphaLeaf.png" alt="Alpha" class="leafIcons" draggable="false">
                                 </div>
-                                <h5>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="costAlpha">5</span></h5>
+                                <h5>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="costLeafAlpha">5</span></h5>
                             </div>
-                            <div class="leaf" onclick="buyTheta()">
+                            <div class="leaf" onclick="buyThetaLeaf()">
                                 <h5>Current Boost: + <span class="boostThetaVal">0</span>%</h5>
                                 <div>
                                     <img src="./assets/ThetaLeaf.png" alt="Theta" class="leafIcons" draggable="false">
                                 </div>
-                                <h5>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="costTheta">5</span></h5>
+                                <h5>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="costLeafTheta">5</span></h5>
                             </div>
                         </div>
                     </div>
@@ -106,9 +106,16 @@
                             <h3><span class="powerBeta">0.0</span> kJ</h3>
                             <br>
                             <h3>Capacity:</h3>
-                            <h3>y,yyy kJ</h3>
+                            <h3><span class="batCapBeta">100</span> kJ</h3>
                         </div>
-                        <div>[button]</div>
+                        <div class ="batCapUpgrades">
+                            <div>Capacity:<br>
+                            +100 kJ</div>
+                            <div class="batCap" onclick="buyBetaBatCap()">
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costBatCapBeta"> 500</span></h5>
+                            </div>
+                        </div>
                     </div>
                     <div class="batteryBin">
                         <div>
@@ -119,9 +126,16 @@
                             <h3><span class="powerAlpha">0.0</span> kJ</h3>
                             <br>
                             <h3>Capacity:</h3>
-                            <h3>y,yyy kJ</h3>
+                            <h3><span class="batCapAlpha">100</span> kJ</h3>
                         </div>
-                        <div>[button]</div>
+                        <div class ="batCapUpgrades">
+                            <div>Capacity:<br>
+                            +100 kJ</div>
+                            <div class="batCap" onclick="buyAlphaBatCap()">
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costBatCapAlpha"> 500</span></h5>
+                            </div>
+                        </div>
                     </div>
                     <div class="batteryBin">
                         <div>
@@ -132,9 +146,16 @@
                             <h3><span class="powerTheta">0.0</span> kJ</h3>
                             <br>
                             <h3>Capacity:</h3>
-                            <h3>y,yyy kJ</h3>
+                            <h3><span class="batCapTheta">100</span> kJ</h3>
                         </div>
-                        <div>[button]</div>
+                        <div class ="batCapUpgrades">
+                            <div>Capacity:<br>
+                            +100 kJ</div>
+                            <div class="batCap" onclick="buyThetaBatCap()">
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costBatCapTheta"> 500</span></h5>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="buildings">
@@ -163,7 +184,7 @@
                             </div>
                             <div class="mintCoins">
                                 <img src="./assets/BetaCoin.png" alt="Beta" class="coinsIcons">
-                                <h2>x<span class="coinsBeta">70</span></h2>
+                                <h2>x<span class="coinsBeta">7000</span></h2>
                             </div>
                         </div>    
                     </div>
@@ -190,7 +211,7 @@
                             </div>
                             <div class="mintCoins">
                                 <img src="./assets/AlphaCoin.png" alt="Alpha" class="coinsIcons">
-                                <h2>x<span class="coinsAlpha">70</span></h2>
+                                <h2>x<span class="coinsAlpha">7000</span></h2>
                             </div>
                         </div>    
                     </div>
@@ -217,7 +238,7 @@
                             </div>
                             <div class="mintCoins">
                                 <img src="./assets/ThetaCoin.png" alt="Theta" class="coinsIcons">
-                                <h2>x<span class="coinsTheta">70</span></h2>
+                                <h2>x<span class="coinsTheta">7000</span></h2>
                             </div>
                         </div>    
                     </div>

@@ -159,6 +159,33 @@ body {
 .batteryBin h3{
     margin:0px 0px 0px 0px;
 }
+.batCapUpgrades {
+    display: grid;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px;
+}
+.batCap {
+    border: 3px solid black;
+    border-radius: 10px;
+    justify-items: center;
+    margin: 10px 3px 0px 3px;
+    padding: 4px;
+
+    position: relative;
+    text-align: center;
+}
+.batCap:hover{
+    opacity: .8;
+    cursor: pointer;
+}
+.batCap:active{
+    opacity: 1;
+    scale: .9
+}
+.batCap h5{
+    margin: 0px;
+}
 .batTick{
     display: block;
     width: 5px;
