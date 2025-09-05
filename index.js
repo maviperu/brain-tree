@@ -13,10 +13,16 @@ let getThetaPower = document.querySelector('.powerTheta')
 let jspowerBeta = parseFloat(getBetaPower.innerHTML)*1000
 let jspowerAlpha = parseFloat(getAlphaPower.innerHTML)*1000
 let jspowerTheta = parseFloat(getThetaPower.innerHTML)*1000
+let getBetaBatCap = document.querySelector('.batCapBeta')
+let getAlphaBatCap = document.querySelector('.batCapAlpha')
+let getThetaBatCap = document.querySelector('.batCapTheta')
+let jsbatCapBeta = parseFloat(getBetaBatCap.innerHTML)
+let jsbatCapAlpha = parseFloat(getAlphaBatCap.innerHTML)
+let jsbatCapTheta = parseFloat(getThetaBatCap.innerHTML)
 
 let getAllBetaCoins = document.querySelectorAll('.coinsBeta')
-let getAllAlphaCoins = document.querySelectorAll('.coinsBeta')
-let getAllThetaCoins = document.querySelectorAll('.coinsBeta')
+let getAllAlphaCoins = document.querySelectorAll('.coinsAlpha')
+let getAllThetaCoins = document.querySelectorAll('.coinsTheta')
 let getBetaCoins = document.querySelector('.coinsBeta')
 let getAlphaCoins = document.querySelector('.coinsAlpha')
 let getThetaCoins = document.querySelector('.coinsTheta')
@@ -24,16 +30,26 @@ let jscoinsBeta = parseFloat(getBetaCoins.innerHTML)
 let jscoinsAlpha = parseFloat(getAlphaCoins.innerHTML)
 let jscoinsTheta = parseFloat(getThetaCoins.innerHTML)
 
-let getBetaCost = document.querySelector('.costBeta')
-let getAlphaCost = document.querySelector('.costAlpha')
-let getThetaCost = document.querySelector('.costTheta')
-let jsCostBeta = parseFloat(getBetaCost.innerHTML)
-let jsCostAlpha = parseFloat(getAlphaCost.innerHTML)
-let jsCostTheta = parseFloat(getThetaCost.innerHTML)
+let getBetaLeafCost = document.querySelector('.costLeafBeta')
+let getAlphaLeafCost = document.querySelector('.costLeafAlpha')
+let getThetaLeafCost = document.querySelector('.costLeafTheta')
+let jsLeafCostBeta = parseFloat(getBetaLeafCost.innerHTML)
+let jsLeafCostAlpha = parseFloat(getAlphaLeafCost.innerHTML)
+let jsLeafCostTheta = parseFloat(getThetaLeafCost.innerHTML)
+let getBetaBatCapCost = document.querySelector('.costBatCapBeta')
+let getAlphaBatCapCost = document.querySelector('.costBatCapAlpha')
+let getThetaBatCapCost = document.querySelector('.costBatCapTheta')
+let jsBatCapCostBeta = parseFloat(getBetaBatCapCost.innerHTML)
+let jsBatCapCostAlpha = parseFloat(getAlphaBatCapCost.innerHTML)
+let jsBatCapCostTheta = parseFloat(getThetaBatCapCost.innerHTML)
 
-let rateCostGrowth = 1.07
-let baseCost = 5
-let baseProdBoost = 2
+let rateLeafCostGrowth = 1.07
+let baseLeafCost = 5
+let baseLeafProdBoost = 2
+
+let rateBatCapCostGrowth = 2
+let baseBatCapCost = 500
+let baseBatCapBoost = 100
 
 let getBetaBoostVal = document.querySelector('.boostBetaVal')
 let getAlphaBoostVal = document.querySelector('.boostAlphaVal')
@@ -41,55 +57,42 @@ let getThetaBoostVal = document.querySelector('.boostThetaVal')
 let boostLvlBeta = 0
 let boostLvlAlpha = 0
 let boostLvlTheta = 0
+let batCapLvlBeta = 0
+let batCapLvlAlpha = 0
+let batCapLvlTheta = 0
 
+console.log(jscoinsBeta)
+console.log(jsBatCapCostBeta)
+console.log(jscoinsAlpha)
+console.log(jsBatCapCostAlpha)
+console.log(jscoinsTheta)
+console.log(jsBatCapCostTheta)
 
-
-
-
-
-const leafType = [
-    {
-    wave: "Beta"
-    }
-]
-
-console.log(leafType[0])
-
-
-/*
-getBetaPower.forEach(function(upd) {
-    upd.innerHTML = 99
-})*/
 
 function setAllInners(thingToSet,mathToDo) {
     thingToSet.forEach(function(i) {
         i.innerHTML = mathToDo
     })
 }
-/*let jpB = 0
-console.log(typeof jpB,jpB)
-setAllInners(getBetaPower,jpB)*/
 
 function logSession() {
-    jspowerBeta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlBeta*baseProdBoost/100))*1000)
+    jspowerBeta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
     let jpB = jspowerBeta / 1000
     setAllInners(getAllBetaPower,jpB)
     
-    jspowerAlpha += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlAlpha*baseProdBoost/100))*1000)
+    jspowerAlpha += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
     let jpA = jspowerAlpha / 1000
     setAllInners(getAllAlphaPower,jpA)
     
-    jspowerTheta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlTheta*baseProdBoost/100))*1000)
+    jspowerTheta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
     let jpT = jspowerTheta / 1000
     setAllInners(getAllThetaPower,jpT)
 
     jsstatSesh += 1
     getstatSesh.innerHTML = jsstatSesh
 }
-
 function logSessionFile(event) {
     let sesh = recordedSessions[jsstatSesh]
-
 
     if (sesh === undefined) {
         const x = Math.min(event.offsetX,140)
@@ -102,23 +105,21 @@ function logSessionFile(event) {
         div.classList.add("seshUndefined")
 
         timeout(   div)
-
     } else {
-        jspowerBeta += sesh.minsBeta*(1+(boostLvlBeta*baseProdBoost/100))*1000
+        jspowerBeta += sesh.minsBeta*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
 
-        jspowerAlpha += sesh.minsAlpha*(1+(boostLvlAlpha*baseProdBoost/100))*1000
+        jspowerAlpha += sesh.minsAlpha*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
 
-        jspowerTheta += sesh.minsTheta*(1+(boostLvlTheta*baseProdBoost/100))*1000
+        jspowerTheta += sesh.minsTheta*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
         
         jsstatSesh += 1
         getstatSesh.innerHTML = jsstatSesh
-    
     }
 }
 
@@ -128,7 +129,7 @@ const timeout = (div) => {
     }, 2900)
 }
 
-
+/*
 function convertToCoins() {
     jscoinsBeta += Math.floor(jspowerBeta/1000)
     setAllInners(getAllBetaCoins,jscoinsBeta)
@@ -149,41 +150,76 @@ function convertToCoins() {
     let jpT = jspowerTheta / 1000
     setAllInners(getAllThetaPower,jpT)
 }
+*/
 
-function buyLeaf(leafType){
-
-}
-function buyBeta() {
-    if (jspowerBeta >= (jsCostBeta*1000)) {
+function buyBetaLeaf() {
+    if (jspowerBeta >= (jsLeafCostBeta*1000)) {
         boostLvlBeta += 1
-        jspowerBeta -= (jsCostBeta*1000)
-        jsCostBeta = Math.round(baseCost*(rateCostGrowth**boostLvlBeta))
-        getBetaCost.innerHTML = jsCostBeta
+        jspowerBeta -= (jsLeafCostBeta*1000)
+        jsLeafCostBeta = Math.round(baseLeafCost*(rateBatCapCostGrowth**boostLvlBeta))
+        getBetaLeafCost.innerHTML = jsLeafCostBeta
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
-        getBetaBoostVal.innerHTML = (boostLvlBeta*baseProdBoost)
+        getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
     }
 }
-function buyAlpha() {
-    if (jspowerAlpha >= (jsCostAlpha*1000)) {
+function buyAlphaLeaf() {
+    if (jspowerAlpha >= (jsLeafCostAlpha*1000)) {
         boostLvlAlpha += 1
-        jspowerAlpha -= (jsCostAlpha*1000)
-        jsCostAlpha = Math.round(baseCost*(rateCostGrowth**boostLvlAlpha))
-        getAlphaCost.innerHTML = jsCostAlpha
+        jspowerAlpha -= (jsLeafCostAlpha*1000)
+        jsLeafCostAlpha = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvlAlpha))
+        getAlphaLeafCost.innerHTML = jsLeafCostAlpha
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
-        getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseProdBoost)
+        getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
     }
 }
-function buyTheta() {
-    if (jspowerTheta >= (jsCostTheta*1000)) {
+function buyThetaLeaf() {
+    if (jspowerTheta >= (jsLeafCostTheta*1000)) {
         boostLvlTheta += 1
-        jspowerTheta -= (jsCostTheta*1000)
-        jsCostTheta = Math.round(baseCost*(rateCostGrowth**boostLvlTheta))
-        getThetaCost.innerHTML = jsCostTheta
+        jspowerTheta -= (jsLeafCostTheta*1000)
+        jsLeafCostTheta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvlTheta))
+        getThetaLeafCost.innerHTML = jsLeafCostTheta
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
-        getThetaBoostVal.innerHTML = (boostLvlTheta*baseProdBoost)
+        getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
+    }
+}
+
+function buyBetaBatCap() {
+    if(jscoinsBeta >= jsBatCapCostBeta) {
+        batCapLvlBeta += 1
+        jscoinsBeta -= jsBatCapCostBeta
+        jsbatCapBeta += baseBatCapBoost
+        getBetaBatCap.innerHTML = jsbatCapBeta
+        jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
+        getBetaBatCapCost.innerHTML = jsBatCapCostBeta
+        let jcB = jscoinsBeta
+        setAllInners(getAllBetaCoins,jcB)
+    }
+}
+function buyAlphaBatCap() {
+    if(jscoinsAlpha >= jsBatCapCostAlpha) {
+        batCapLvlAlpha += 1
+        jscoinsAlpha -= jsBatCapCostAlpha
+        jsbatCapAlpha += baseBatCapBoost
+        getAlphaBatCap.innerHTML = jsbatCapAlpha
+        jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
+        getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
+        let jcA = jscoinsAlpha
+        setAllInners(getAllAlphaCoins,jcA)
+    }
+}
+function buyThetaBatCap() {
+    if(jscoinsTheta >= jsBatCapCostTheta) {
+        batCapLvlTheta += 1
+        jscoinsTheta -= jsBatCapCostTheta
+        jsbatCapTheta += baseBatCapBoost
+        getThetaBatCap.innerHTML = jsbatCapTheta
+        jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
+        getThetaBatCapCost.innerHTML = jsBatCapCostTheta
+        let jcT = jscoinsTheta
+        setAllInners(getAllThetaCoins,jcT)
     }
 }
 
@@ -242,7 +278,7 @@ setInterval(() => {
         }
     }
 },1000)
-console.log(localStorage)
+
 function save() {
     localStorage.clear()
 
@@ -253,9 +289,9 @@ function save() {
     localStorage.setItem("jscoinsBeta",JSON.stringify(jscoinsBeta))
     localStorage.setItem("jscoinsAlpha",JSON.stringify(jscoinsAlpha))
     localStorage.setItem("jscoinsTheta",JSON.stringify(jscoinsTheta))
-    localStorage.setItem("jsCostBeta",JSON.stringify(jsCostBeta))
-    localStorage.setItem("jsCostAlpha",JSON.stringify(jsCostAlpha))
-    localStorage.setItem("jsCostTheta",JSON.stringify(jsCostTheta))
+    localStorage.setItem("jsLeafCostBeta",JSON.stringify(jsLeafCostBeta))
+    localStorage.setItem("jsLeafCostAlpha",JSON.stringify(jsLeafCostAlpha))
+    localStorage.setItem("jsLeafCostTheta",JSON.stringify(jsLeafCostTheta))
     localStorage.setItem("boostLvlBeta",JSON.stringify(boostLvlBeta))
     localStorage.setItem("boostLvlAlpha",JSON.stringify(boostLvlAlpha))
     localStorage.setItem("boostLvlTheta",JSON.stringify(boostLvlTheta))
@@ -265,7 +301,6 @@ function save() {
 
 console.log(localStorage)
 }
- 
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
     jspowerBeta = JSON.parse(localStorage.getItem("jspowerBeta"))
@@ -274,9 +309,9 @@ function load() {
     jscoinsBeta = JSON.parse(localStorage.getItem("jscoinsBeta"))
     jscoinsAlpha = JSON.parse(localStorage.getItem("jscoinsAlpha"))
     jscoinsTheta = JSON.parse(localStorage.getItem("jscoinsTheta"))
-    jsCostBeta = JSON.parse(localStorage.getItem("jsCostBeta"))
-    jsCostAlpha = JSON.parse(localStorage.getItem("jsCostAlpha"))
-    jsCostTheta = JSON.parse(localStorage.getItem("jsCostTheta"))
+    jsLeafCostBeta = JSON.parse(localStorage.getItem("jsLeafCostBeta"))
+    jsLeafCostAlpha = JSON.parse(localStorage.getItem("jsLeafCostAlpha"))
+    jsLeafCostTheta = JSON.parse(localStorage.getItem("jsLeafCostTheta"))
     boostLvlBeta = JSON.parse(localStorage.getItem("boostLvlBeta"))
     boostLvlAlpha = JSON.parse(localStorage.getItem("boostLvlAlpha"))
     boostLvlTheta = JSON.parse(localStorage.getItem("boostLvlTheta"))
@@ -296,19 +331,22 @@ function load() {
     setAllInners(getAllBetaCoins,jscoinsBeta)
     setAllInners(getAllAlphaCoins,jscoinsAlpha)
     setAllInners(getAllThetaCoins,jscoinsTheta)
-    getBetaCost.innerHTML = jsCostBeta
-    getAlphaCost.innerHTML = jsCostAlpha
-    getThetaCost.innerHTML = jsCostTheta
-    getBetaBoostVal.innerHTML = (boostLvlBeta*baseProdBoost)
-    getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseProdBoost)
-    getThetaBoostVal.innerHTML = (boostLvlTheta*baseProdBoost)
+    getBetaLeafCost.innerHTML = jsLeafCostBeta
+    getAlphaLeafCost.innerHTML = jsLeafCostAlpha
+    getThetaLeafCost.innerHTML = jsLeafCostTheta
+    getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
+    getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
+    getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
 }
 
 window.logSession = logSession
 window.logSessionFile = logSessionFile
-window.convertToCoins = convertToCoins
-window.buyBeta = buyBeta
-window.buyAlpha = buyAlpha
-window.buyTheta = buyTheta
+//window.convertToCoins = convertToCoins
+window.buyBetaLeaf = buyBetaLeaf
+window.buyAlphaLeaf = buyAlphaLeaf
+window.buyThetaLeaf = buyThetaLeaf
+window.buyBetaBatCap = buyBetaBatCap
+window.buyAlphaBatCap = buyAlphaBatCap
+window.buyThetaBatCap = buyThetaBatCap
 window.save = save
 window.load = load
