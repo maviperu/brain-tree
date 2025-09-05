@@ -1,0 +1,4 @@
+brainwavelogger/__pycache__/
+.vscode/
+tests/__pycache__/
+src.egg-info/
