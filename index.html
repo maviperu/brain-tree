@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width", initial-scale=1.0>
-    <title>Focus Synthesis</title>
+    <title>Brain Tree</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <section>
         <div class="main">
+            <!--STATS WINDOW-->
             <div class="stats">
                 <H3><u>Stats</u></H3>
                 <div class="containerSmFlex">
@@ -29,6 +30,9 @@
                         <strong>Theta Power: </strong>
                         <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="powerTheta">0.0</span> kJ
                     </div>
+                    <button class="util-button" onclick="logSession()">
+                        Debug +Energy
+                    </button>
                 </div>
                 <div class="stats-Container">
                     <p><u>Coins</u></p>
@@ -53,13 +57,17 @@
                         Load
                     </button>
                 </div>
+                
             </div>
             <div class="top">
+                <!--TREE BUILDING-->
                 <div class="buildings">
                     <H3>Brainwave Tree</H3>
-                    <div class="TreeButton" onclick="logSession()">
-                        <img src="./assets/TreeButton.png" alt="Synthesize" class="TreeIcon" draggable="false">
-                        <h5>Click to convert a Session's Brainpower to Energy</h5>
+                    <div class="TreeButtonContainer">
+                        <div class="TreeButton" onclick="logSessionFile(event)">
+                            <img src="./assets/TreeButton.png" alt="Synthesize" class="TreeIcon" draggable="false">
+                            <h5>Click to convert a Session's Brainpower to Energy</h5>
+                        </div>
                     </div>
                     <div class="treeUpgradeBin">
                         <h3>Tree Upgrades</h3>
@@ -88,15 +96,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="fileButtonContainer">
-                        <div class="fileButton" onclick="logSessionFile(event)">
-                            <h5>Click for Energy from File</h5>
-                        </div>
-                    </div>
                 </div>
+                <!--BATTERY BUILDING-->
                 <div class="buildings">
                     <H3>Batteries</H3>
                     <p>Batteries store Brainpower as Energy, but have a limited Capacity</p>
+                    <div class="batteryBin">
+                        <h5>Manual Labor: create a tiny amount of energy by turning this crank!</h5>
+                        <img src="./assets/crank.png" class="crank" id="crankbutton" onclick="rotateCrank()">
+                        <div class="crankIndicator">
+                            <div class="indicatorLight"></div>
+                            <div class="indicatorLight"></div>
+                            <div class="indicatorLight"></div>
+                            <div class="indicatorLight"></div>
+                            <div class="indicatorLight"></div>
+                            <div class="indicatorLight"></div>
+                        </div>
+                    </div>
                     <div class="batteryBin">
                         <div>
                             <img src="./assets/BetaBattery.png" alt="Beta" class="batIcons" draggable="false">
@@ -158,6 +174,7 @@
                         </div>
                     </div>
                 </div>
+                <!--MINT BUILDING-->
                 <div class="buildings">
                     <H3>Mints</H3>
                     <p>Mints convert Energy to Currency over time!</p>
@@ -243,11 +260,12 @@
                         </div>    
                     </div>
                 </div>
-                <div class="buildings">
+                 <!--TEMP BUILDING-->
+<!--                <div class="buildings">
                     <p>asdf</p>
                     <img src="./assets/TreeButton.png" alt="Synthesize" class="TreeIcon" draggable="false">
-                </div>
-            </div>
+                </div> -->
+            </div> 
         </div>
     </section>
 

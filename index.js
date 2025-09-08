@@ -2,7 +2,7 @@ import {recordedSessions} from "./sessions.js";
 
 let getstatSesh = document.querySelector('.statSesh')
 let jsstatSesh = parseFloat(getstatSesh.innerHTML)
-let jsFileButton = document.querySelector('.fileButtonContainer')
+let jsFileButton = document.querySelector('.TreeButtonContainer')
 
 let getAllBetaPower = document.querySelectorAll('.powerBeta')
 let getAllAlphaPower = document.querySelectorAll('.powerAlpha')
@@ -61,12 +61,7 @@ let batCapLvlBeta = 0
 let batCapLvlAlpha = 0
 let batCapLvlTheta = 0
 
-console.log(jscoinsBeta)
-console.log(jsBatCapCostBeta)
-console.log(jscoinsAlpha)
-console.log(jsBatCapCostAlpha)
-console.log(jscoinsTheta)
-console.log(jsBatCapCostTheta)
+
 
 
 function setAllInners(thingToSet,mathToDo) {
@@ -96,15 +91,15 @@ function logSessionFile(event) {
 
     if (sesh === undefined) {
         const x = Math.min(event.offsetX,140)
-        const y = Math.min(event.offsetY,50)
-
+        const y = Math.min(event.offsetY,305)
+        
         const div = document.createElement("div")
         div.innerHTML = "No Session to Log!"
         div.style.cssText = `color: red; position: absolute; top: ${y}px; left: ${x}px; pointer-events: none;`
         jsFileButton.appendChild(div)
         div.classList.add("seshUndefined")
 
-        timeout(   div)
+        timeout(div,2800)
     } else {
         jspowerBeta += sesh.minsBeta*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000
         let jpB = jspowerBeta / 1000
@@ -123,10 +118,22 @@ function logSessionFile(event) {
     }
 }
 
-const timeout = (div) => {
+const timeout = (div,time) => {
     setTimeout(() => {
         div.remove()
-    }, 2900)
+    }, time)
+}
+
+function crankPower(be,al,th) {
+    jspowerBeta += be
+    jspowerAlpha += al
+    jspowerTheta += th
+    let jpB = jspowerBeta / 1000
+    let jpA = jspowerAlpha / 1000
+    let jpT = jspowerTheta / 1000
+    setAllInners(getAllBetaPower,jpB)
+    setAllInners(getAllAlphaPower,jpA)
+    setAllInners(getAllThetaPower,jpT)
 }
 
 /*
@@ -339,8 +346,43 @@ function load() {
     getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
 }
 
+let jsCrankNum = 0
+let cranking = 0
+let fillBar = document.querySelectorAll('.indicatorLight')
+let segment = 6
+
+function rotateCrank() {
+    if (cranking == 0) {
+        cranking += 1
+        let testcrank = document.getElementById('crankbutton');
+        testcrank.classList.add("crankRot");
+        
+        jsCrankNum += 1
+        if (jsCrankNum < 7) {
+            let activeSegment = segment-jsCrankNum
+            fillBar[activeSegment].classList.add("active")
+        } else {
+            jsCrankNum = 0
+            crankPower(5,5,5)
+            fillBar.forEach(function(i) {
+                i.classList.remove("active")
+            })
+        }
+
+        setTimeout(() => {
+            testcrank.classList.remove("crankRot");
+            cranking = 0
+        }, 250)
+
+    }
+}
+
+window.rotateCrank = rotateCrank
+
+
 window.logSession = logSession
 window.logSessionFile = logSessionFile
+window.crankPower = crankPower
 //window.convertToCoins = convertToCoins
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
