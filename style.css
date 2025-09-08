@@ -62,6 +62,9 @@ body {
     width: 256px;
     height: auto;
 }
+.TreeButtonContainer{
+    position: relative;
+}
 .TreeButton{
     width: 256px;
     height: auto;
@@ -99,24 +102,7 @@ body {
     margin-top: 0px;
     margin-bottom: 0px;
 }
-.fileButton {
-    width: 256px;
-    height: auto;
-    border: 3px solid black;
-    border-radius: 10px;
-    justify-items: center;
-    margin: 0px 5px 0px 5px;
-    padding: 4px;
-    text-align: center;
-}
-.fileButton:hover {
-    opacity: .8;
-    cursor: pointer;
-}
-.fileButton:active {
-    opacity: 1;
-    scale: .9
-}
+
 .leafIcons{
     width: 48px;
     height: 48px;
@@ -142,6 +128,35 @@ body {
 .leaf:active{
     opacity: 1;
     scale: .9
+}
+
+.crank {
+    height: 48px;
+    width: 48px;
+    transform: rotate(0deg);
+}
+.crankRot {
+    transform: rotate(360deg);
+    transition: .25s linear;
+}
+.crankIndicator {
+    display: grid;
+    height: 36px;
+    width: 6px;
+    border: 2px solid black;
+    padding: 0px;
+    margin-left: 4px;
+}
+.indicatorLight {
+    height: 4px;
+    width: 4px;
+    border: 1px solid black;
+    padding: 0px;
+    margin: 0px;
+    background-color: lightgrey;
+}
+.indicatorLight.active {
+    background-color: red;
 }
 
 .batteryBin{
@@ -344,10 +359,7 @@ input:checked + .slider:before {
     90% {opacity: .1;}
     100% {opacity: .0;}
 }
-.fileButtonContainer{
-    position: relative;
 
-}
 
 .ContainerSmFlex{
     display: flex;
@@ -357,9 +369,6 @@ input:checked + .slider:before {
     display: grid;
     justify-items: center;
 }
-
-
-
 
 
 .testbinflex{
