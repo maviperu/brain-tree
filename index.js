@@ -136,6 +136,36 @@ function crankPower(be,al,th) {
     setAllInners(getAllThetaPower,jpT)
 }
 
+let jsCrankNum = 0
+let cranking = 0
+let fillBar = document.querySelectorAll('.indicatorLight')
+let segment = 6
+function rotateCrank() {
+    if (cranking == 0) {
+        cranking += 1
+        let crankIsCranking = document.getElementById('crankbutton');
+        crankIsCranking.classList.add("crankRot");
+        
+        jsCrankNum += 1
+        if (jsCrankNum < 7) {
+            let activeSegment = segment-jsCrankNum
+            fillBar[activeSegment].classList.add("active")
+        } else {
+            jsCrankNum = 0
+            crankPower(5,5,5)
+            fillBar.forEach(function(i) {
+                i.classList.remove("active")
+            })
+        }
+
+        setTimeout(() => {
+            crankIsCranking.classList.remove("crankRot");
+            cranking = 0
+        }, 250)
+
+    }
+}
+
 /*
 function convertToCoins() {
     jscoinsBeta += Math.floor(jspowerBeta/1000)
@@ -163,7 +193,7 @@ function buyBetaLeaf() {
     if (jspowerBeta >= (jsLeafCostBeta*1000)) {
         boostLvlBeta += 1
         jspowerBeta -= (jsLeafCostBeta*1000)
-        jsLeafCostBeta = Math.round(baseLeafCost*(rateBatCapCostGrowth**boostLvlBeta))
+        jsLeafCostBeta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvlBeta))
         getBetaLeafCost.innerHTML = jsLeafCostBeta
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
@@ -197,7 +227,7 @@ function buyBetaBatCap() {
     if(jscoinsBeta >= jsBatCapCostBeta) {
         batCapLvlBeta += 1
         jscoinsBeta -= jsBatCapCostBeta
-        jsbatCapBeta += baseBatCapBoost
+        jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
         getBetaBatCap.innerHTML = jsbatCapBeta
         jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
         getBetaBatCapCost.innerHTML = jsBatCapCostBeta
@@ -209,7 +239,7 @@ function buyAlphaBatCap() {
     if(jscoinsAlpha >= jsBatCapCostAlpha) {
         batCapLvlAlpha += 1
         jscoinsAlpha -= jsBatCapCostAlpha
-        jsbatCapAlpha += baseBatCapBoost
+        jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
         getAlphaBatCap.innerHTML = jsbatCapAlpha
         jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
         getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
@@ -221,7 +251,7 @@ function buyThetaBatCap() {
     if(jscoinsTheta >= jsBatCapCostTheta) {
         batCapLvlTheta += 1
         jscoinsTheta -= jsBatCapCostTheta
-        jsbatCapTheta += baseBatCapBoost
+        jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
         getThetaBatCap.innerHTML = jsbatCapTheta
         jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
         getThetaBatCapCost.innerHTML = jsBatCapCostTheta
@@ -229,7 +259,6 @@ function buyThetaBatCap() {
         setAllInners(getAllThetaCoins,jcT)
     }
 }
-
 
 //This is the conversion timer between power and coins
 let sliderBeta = document.getElementById("sliderBeta");
@@ -293,6 +322,7 @@ function save() {
     localStorage.setItem("jspowerBeta",JSON.stringify(jspowerBeta))
     localStorage.setItem("jspowerAlpha",JSON.stringify(jspowerAlpha))
     localStorage.setItem("jspowerTheta",JSON.stringify(jspowerTheta))
+    localStorage.setItem("jsCrankNum",JSON.stringify(jsCrankNum))
     localStorage.setItem("jscoinsBeta",JSON.stringify(jscoinsBeta))
     localStorage.setItem("jscoinsAlpha",JSON.stringify(jscoinsAlpha))
     localStorage.setItem("jscoinsTheta",JSON.stringify(jscoinsTheta))
@@ -302,6 +332,12 @@ function save() {
     localStorage.setItem("boostLvlBeta",JSON.stringify(boostLvlBeta))
     localStorage.setItem("boostLvlAlpha",JSON.stringify(boostLvlAlpha))
     localStorage.setItem("boostLvlTheta",JSON.stringify(boostLvlTheta))
+    localStorage.setItem("batCapLvlBeta",JSON.stringify(batCapLvlBeta))
+    localStorage.setItem("batCapLvlAlpha",JSON.stringify(batCapLvlAlpha))
+    localStorage.setItem("batCapLvlTheta",JSON.stringify(batCapLvlTheta))
+    localStorage.setItem("sliderBeta",JSON.stringify(sliderBeta.checked))
+    localStorage.setItem("sliderAlpha",JSON.stringify(sliderAlpha.checked))
+    localStorage.setItem("sliderTheta",JSON.stringify(sliderTheta.checked))
     localStorage.setItem("craftBeta",JSON.stringify(craftBeta))
     localStorage.setItem("craftAlpha",JSON.stringify(craftAlpha))
     localStorage.setItem("craftTheta",JSON.stringify(craftTheta))
@@ -313,6 +349,7 @@ function load() {
     jspowerBeta = JSON.parse(localStorage.getItem("jspowerBeta"))
     jspowerAlpha = JSON.parse(localStorage.getItem("jspowerAlpha"))
     jspowerTheta = JSON.parse(localStorage.getItem("jspowerTheta"))
+    jsCrankNum = JSON.parse(localStorage.getItem("jsCrankNum"))
     jscoinsBeta = JSON.parse(localStorage.getItem("jscoinsBeta"))
     jscoinsAlpha = JSON.parse(localStorage.getItem("jscoinsAlpha"))
     jscoinsTheta = JSON.parse(localStorage.getItem("jscoinsTheta"))
@@ -322,11 +359,25 @@ function load() {
     boostLvlBeta = JSON.parse(localStorage.getItem("boostLvlBeta"))
     boostLvlAlpha = JSON.parse(localStorage.getItem("boostLvlAlpha"))
     boostLvlTheta = JSON.parse(localStorage.getItem("boostLvlTheta"))
+    batCapLvlBeta = JSON.parse(localStorage.getItem("batCapLvlBeta"))
+    batCapLvlAlpha = JSON.parse(localStorage.getItem("batCapLvlAlpha"))
+    batCapLvlTheta = JSON.parse(localStorage.getItem("batCapLvlTheta"))
+    sliderBeta.checked = JSON.parse(localStorage.getItem("sliderBeta"))
+    sliderAlpha.checked = JSON.parse(localStorage.getItem("sliderAlpha"))
+    sliderTheta.checked = JSON.parse(localStorage.getItem("sliderTheta"))
     craftBeta = JSON.parse(localStorage.getItem("craftBeta"))
     craftAlpha = JSON.parse(localStorage.getItem("craftAlpha"))
     craftTheta = JSON.parse(localStorage.getItem("craftTheta"))
 
     getstatSesh.innerHTML = jsstatSesh
+
+    let n=0
+    fillBar.forEach(function(i) {
+        if (n >= (6-jsCrankNum)) {
+            i.classList.add("active")
+            } else {i.classList.remove("active")}
+        n += 1
+    })
 
     let jpB = jspowerBeta / 1000
     setAllInners(getAllBetaPower,jpB)
@@ -344,45 +395,29 @@ function load() {
     getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
     getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
     getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
+
+    jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
+    getBetaBatCap.innerHTML = jsbatCapBeta
+    jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
+    getBetaBatCapCost.innerHTML = jsBatCapCostBeta
+
+    jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
+    getAlphaBatCap.innerHTML = jsbatCapAlpha
+    jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
+    getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
+
+    jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
+    getThetaBatCap.innerHTML = jsbatCapTheta
+    jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
+    getThetaBatCapCost.innerHTML = jsBatCapCostTheta
 }
 
-let jsCrankNum = 0
-let cranking = 0
-let fillBar = document.querySelectorAll('.indicatorLight')
-let segment = 6
-
-function rotateCrank() {
-    if (cranking == 0) {
-        cranking += 1
-        let testcrank = document.getElementById('crankbutton');
-        testcrank.classList.add("crankRot");
-        
-        jsCrankNum += 1
-        if (jsCrankNum < 7) {
-            let activeSegment = segment-jsCrankNum
-            fillBar[activeSegment].classList.add("active")
-        } else {
-            jsCrankNum = 0
-            crankPower(5,5,5)
-            fillBar.forEach(function(i) {
-                i.classList.remove("active")
-            })
-        }
-
-        setTimeout(() => {
-            testcrank.classList.remove("crankRot");
-            cranking = 0
-        }, 250)
-
-    }
-}
-
-window.rotateCrank = rotateCrank
 
 
 window.logSession = logSession
 window.logSessionFile = logSessionFile
 window.crankPower = crankPower
+window.rotateCrank = rotateCrank
 //window.convertToCoins = convertToCoins
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
