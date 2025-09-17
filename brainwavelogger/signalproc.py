@@ -140,7 +140,7 @@ def butter_highpass_filter(data, cutoff, fs, order=5):
     return y
 
 
-def bandpass_filter(df, eeg_columns, sampling_rate, highcut=30, lowcut=0.5,
+def bandpass_filter(df, eeg_columns, sampling_rate, highcut=0.5, lowcut=30,
                     filter_order=5):
     """Band pass filter
 
@@ -148,10 +148,10 @@ def bandpass_filter(df, eeg_columns, sampling_rate, highcut=30, lowcut=0.5,
         df (dataframe): EEG data in dataframe (with other columns)
         eeg_columns (list): column names in dataframe to filter
         sampling_rate (float): sampling rate
-        highcut (int, optional): Up to which high frequencies we let pass. \
-            Defaults to 30.
-        lowcut (float, optional): What is the lowest frequency we let pass. \
+        highcut (int, optional): What is the lowerst frequency we let pass. \
             Defaults to 0.5.
+        lowcut (float, optional): What is the highest frequency we let pass. \
+            Defaults to 30.
         filter_order (int, optional): Filter order. Defaults to 5.
 
     Returns:
