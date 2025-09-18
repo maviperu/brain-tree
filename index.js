@@ -101,15 +101,15 @@ function logSessionFile(event) {
 
         timeout(div,2800)
     } else {
-        jspowerBeta += sesh.minsBeta*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000
+        jspowerBeta += Math.floor(sesh.minsBeta*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
 
-        jspowerAlpha += sesh.minsAlpha*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000
+        jspowerAlpha += Math.floor(sesh.minsAlpha*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
 
-        jspowerTheta += sesh.minsTheta*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000
+        jspowerTheta += Math.floor(sesh.minsTheta*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
         
@@ -166,28 +166,49 @@ function rotateCrank() {
     }
 }
 
-/*
-function convertToCoins() {
-    jscoinsBeta += Math.floor(jspowerBeta/1000)
-    setAllInners(getAllBetaCoins,jscoinsBeta)
-    jspowerBeta = jspowerBeta%1000
-
-    jscoinsAlpha += Math.floor(jspowerAlpha/1000)
-    setAllInners(getAllAlphaCoins,jscoinsAlpha)
-    jspowerAlpha = jspowerAlpha%1000
-
-    jscoinsTheta += Math.floor(jspowerTheta/1000)
-    setAllInners(getAllThetaCoins,jscoinsTheta)
-    jspowerTheta = jspowerTheta%1000
-
-    let jpB = jspowerBeta / 1000
-    setAllInners(getAllBetaPower,jpB)
-    let jpA = jspowerAlpha / 1000
-    setAllInners(getAllAlphaPower,jpA)
-    let jpT = jspowerTheta / 1000
-    setAllInners(getAllThetaPower,jpT)
+function makeLeaf(type) {
+    const reverse = Math.random() <.5
+    let angle = Math.floor(Math.random() * 15) - 30
+    
+    const img = document.createElement("img")
+    if (reverse === true) {
+        img.src =`./assets/${type}WillowLeaf.png`
+        img.style.transformOrigin = "top right"
+    } else {
+        img.src =`./assets/${type}WillowLeaf-r.png`
+        angle = Math.abs(angle)
+        img.style.transformOrigin = "top left"
+    }
+    img.classList.add("willowLeaf")
+    img.classList.add("willowLeafExpand")
+    img.style.transform = `rotate(${angle}deg)`
+    const src = document.getElementById(`leafGarden${type}`)
+    src.appendChild(img)
+    
 }
-*/
+function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
+    const cleanupB = document.getElementById('leafGardenBeta')
+    const cleanupA = document.getElementById('leafGardenAlpha')
+    const cleanupT = document.getElementById('leafGardenTheta')
+    while(cleanupB.firstChild){
+        cleanupB.removeChild(cleanupB.firstChild)
+    }
+    while(cleanupA.firstChild){
+        cleanupA.removeChild(cleanupA.firstChild)
+    }
+    while(cleanupT.firstChild){
+        cleanupT.removeChild(cleanupT.firstChild)
+    }
+    for (let i = 0; i < BetaVal; i++) {
+        makeLeaf("Beta")
+    }
+    for (let i = 0; i < AlphaVal; i++) {
+        makeLeaf("Alpha")
+    }
+    for (let i = 0; i < ThetaVal; i++) {
+        makeLeaf("Theta")
+    }
+}
 
 function buyBetaLeaf() {
     if (jspowerBeta >= (jsLeafCostBeta*1000)) {
@@ -198,6 +219,7 @@ function buyBetaLeaf() {
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
         getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
+        makeLeaf("Beta")
     }
 }
 function buyAlphaLeaf() {
@@ -209,6 +231,7 @@ function buyAlphaLeaf() {
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
         getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
+        makeLeaf("Alpha")
     }
 }
 function buyThetaLeaf() {
@@ -220,6 +243,7 @@ function buyThetaLeaf() {
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
         getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
+        makeLeaf("Theta")
     }
 }
 
@@ -395,6 +419,7 @@ function load() {
     getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
     getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
     getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
+    makeAllLeaves(boostLvlBeta,boostLvlAlpha,boostLvlTheta)
 
     jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
     getBetaBatCap.innerHTML = jsbatCapBeta
@@ -418,7 +443,8 @@ window.logSession = logSession
 window.logSessionFile = logSessionFile
 window.crankPower = crankPower
 window.rotateCrank = rotateCrank
-//window.convertToCoins = convertToCoins
+window.makeLeaf = makeLeaf
+window.makeAllLeaves = makeAllLeaves
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
 window.buyThetaLeaf = buyThetaLeaf
