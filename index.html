@@ -14,20 +14,20 @@
                 <H3><u>Stats</u></H3>
                 <div class="containerSmFlex">
                     <strong>Sessions Logged: </strong><span class="statSesh">0</span><br>
-                    <strong>Brain Time: </strong><span class="statSesh">0</span> minutes
+                    <strong>Brain Time: </strong><span class="statMins">0</span> minutes
                 </div>
                 <div class="stats-Container">
                     <p><u>Energy</u></p>
                     <div class="containerSmFlex">
-                        <strong>Beta Power: </strong>
+                        <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0.0</span>/s)<br>
                         <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="powerBeta">0.0</span> kJ
                     </div>
                     <div class="containerSmFlex">                        
-                        <strong>Alpha Power: </strong>
+                        <strong>Alpha Power: </strong> (<span class="kJpsAlpha rate">0.0</span>/s)<br>
                         <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="powerAlpha">0.0</span> kJ
                     </div>
                     <div class="containerSmFlex">
-                        <strong>Theta Power: </strong>
+                        <strong>Theta Power: </strong> (<span class="kJpsTheta rate">0.0</span>/s)<br>
                         <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="powerTheta">0.0</span> kJ
                     </div>
                     <button class="util-button" onclick="logSession()">
@@ -37,26 +37,29 @@
                 <div class="stats-Container">
                     <p><u>Mint</u></p>
                     <div class="mintAction">
+                        <span class="mintNums"><span class="mintNumBeta">1</span>x </span>
                         <img src="./assets/BetaWave.png" alt="Beta" class="statsIcons">
                         <label class="switch">
-                            <input type="checkbox" id="sliderBeta">
-                            <span class="slider Beta"></span>
+                            <input type="checkbox" id="mintBeta">
+                            <span class="mint Beta"></span>
                         </label>
                         <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons">
                     </div>
                     <div class="mintAction">
+                        <span class="mintNums"><span class="mintNumAlpha">1</span>x </span>
                         <img src="./assets/AlphaWave.png" alt="Alpha" class="statsIcons">
                         <label class="switch">
-                            <input type="checkbox" id="sliderAlpha">
-                            <span class="slider Alpha"></span>
+                            <input type="checkbox" id="mintAlpha">
+                            <span class="mint Alpha"></span>
                         </label>
                         <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons">
                     </div>
                     <div class="mintAction">
+                        <span class="mintNums"><span class="mintNumTheta">1</span>x </span>
                         <img src="./assets/ThetaWave.png" alt="Theta" class="statsIcons">
                         <label class="switch">
-                            <input type="checkbox" id="sliderTheta">
-                            <span class="slider Theta"></span>
+                            <input type="checkbox" id="mintTheta">
+                            <span class="mint Theta"></span>
                         </label>
                         <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons">
                     </div>
@@ -64,15 +67,15 @@
                 <div class="stats-Container">
                     <p><u>Coins</u></p>
                     <div class="containerSmFlex">
-                        <strong>Beta Coins: </strong>
+                        <strong>Beta Coins: </strong> (<span class="coinspsBeta rate">0.0</span>/s)<br>
                         <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">7000</span>
                     </div>
                     <div class="containerSmFlex">                        
-                        <strong>Alpha Coins: </strong>
+                        <strong>Alpha Coins: </strong> (<span class="coinspsAlpha rate">0.0</span>/s)<br>
                         <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">7000</span>
                     </div>
                     <div class="containerSmFlex">
-                        <strong>Theta Coins: </strong>
+                        <strong>Theta Coins: </strong> (<span class="coinspsTheta rate">0.0</span>/s)<br>
                         <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">7000</span>
                     </div>
                 </div>
@@ -147,7 +150,7 @@
                     </div>
                     <div class="batUpgradeBin">
                         <H3>Batteries</H3>
-                        <p>Batteries store Brainpower as Energy, but have a limited Capacity. Each upgrades gives +100 kJ</p>
+                        <p>Batteries store Brainpower as Energy, but have a limited Capacity. Each upgrade gives +100 kJ</p>
                         <div class="batteryUpgrades">
                             <div class="batCap" onclick="buyBetaBatCap()">
                                 <h5>Current Capacity: <span class="batCapBeta">100</span> kJ</h5>
@@ -177,14 +180,14 @@
                     </div>
                 </div>
                 
-                <div class="theGrid">
-                    <div ><img src="./assets/house4sm.png"></div>
-                    <div ><img src="./assets/building-BBat.png"></div>
-                    <div ><img src="./assets/house2sm.png"></div>
-                    <div ><img src="./assets/house4sm.png"></div>
-                    <div ><img src="./assets/building-ABat.png"></div>
-                    <div ><img src="./assets/building-TBat.png"></div>
-                    <div ><img src="./assets/house3sm.png"></div>
+                <div class="theGrid" id="theGrid">
+                    <div class="buildHov"><img  src="./assets/building-1House.png"><span class="buildTooltip">House</span></div>
+                    <div class="buildHov"><img  src="./assets/building-BetaBattery.png"><span class="buildTooltip">Battery</span></div>
+                    <div class="buildHov"><img  src="./assets/building-AlphaMint.png"><span class="buildTooltip">Mint</span></div>
+                    <div class="buildHov"><img  src="./assets/building-BetaMint.png"><span class="buildTooltip">Mint</span></div>
+                    <div class="buildHov"><img  src="./assets/building-AlphaBattery.png"><span class="buildTooltip">Battery</span></div>
+                    <div class="buildHov"><img  src="./assets/building-ThetaBattery.png"><span class="buildTooltip">Battery</span></div>
+                    <div class="buildHov"><img  src="./assets/building-ThetaMint.png"><span class="buildTooltip">Mint</span></div>
                     
                 </div>
             </div> 

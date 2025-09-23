@@ -1,7 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
 body {
     display: grid;
     background-color: PowderBlue;
     user-select: none;
+
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
 }
 
 .main{
@@ -13,7 +20,7 @@ body {
 }
 
 .stats{
-    width: 200px;
+    width: 224px;
     height: 95vh;
     display: block;
     border: 5px solid black;
@@ -27,6 +34,7 @@ body {
     margin-left: 10px;
 }
 .stats-Container{
+    width: 190px;
     border: 1px solid black;
     border-radius: 10px;
     padding: 5px;
@@ -307,17 +315,6 @@ body {
     margin-right: 5px;
 }
 
-.mintBin{
-    width: 280px;
-    display: grid;
-    border: 3px solid black;
-    border-radius: 10px;
-    justify-items: center;
-    margin: 5px 0px 5px 0px;
-    padding: 4px;
-    text-align: center;
-    align-items: center;
-}
 .mintIcons{
     width: 272px;
     height: auto;
@@ -328,7 +325,9 @@ body {
     align-items: center;
     justify-items: stretch;
     justify-content: space-between;
-    
+}
+.mintNums{
+    width: 3em;
 }
 .mintCoins{
     width: 108px;
@@ -344,7 +343,7 @@ body {
     height: 34px;
 }
 
-/* The switch - the box around the slider */
+/* The switch - the box around the mint slider */
 .switch {
   position: relative;
   display: inline-block;
@@ -357,8 +356,8 @@ body {
     width: 0;
     height: 0;
 }
-/* The slider */
-.slider {
+/* The mint slider */
+.mint {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -370,16 +369,16 @@ body {
     border: 1px solid grey;
     border-radius: 16px;
 }
-.slider.Beta {
+.mint.Beta {
     background-color: #f6ccaa;
 }
-.slider.Alpha {
+.mint.Alpha {
     background-color: #e7d98b;
 }
-.slider.Theta {
+.mint.Theta {
     background-color: #c5db85;
 }
-.slider:before {
+.mint:before {
     position: absolute;
     content: "";
     height: 8px;
@@ -391,19 +390,19 @@ body {
     transition: .4s;
     border-radius: 25px;
 }
-input:checked + .slider.Beta {
+input:checked + .mint.Beta {
     background-color: #f7770a;
 }
-input:checked + .slider.Alpha {
+input:checked + .mint.Alpha {
     background-color: #dcbd00;
 }
-input:checked + .slider.Theta {
+input:checked + .mint.Theta {
     background-color: #92bc1e;
 }
-input:focus + .slider {
+input:focus + .mint {
     box-shadow: 0 0 1px #000000;
 }
-input:checked + .slider:before {
+input:checked + .mint:before {
     -webkit-transform: translateX(30px);
     -ms-transform: translateX(30px);
     transform: translateX(30px);
@@ -498,28 +497,53 @@ input:checked + .slider:before {
 }
 
 
-.theGrid{
+.theGrid {
     display: grid;
-    grid-template-columns: repeat(2, 140px);
-    grid-auto-rows: 35px;
+    grid-template-columns: repeat(2, 160px);
+    grid-auto-rows: 40px;
+    justify-items: center;
 }
-.theGrid div{
-
+.theGrid div {
     &:nth-child(4n+1){
-        margin-left: 50%;
+        margin-left: 30%;
         margin-right: -50%;
     }
     &:nth-child(4n+2){
-        margin-left: 50%;
+        margin-left: 30%;
         margin-right: -50%;
     }
     &:nth-child(4n+3){
-        margin-left: 0%;
+        margin-left: -20%;
         margin-right: 0%;
     }
     &:nth-child(4n+4){
-        margin-left: 0%;
+        margin-left: -20%;
         margin-right: 0%;
     }
-    
 }
+
+.buildHov:hover {
+    filter:grayscale(60%);
+    filter:brightness(120%);
+}
+.buildHov:hover .buildTooltip {
+    display: block;
+}
+.buildTooltip {
+    display: none;
+    background: #C8C8C8;
+    margin-left: 28px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1000;
+}
+
+.positive-value{
+    color:darkgreen;
+    font-weight:500;
+}
+.negative-value{
+    color:darkred;
+    font-weight:500;
+}
+
