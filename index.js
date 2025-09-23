@@ -1,8 +1,13 @@
 import {recordedSessions} from "./sessions.js";
+import {userBuildings} from "./user_buildings.js";
 
 let getstatSesh = document.querySelector('.statSesh')
 let jsstatSesh = parseFloat(getstatSesh.innerHTML)
+let getstatMins = document.querySelector('.statMins')
+let jsstatMins = parseFloat(getstatMins.innerHTML)
+
 let jsFileButton = document.querySelector('.TreeButtonContainer')
+let jsTheGrid = document.querySelector('.theGrid')
 
 let getAllBetaPower = document.querySelectorAll('.powerBeta')
 let getAllAlphaPower = document.querySelectorAll('.powerAlpha')
@@ -61,14 +66,35 @@ let batCapLvlBeta = 0
 let batCapLvlAlpha = 0
 let batCapLvlTheta = 0
 
+let getkJpsBeta = document.querySelector('.kJpsBeta')
+let getkJpsAlpha = document.querySelector('.kJpsAlpha')
+let getkJpsTheta = document.querySelector('.kJpsTheta')
+let getcoinspsBeta = document.querySelector('.coinspsBeta')
+let getcoinspsAlpha = document.querySelector('.coinspsAlpha')
+let getcoinspsTheta = document.querySelector('.coinspsTheta')
 
 
+
+function reparsefloats() {
+    jspowerBeta = parseFloat(getBetaPower.innerHTML)*1000
+    jspowerAlpha = parseFloat(getAlphaPower.innerHTML)*1000
+    jspowerTheta = parseFloat(getThetaPower.innerHTML)*1000
+    jscoinsBeta = parseFloat(getBetaCoins.innerHTML)
+    jscoinsAlpha = parseFloat(getAlphaCoins.innerHTML)
+    jscoinsTheta = parseFloat(getThetaCoins.innerHTML)
+}
 
 function setAllInners(thingToSet,mathToDo) {
     thingToSet.forEach(function(i) {
         i.innerHTML = mathToDo
     })
 }
+
+/*
+-----------------
+ENERGY GENERATION
+-----------------
+*/
 
 function logSession() {
     jspowerBeta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
@@ -101,18 +127,21 @@ function logSessionFile(event) {
 
         timeout(div,2800)
     } else {
-        jspowerBeta += Math.floor(sesh.minsBeta*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
+        jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
 
-        jspowerAlpha += Math.floor(sesh.minsAlpha*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
+        jspowerAlpha += Math.floor(sesh.alphaPower*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
 
-        jspowerTheta += Math.floor(sesh.minsTheta*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
+        jspowerTheta += Math.floor(sesh.thetaPower*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
         
+        jsstatMins += sesh.sessionMinutes
+        getstatMins.innerHTML = jsstatMins
+
         jsstatSesh += 1
         getstatSesh.innerHTML = jsstatSesh
     }
@@ -166,6 +195,7 @@ function rotateCrank() {
     }
 }
 
+//Functions for adding art assets to the game after purchases
 function makeLeaf(type) {
     const reverse = Math.random() <.5
     let angle = Math.floor(Math.random() * 15) - 30
@@ -209,7 +239,39 @@ function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
         makeLeaf("Theta")
     }
 }
+function makeBuilding(type,wave) {
+    const div = document.createElement("div")
+        div.classList.add("buildHov")
+    const img = document.createElement("img")
+        img.src = `./assets/building-${wave}${type}.png`
+    const span = document.createElement("span")
+        span.classList.add("buildTooltip")
+        span.innerHTML = `${type}`
+    
+    div.appendChild(img)
+    div.appendChild(span)
+    jsTheGrid.appendChild(div)
+}
 
+let jsuserBuildings = userBuildings
+function makeAllBuildings() {
+    const cleanupBuildings = document.getElementById('theGrid')
+    while(cleanupBuildings.firstChild){
+        cleanupBuildings.removeChild(cleanupBuildings.firstChild)
+    }
+    
+        jsuserBuildings.map((div) =>{
+            makeBuilding(div.type,div.wave)
+        })
+}
+
+/*
+---------------
+UPGRADE BUTTONS
+---------------
+*/
+
+//Functions for buying Leaf Upgrades
 function buyBetaLeaf() {
     if (jspowerBeta >= (jsLeafCostBeta*1000)) {
         boostLvlBeta += 1
@@ -247,6 +309,7 @@ function buyThetaLeaf() {
     }
 }
 
+//Functions for buying Battery Upgrades
 function buyBetaBatCap() {
     if(jscoinsBeta >= jsBatCapCostBeta) {
         batCapLvlBeta += 1
@@ -257,6 +320,7 @@ function buyBetaBatCap() {
         getBetaBatCapCost.innerHTML = jsBatCapCostBeta
         let jcB = jscoinsBeta
         setAllInners(getAllBetaCoins,jcB)
+        makeBuilding("Battery","Beta")
     }
 }
 function buyAlphaBatCap() {
@@ -269,6 +333,7 @@ function buyAlphaBatCap() {
         getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
         let jcA = jscoinsAlpha
         setAllInners(getAllAlphaCoins,jcA)
+        makeBuilding("Battery","Alpha")
     }
 }
 function buyThetaBatCap() {
@@ -281,62 +346,125 @@ function buyThetaBatCap() {
         getThetaBatCapCost.innerHTML = jsBatCapCostTheta
         let jcT = jscoinsTheta
         setAllInners(getAllThetaCoins,jcT)
+        makeBuilding("Battery","Theta")
     }
 }
 
-//This is the conversion timer between power and coins
-let sliderBeta = document.getElementById("sliderBeta");
+/*
+---------------------------
+Consume / Produce Functions
+---------------------------
+*/
+
+let producers = [ // timer is per second
+    {name:"mintBeta",numBuilt:1,consumeWave:"Beta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Beta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
+    {name:"mintAlpha",numBuilt:1,consumeWave:"Alpha",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Alpha",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
+    {name:"mintTheta",numBuilt:1,consumeWave:"Theta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Theta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
+]
+let fractAmts = [
+    {stat:"coins",wave:"Beta",fract:0},
+    {stat:"coins",wave:"Alpha",fract:0},
+    {stat:"coins",wave:"Theta",fract:0},
+]
+
+function getRates(stat,wave,pc) {
+    if (pc==="con")
+        {return producers
+            .filter(p => p.consumeStat === stat)
+            .filter(p => p.consumeWave === wave)
+            .filter(p => p.active)
+            .reduce((sum,p) => sum + (p.numBuilt * p.consumeAmtThing),0)
+        }
+    if (pc==="prod")
+        {return producers
+            .filter(p => p.prodStat === stat)
+            .filter(p => p.consumeWave === wave)
+            .filter(p => p.active)
+            .reduce((sum,p) => sum + Math.floor((p.numBuilt * p.prodAmtThing / p.prodAmtTime)*100)/100,0)
+        }
+}
+function consume (stat,wave) {
+    let str = stat+wave
+    let enoughStat = true
+    let getElement = document.querySelector(`.${str}`)
+    let jsElement = parseFloat(getElement.innerHTML)*1000
+    jsElement += getRates(stat,wave,"con")
+    if (jsElement <= 0) {
+        jsElement = 0
+        getElement.innerHTML = 0
+        enoughStat = false
+    } else {
+        getElement.innerHTML = jsElement/1000
+        enoughStat = true
+    }
+    return enoughStat
+}
+function produce (stat, wave) {
+    let str = stat+wave
+    let getElement = document.querySelector(`.${str}`)
+    let fractObj = fractAmts.find(p => p.stat === stat && p.wave === wave)
+    let jsElement = (parseFloat(getElement.innerHTML) + fractObj.fract)*100
+    jsElement += Math.floor(getRates(stat,wave,"prod")*100)
+    if (jsElement >= 100) {
+        getElement.innerHTML = Math.floor(jsElement/100)
+        fractObj.fract = (jsElement % 100) / 100
+    }
+    
+}
+
+let getAllRateText = document.querySelectorAll('.rate')
+function ratecolors() {
+    getAllRateText.forEach(function(i) {
+        if (i.innerHTML < 0) {
+            i.classList.add("negative-value")
+            i.classList.remove("positive-value")
+        } else if (i.innerHTML > 0) {
+            i.classList.add("positive-value")
+            i.classList.remove("negative-value")
+        } else {
+            i.classList.remove("positive-value")
+            i.classList.remove("negative-value")
+        }
+    })
+}
+
+//This is the conversion timer for minting coins
+let mintBeta = document.getElementById("mintBeta");
 let craftBeta = 0
-let sliderAlpha = document.getElementById("sliderAlpha");
+let mintAlpha = document.getElementById("mintAlpha");
 let craftAlpha = 0
-let sliderTheta = document.getElementById("sliderTheta");
+let mintTheta = document.getElementById("mintTheta");
 let craftTheta = 0
 setInterval(() => {
-    if (sliderBeta.checked == true)  {
-        if (jspowerBeta <=0) {
-            sliderBeta.checked = false
-        } else {
-            jspowerBeta -= 1
-            craftBeta += 1
-            let jpB = jspowerBeta / 1000
-            setAllInners(getAllBetaPower,jpB)
-            if (craftBeta >= 9) {
-                craftBeta -= 9
-                jscoinsBeta += 1
-                setAllInners(getAllBetaCoins,jscoinsBeta)
-            }
-        }
-    }
-    if (sliderAlpha.checked == true)  {
-        if (jspowerAlpha <=0) {
-            sliderAlpha.checked = false
-        } else {    
-            jspowerAlpha -= 1
-            craftAlpha += 1
-            let jpA = jspowerAlpha / 1000
-            setAllInners(getAllAlphaPower,jpA)
-            if (craftAlpha >= 9) {
-                craftAlpha -= 9
-                jscoinsAlpha += 1
-                setAllInners(getAllAlphaCoins,jscoinsAlpha)
-            }
-        }
-    }
-    if (sliderTheta.checked == true)  {
-        if (jspowerTheta <=0) {
-            sliderTheta.checked = false
-        } else {
-            jspowerTheta -= 1
-            craftTheta += 1
-            let jpT = jspowerTheta / 1000
-            setAllInners(getAllThetaPower,jpT)
-            if (craftTheta >= 9) {
-                craftTheta -= 9
-                jscoinsTheta += 1
-                setAllInners(getAllThetaCoins,jscoinsTheta)
-            }
-        }
-    }
+    let enoughBeta = consume("power","Beta")
+    let enoughAlpha = consume("power","Alpha")
+    let enoughTheta = consume("power","Theta")
+    produce ("coins","Beta")
+    produce ("coins","Alpha")
+    produce ("coins","Theta")
+    
+    if (mintBeta.checked == true)  {
+        producers.find(p => p.name === "mintBeta").active = true
+        mintBeta.checked = enoughBeta
+    } else {producers.find(p => p.name === "mintBeta").active = false}
+    if (mintAlpha.checked == true)  {
+        producers.find(p => p.name === "mintAlpha").active = true
+        mintAlpha.checked = enoughAlpha
+    } else {producers.find(p => p.name === "mintAlpha").active = false}
+    if (mintTheta.checked == true)  {
+        producers.find(p => p.name === "mintTheta").active = true
+        mintTheta.checked = enoughTheta
+    } else {producers.find(p => p.name === "mintTheta").active = false}
+
+
+    getkJpsBeta.innerHTML = getRates("power","Beta","con")/1000
+    getkJpsAlpha.innerHTML = getRates("power","Alpha","con")/1000
+    getkJpsTheta.innerHTML = getRates("power","Theta","con")/1000
+    getcoinspsBeta.innerHTML = getRates("coins","Beta","prod")
+    getcoinspsAlpha.innerHTML = getRates("coins","Alpha","prod")
+    getcoinspsTheta.innerHTML = getRates("coins","Theta","prod")
+    ratecolors()
+    reparsefloats()
 },1000)
 
 function save() {
@@ -359,9 +487,9 @@ function save() {
     localStorage.setItem("batCapLvlBeta",JSON.stringify(batCapLvlBeta))
     localStorage.setItem("batCapLvlAlpha",JSON.stringify(batCapLvlAlpha))
     localStorage.setItem("batCapLvlTheta",JSON.stringify(batCapLvlTheta))
-    localStorage.setItem("sliderBeta",JSON.stringify(sliderBeta.checked))
-    localStorage.setItem("sliderAlpha",JSON.stringify(sliderAlpha.checked))
-    localStorage.setItem("sliderTheta",JSON.stringify(sliderTheta.checked))
+    localStorage.setItem("mintBeta",JSON.stringify(mintBeta.checked))
+    localStorage.setItem("mintAlpha",JSON.stringify(mintAlpha.checked))
+    localStorage.setItem("mintTheta",JSON.stringify(mintTheta.checked))
     localStorage.setItem("craftBeta",JSON.stringify(craftBeta))
     localStorage.setItem("craftAlpha",JSON.stringify(craftAlpha))
     localStorage.setItem("craftTheta",JSON.stringify(craftTheta))
@@ -386,9 +514,9 @@ function load() {
     batCapLvlBeta = JSON.parse(localStorage.getItem("batCapLvlBeta"))
     batCapLvlAlpha = JSON.parse(localStorage.getItem("batCapLvlAlpha"))
     batCapLvlTheta = JSON.parse(localStorage.getItem("batCapLvlTheta"))
-    sliderBeta.checked = JSON.parse(localStorage.getItem("sliderBeta"))
-    sliderAlpha.checked = JSON.parse(localStorage.getItem("sliderAlpha"))
-    sliderTheta.checked = JSON.parse(localStorage.getItem("sliderTheta"))
+    mintBeta.checked = JSON.parse(localStorage.getItem("mintBeta"))
+    mintAlpha.checked = JSON.parse(localStorage.getItem("mintAlpha"))
+    mintTheta.checked = JSON.parse(localStorage.getItem("mintTheta"))
     craftBeta = JSON.parse(localStorage.getItem("craftBeta"))
     craftAlpha = JSON.parse(localStorage.getItem("craftAlpha"))
     craftTheta = JSON.parse(localStorage.getItem("craftTheta"))
@@ -420,6 +548,7 @@ function load() {
     getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
     getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
     makeAllLeaves(boostLvlBeta,boostLvlAlpha,boostLvlTheta)
+    makeAllBuildings()
 
     jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
     getBetaBatCap.innerHTML = jsbatCapBeta
@@ -445,11 +574,14 @@ window.crankPower = crankPower
 window.rotateCrank = rotateCrank
 window.makeLeaf = makeLeaf
 window.makeAllLeaves = makeAllLeaves
+window.makeBuilding = makeBuilding
+window.makeAllBuildings = makeAllBuildings
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
 window.buyThetaLeaf = buyThetaLeaf
 window.buyBetaBatCap = buyBetaBatCap
 window.buyAlphaBatCap = buyAlphaBatCap
 window.buyThetaBatCap = buyThetaBatCap
+window.getRates = getRates
 window.save = save
 window.load = load
