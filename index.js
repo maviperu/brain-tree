@@ -146,16 +146,27 @@ function logSessionFile(event) {
         timeout(div,2800)
     } else {
         jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
+        jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
+        batCapPercent("Beta")
+        batCapPercentIndicator("Beta")
+        
+
 
         jspowerAlpha += Math.floor(sesh.alphaPower*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
+        jspowerAlpha = Math.min(jspowerAlpha,jsbatCapAlpha*1000)
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
+        batCapPercent("Alpha")
+        batCapPercentIndicator("Alpha")
 
         jspowerTheta += Math.floor(sesh.thetaPower*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
+        jspowerTheta = Math.min(jspowerTheta,jsbatCapTheta*1000)
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
+        batCapPercent("Theta")
+        batCapPercentIndicator("Theta")
         
         jsstatMins += sesh.sessionMinutes
         getstatMins.innerHTML = jsstatMins
@@ -197,6 +208,24 @@ function logSessionFile(event) {
     }
 }
 
+
+function batCapPercent(type) {
+    let power = parseFloat(document.querySelector(`.power${type}`).innerHTML)
+    let cap = parseFloat(document.querySelector(`.batCap${type}`).innerHTML)
+    let cent = Math.floor((power / cap)*10000)/100
+    document.querySelector(`.batCapPercent${type}`).innerHTML = cent
+}
+function batCapPercentIndicator(type) {
+    let indicators = document.querySelectorAll(`.batCapIndicatorLight.${type}`)
+    let cent = parseFloat(document.querySelector(`.batCapPercent${type}`).innerHTML)
+    let numLit = Math.ceil(cent/10)
+    
+    for ( let i = 0; i<10; i++) {
+        if (i<numLit) {indicators[i].classList.add("active")} else {indicators[i].classList.remove("active")}
+    }
+}
+
+
 //Creating the Array that enables bolt animation during session logging
 const bolts = []
 function makeBolts (seshBeta,seshAlpha,seshTheta) {
@@ -228,17 +257,26 @@ function crankPower(be,al,th) {
     jspowerBeta += be
     jspowerAlpha += al
     jspowerTheta += th
+    jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
+    jspowerAlpha = Math.min(jspowerAlpha,jsbatCapAlpha*1000)
+    jspowerTheta = Math.min(jspowerTheta,jsbatCapTheta*1000)
     let jpB = jspowerBeta / 1000
     let jpA = jspowerAlpha / 1000
     let jpT = jspowerTheta / 1000
     setAllInners(getAllBetaPower,jpB)
     setAllInners(getAllAlphaPower,jpA)
     setAllInners(getAllThetaPower,jpT)
+    batCapPercent("Beta")
+    batCapPercentIndicator("Beta")
+    batCapPercent("Alpha")
+    batCapPercentIndicator("Alpha")
+    batCapPercent("Theta")
+    batCapPercentIndicator("Theta")
 }
 
 let jsCrankNum = 0
 let cranking = 0
-let fillBar = document.querySelectorAll('.indicatorLight')
+let fillBar = document.querySelectorAll('.crankIndicatorLight')
 let segment = 6
 function rotateCrank() {
     if (cranking == 0) {
@@ -352,6 +390,8 @@ function buyBetaLeaf() {
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
         getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
+        batCapPercent("Beta")
+        batCapPercentIndicator("Beta")
         makeLeaf("Beta")
     }
 }
@@ -364,6 +404,8 @@ function buyAlphaLeaf() {
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
         getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
+        batCapPercent("Alpha")
+        batCapPercentIndicator("Alpha")
         makeLeaf("Alpha")
     }
 }
@@ -376,6 +418,8 @@ function buyThetaLeaf() {
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
         getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
+        batCapPercent("Theta")
+        batCapPercentIndicator("Theta")
         makeLeaf("Theta")
     }
 }
@@ -470,7 +514,7 @@ Consume / Produce Functions
 */
 
 let producers = [ // timer is per second
-    {name:"mintBeta",numBuilt:1,consumeWave:"Beta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Beta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
+    {name:"mintBeta",numBuilt:1,consumeWave:"Beta",consumeStat:"power",consumeAmtThing:-300,consumeAmtTime:1,prodWave:"Beta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
     {name:"mintAlpha",numBuilt:1,consumeWave:"Alpha",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Alpha",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
     {name:"mintTheta",numBuilt:1,consumeWave:"Theta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Theta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
 ]
@@ -570,6 +614,12 @@ setInterval(() => {
     } else {producers.find(p => p.name === "mintTheta").active = false}
 
 
+    batCapPercent("Beta")
+    batCapPercentIndicator("Beta")
+    batCapPercent("Alpha")
+    batCapPercentIndicator("Alpha")
+    batCapPercent("Theta")
+    batCapPercentIndicator("Theta")
     getkJpsBeta.innerHTML = getRates("power","Beta","con")/1000
     getkJpsAlpha.innerHTML = getRates("power","Alpha","con")/1000
     getkJpsTheta.innerHTML = getRates("power","Theta","con")/1000

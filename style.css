@@ -28,8 +28,12 @@ body {
     justify-items: left;
     padding: 2px;
     margin-right: 10px;
+    overflow-x: visible;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: black powderblue;
 }
-.stats div{
+.stats  div.pad{
     margin-bottom: 10px;
     margin-left: 10px;
 }
@@ -39,6 +43,36 @@ body {
     border-radius: 10px;
     padding: 5px;
 }
+.statBatCap{
+    margin: 6px 0px 16px 0px;
+    font-size:.8em;
+}
+
+.battery {
+    display: grid;
+    grid-template-columns: repeat(10, 10%);
+    grid-auto-rows: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0px 4px;
+    margin-left: 4px;
+}
+.battery.Beta {background-color: #f6ccaa;}
+.battery.Alpha {background-color: #e7d98b;}
+.battery.Theta {background-color: #c5db85;}
+.batCapIndicatorLight {
+    height: 32px;
+    width: auto;
+    border: 1px solid black;
+    border-radius: 16px;
+    padding: 0px;
+    margin: 3px 2px;
+    background-color: #f6ccaa;
+}
+.batCapIndicatorLight.Beta.active {background-color: #f7770a;}
+.batCapIndicatorLight.Alpha.active {background-color: #dcbd00;}
+.batCapIndicatorLight.Theta.active {background-color: #92bc1e;}
+
 .statsIcons{
     height: 1em;
     width: 1em;
@@ -107,7 +141,7 @@ body {
     padding: 0px;
     margin-left: 4px;
 }
-.indicatorLight {
+.crankIndicatorLight {
     height: 4px;
     width: 4px;
     border: 1px solid black;
@@ -115,7 +149,7 @@ body {
     margin: 0px;
     background-color: lightgrey;
 }
-.indicatorLight.active {
+.crankIndicatorLight.active {
     background-color: red;
 }
 
