@@ -68,7 +68,7 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: black powderblue;
+    scrollbar-color: black #78b933;
     background-image: url("./assets/CityBackground.png")
 }
 
@@ -153,7 +153,6 @@ body {
     justify-items: center;
     padding: 2px;
 }
-
 .treeUpgrades{
     display: flex;
     align-items: center;
@@ -165,7 +164,6 @@ body {
     margin-top: 0px;
     margin-bottom: 0px;
 }
-
 .batUpgradeBin{
     display: block;
     justify-items: center;
@@ -179,6 +177,22 @@ body {
     padding: 10px;
 }
 .batteryUpgrades h5{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.mintUpgradeBin{
+    display: block;
+    justify-items: center;
+    padding: 2px;
+}
+.mintUpgrades{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px;
+    padding: 10px;
+}
+.mintUpgrades h5{
     margin-top: 0px;
     margin-bottom: 0px;
 }
@@ -201,7 +215,6 @@ body {
     position: relative;
     text-align: center;
 }
-
 .leaf:hover{
     opacity: .8;
     cursor: pointer;
@@ -220,7 +233,6 @@ body {
     padding: 70px 40px 0px 40px;
     text-align: center;
 }
-
 .willowLeaf{
     width: .5em;
     height: auto;
@@ -251,7 +263,11 @@ body {
     justify-items: center;
     margin: 0px 10px 0px 10px;
     padding: 4px;
-    text-align: center;    
+    text-align: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: black blanchedalmond;
 }
 .buildings h3{
     margin: 10px 0px 0px 0px;
@@ -260,27 +276,6 @@ body {
     margin: 0px;
 }
 
-.batteryBin{
-    width: 280px;
-    display: flex;
-    border: 3px solid black;
-    border-radius: 10px;
-    justify-items: center;
-    margin: 5px 0px 5px 0px;
-    padding: 4px;
-    text-align: center;
-    align-items: center;
-    justify-content: space-between;
-}
-.batteryBin h3{
-    margin:0px 0px 0px 0px;
-}
-/*.batCapUpgrades {
-    display: grid;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0px;
-}*/
 .batCap {
     border: 3px solid black;
     border-radius: 10px;
@@ -299,9 +294,26 @@ body {
     opacity: 1;
     scale: .9
 }
-.batCap h5{
-    margin: 0px;
+
+.mintUp {
+    border: 3px solid black;
+    border-radius: 10px;
+    justify-items: center;
+    margin: 10px 3px 0px 3px;
+    padding: 4px;
+
+    position: relative;
+    text-align: center;
 }
+.mintUp:hover{
+    opacity: .8;
+    cursor: pointer;
+}
+.mintUp:active{
+    opacity: 1;
+    scale: .9
+}
+
 .batTick{
     display: block;
     width: 5px;
@@ -316,7 +328,7 @@ body {
 }
 
 .mintIcons{
-    width: 272px;
+    width: 48px;
     height: auto;
 }
 .mintAction{
@@ -329,15 +341,7 @@ body {
 .mintNums{
     width: 3em;
 }
-.mintCoins{
-    width: 108px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
-}
-.mintCoins h2{
-    margin: 0px 0px 0px 5px;
-}
+
 .coinsIcons{
     width: 34px;
     height: 34px;
@@ -547,3 +551,21 @@ input:checked + .mint:before {
     font-weight:500;
 }
 
+.particle {
+    position: absolute;
+    z-index: 1;
+   /* -webkit-animation: moveToCoordinate 1s Linear 1 ;
+    -moz-animation: moveToCoordinate 1s Linear 1 ;
+    animation: moveToCoordinate 1s Linear 1 ; 
+    
+    transition: top 1s ease-in-out left 1s ease-in-out; */
+}
+/*@keyframes moveToCoordinate {
+    0% {
+        
+    }
+    100% {
+        top:0%;
+        left:0%;
+    }
+}*/
