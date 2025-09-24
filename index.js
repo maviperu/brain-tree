@@ -24,6 +24,12 @@ let getThetaBatCap = document.querySelector('.batCapTheta')
 let jsbatCapBeta = parseFloat(getBetaBatCap.innerHTML)
 let jsbatCapAlpha = parseFloat(getAlphaBatCap.innerHTML)
 let jsbatCapTheta = parseFloat(getThetaBatCap.innerHTML)
+let getAllBetaMintNums = document.querySelectorAll('.mintNumBeta')
+let getAllAlphaMintNums = document.querySelectorAll('.mintNumAlpha')
+let getAllThetaMintNums = document.querySelectorAll('.mintNumTheta')
+let getBetaMintNums = document.querySelector('.mintNumBeta')
+let getAlphaMintNums = document.querySelector('.mintNumAlpha')
+let getThetaMintNums = document.querySelector('.mintNumTheta')
 
 let getAllBetaCoins = document.querySelectorAll('.coinsBeta')
 let getAllAlphaCoins = document.querySelectorAll('.coinsAlpha')
@@ -47,6 +53,12 @@ let getThetaBatCapCost = document.querySelector('.costBatCapTheta')
 let jsBatCapCostBeta = parseFloat(getBetaBatCapCost.innerHTML)
 let jsBatCapCostAlpha = parseFloat(getAlphaBatCapCost.innerHTML)
 let jsBatCapCostTheta = parseFloat(getThetaBatCapCost.innerHTML)
+let getBetaMintUpCost = document.querySelector('.costMintUpBeta')
+let getAlphaMintUpCost = document.querySelector('.costMintUpAlpha')
+let getThetaMintUpCost = document.querySelector('.costMintUpTheta')
+let jsMintUpCostBeta = parseFloat(getBetaMintUpCost.innerHTML)
+let jsMintUpCostAlpha = parseFloat(getAlphaMintUpCost.innerHTML)
+let jsMintUpCostTheta = parseFloat(getThetaMintUpCost.innerHTML)
 
 let rateLeafCostGrowth = 1.07
 let baseLeafCost = 5
@@ -55,6 +67,9 @@ let baseLeafProdBoost = 2
 let rateBatCapCostGrowth = 2
 let baseBatCapCost = 500
 let baseBatCapBoost = 100
+
+let rateMintUpCostGrowth = 2
+let baseMintUpCost = 2000
 
 let getBetaBoostVal = document.querySelector('.boostBetaVal')
 let getAlphaBoostVal = document.querySelector('.boostAlphaVal')
@@ -65,6 +80,9 @@ let boostLvlTheta = 0
 let batCapLvlBeta = 0
 let batCapLvlAlpha = 0
 let batCapLvlTheta = 0
+let mintUpLvlBeta = 1
+let mintUpLvlAlpha = 1
+let mintUpLvlTheta = 1
 
 let getkJpsBeta = document.querySelector('.kJpsBeta')
 let getkJpsAlpha = document.querySelector('.kJpsAlpha')
@@ -144,8 +162,61 @@ function logSessionFile(event) {
 
         jsstatSesh += 1
         getstatSesh.innerHTML = jsstatSesh
+
+        makeBolts(sesh.betaPower,sesh.alphaPower,sesh.thetaPower)
+        bolts.forEach (function(i) {
+            let x = event.clientX + (i.randX*30)
+            let y = event.clientY + (i.randY*30)
+            let element = document.querySelector(`.dest${i.type}`)
+            let div = element.getBoundingClientRect()
+
+            let particle = document.createElement("img")
+            particle.src =`./assets/${i.type}Bolt.png`
+            particle.style.cssText = `top: ${y}px; left: ${x}px; pointer-events: none;`
+            particle.classList.add("particle")
+            particle.classList.add("statsIcons")
+            element.appendChild(particle)
+
+            let dur = Math.random()-.5
+            const moveToTarget = [
+                {},
+                {offset:.03,top:`${event.clientX + (i.randY*200)}px`,left:`${event.clientX + (i.randX*200)}px`},
+                {top:`${div.y}px`,left:`${div.x}px`},
+            ]
+            let moveOptions = {
+                iterations: 1,
+                easing: 'ease-in-out',
+            }
+            moveOptions.duration = 2000+(dur*2000)           
+            particle.animate(moveToTarget,moveOptions)
+            setTimeout(() => {
+                particle.remove()
+            }, (1900+(dur*2000)))
+        })
+        bolts.length = 0
     }
 }
+
+//Creating the Array that enables bolt animation during session logging
+const bolts = []
+function makeBolts (seshBeta,seshAlpha,seshTheta) {
+    for ( let i = 0; i<seshBeta; i++) {
+        let randX = (Math.random()-.5)
+        let randY = (Math.random()-.5)
+        bolts.push({type:"Beta",randX:`${randX}`,randY:`${randY}`})
+    }
+    for ( let i = 0; i<seshAlpha; i++) {
+        let randX = (Math.random()-.5)
+        let randY = (Math.random()-.5)
+        bolts.push({type:"Alpha",randX:`${randX}`,randY:`${randY}`})
+    }
+    for ( let i = 0; i<seshTheta; i++) {
+        let randX = (Math.random()-.5)
+        let randY = (Math.random()-.5)
+        bolts.push({type:"Theta",randX:`${randX}`,randY:`${randY}`})
+    }
+}
+
 
 const timeout = (div,time) => {
     setTimeout(() => {
@@ -349,6 +420,48 @@ function buyThetaBatCap() {
         makeBuilding("Battery","Theta")
     }
 }
+
+//Functions for buying Mint Upgrades
+function buyBetaMint() {
+    if(jscoinsBeta >= jsMintUpCostBeta) {
+        mintUpLvlBeta += 1
+        producers.find(p => p.name === "mintBeta").numBuilt = mintUpLvlBeta
+        jscoinsBeta -= jsMintUpCostBeta
+        jsMintUpCostBeta = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvlBeta))
+        setAllInners(getAllBetaMintNums,mintUpLvlBeta)
+        getBetaMintUpCost.innerHTML = jsMintUpCostBeta
+        let jcB = jscoinsBeta
+        setAllInners(getAllBetaCoins,jcB)
+        makeBuilding("Mint","Beta")
+    }
+}
+function buyAlphaMint() {
+    if(jscoinsAlpha >= jsMintUpCostAlpha) {
+        mintUpLvlAlpha += 1
+        producers.find(p => p.name === "mintAlpha").numBuilt = mintUpLvlAlpha
+        jscoinsAlpha -= jsMintUpCostAlpha
+        jsMintUpCostAlpha = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvlAlpha))
+        setAllInners(getAllAlphaMintNums,mintUpLvlAlpha)
+        getAlphaMintUpCost.innerHTML = jsMintUpCostAlpha
+        let jcB = jscoinsAlpha
+        setAllInners(getAllAlphaCoins,jcB)
+        makeBuilding("Mint","Alpha")
+    }
+}
+function buyThetaMint() {
+    if(jscoinsTheta >= jsMintUpCostTheta) {
+        mintUpLvlTheta += 1
+        producers.find(p => p.name === "mintTheta").numBuilt = mintUpLvlTheta
+        jscoinsTheta -= jsMintUpCostTheta
+        jsMintUpCostTheta = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvlTheta))
+        setAllInners(getAllThetaMintNums,mintUpLvlTheta)
+        getThetaMintUpCost.innerHTML = jsMintUpCostTheta
+        let jcB = jscoinsTheta
+        setAllInners(getAllThetaCoins,jcB)
+        makeBuilding("Mint","Theta")
+    }
+}
+
 
 /*
 ---------------------------
@@ -582,6 +695,9 @@ window.buyThetaLeaf = buyThetaLeaf
 window.buyBetaBatCap = buyBetaBatCap
 window.buyAlphaBatCap = buyAlphaBatCap
 window.buyThetaBatCap = buyThetaBatCap
+window.buyBetaMint = buyBetaMint
+window.buyAlphaMint = buyAlphaMint
+window.buyThetaMint = buyThetaMint
 window.getRates = getRates
 window.save = save
 window.load = load

@@ -20,15 +20,15 @@
                     <p><u>Energy</u></p>
                     <div class="containerSmFlex">
                         <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0.0</span>/s)<br>
-                        <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="powerBeta">0.0</span> kJ
+                        <span class ="destBeta"><img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"></span><span class="powerBeta">0.0</span> kJ
                     </div>
                     <div class="containerSmFlex">                        
                         <strong>Alpha Power: </strong> (<span class="kJpsAlpha rate">0.0</span>/s)<br>
-                        <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="powerAlpha">0.0</span> kJ
+                        <span class ="destAlpha"><img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"></span><span class="powerAlpha">0.0</span> kJ
                     </div>
                     <div class="containerSmFlex">
                         <strong>Theta Power: </strong> (<span class="kJpsTheta rate">0.0</span>/s)<br>
-                        <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="powerTheta">0.0</span> kJ
+                        <span class ="destTheta"><img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"></span><span class="powerTheta">0.0</span> kJ
                     </div>
                     <button class="util-button" onclick="logSession()">
                         Debug +Energy
@@ -68,7 +68,7 @@
                     <p><u>Coins</u></p>
                     <div class="containerSmFlex">
                         <strong>Beta Coins: </strong> (<span class="coinspsBeta rate">0.0</span>/s)<br>
-                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">7000</span>
+                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">17000</span>
                     </div>
                     <div class="containerSmFlex">                        
                         <strong>Alpha Coins: </strong> (<span class="coinspsAlpha rate">0.0</span>/s)<br>
@@ -121,6 +121,7 @@
                 <!--UPGRADES BUILDING-->
                 <div class="buildings">
                     <H3><u>Upgrades</u></H3>
+                    <!--TREE UPGRADES-->
                     <div class="treeUpgradeBin">
                         <h3>Tree Upgrades</h3>
                         <p>Add leaves to your tree to get more out of each session! Each Leaf gives +2% more energy</p>
@@ -148,6 +149,7 @@
                             </div>
                         </div>
                     </div>
+                    <!--BATTERY UPGRADES-->
                     <div class="batUpgradeBin">
                         <H3>Batteries</H3>
                         <p>Batteries store Brainpower as Energy, but have a limited Capacity. Each upgrade gives +100 kJ</p>
@@ -175,6 +177,37 @@
                                 </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costBatCapTheta"> 500</span></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <!--MINT UPGRADES-->
+                    <div class="mintUpgradeBin">
+                        <H3>Mints</H3>
+                        <p>Mints slowly produce Coins, but require Energy to operate. Each mint consumes 1 Watt and produces a coin every 9 seconds</p>
+                        <div class="mintUpgrades">
+                            <div class="mintUp" onclick="buyBetaMint()">
+                                <h5>Current Count: <span class="mintNumBeta">1</span></h5>
+                                <div>
+                                    <img src="./assets/BetaMint.png" alt="Beta" class="mintIcons" draggable="false">
+                                </div>
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costMintUpBeta"> 4000</span></h5>
+                            </div>
+                            <div class="mintUp" onclick="buyAlphaMint()">
+                                <h5>Current Count: <span class="mintNumAlpha">1</span></h5>
+                                <div>
+                                    <img src="./assets/AlphaMint.png" alt="Alpha" class="mintIcons" draggable="false">
+                                </div>
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costMintUpAlpha"> 4000</span></h5>
+                            </div>
+                            <div class="mintUp" onclick="buyThetaMint()">
+                                <h5>Current Count: <span class="mintNumTheta">1</span></h5>
+                                <div>
+                                    <img src="./assets/ThetaMint.png" alt="Theta" class="mintIcons" draggable="false">
+                                </div>
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costMintUpTheta"> 4000</span></h5>
                             </div>
                         </div>
                     </div>
