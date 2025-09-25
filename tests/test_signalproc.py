@@ -1,4 +1,4 @@
-import brainwavelogger.signalproc as signalproc
+import src.signalproc as signalproc
 import numpy as np
 import pandas as pd
 

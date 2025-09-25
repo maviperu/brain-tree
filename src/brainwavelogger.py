@@ -1,4 +1,4 @@
-import brainwavelogger.signalproc as signalproc
+import src.signalproc as signalproc
 import pandas as pd
 import numpy as np
 import glob
@@ -128,3 +128,4 @@ print("Finished logging files")
 # @TODO: Check output of Welch transform. Does it look like FFT?
 # @TODO: Remove outliers at the feature level. 
 # @TODO: Add bat file for brainwavelogger.py
+# @TODO: Create instructions and try them in new user: https://conda.github.io/conda-pack/
