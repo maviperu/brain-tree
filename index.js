@@ -18,6 +18,9 @@ let getThetaPower = document.querySelector('.powerTheta')
 let jspowerBeta = parseFloat(getBetaPower.innerHTML)*1000
 let jspowerAlpha = parseFloat(getAlphaPower.innerHTML)*1000
 let jspowerTheta = parseFloat(getThetaPower.innerHTML)*1000
+let getAllBetaBatCap = document.querySelectorAll('.batCapBeta')
+let getAllAlphaBatCap = document.querySelectorAll('.batCapAlpha')
+let getAllThetaBatCap = document.querySelectorAll('.batCapTheta')
 let getBetaBatCap = document.querySelector('.batCapBeta')
 let getAlphaBatCap = document.querySelector('.batCapAlpha')
 let getThetaBatCap = document.querySelector('.batCapTheta')
@@ -113,23 +116,6 @@ function setAllInners(thingToSet,mathToDo) {
 ENERGY GENERATION
 -----------------
 */
-
-function logSession() {
-    jspowerBeta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
-    let jpB = jspowerBeta / 1000
-    setAllInners(getAllBetaPower,jpB)
-    
-    jspowerAlpha += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
-    let jpA = jspowerAlpha / 1000
-    setAllInners(getAllAlphaPower,jpA)
-    
-    jspowerTheta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
-    let jpT = jspowerTheta / 1000
-    setAllInners(getAllThetaPower,jpT)
-
-    jsstatSesh += 1
-    getstatSesh.innerHTML = jsstatSesh
-}
 function logSessionFile(event) {
     let sesh = recordedSessions[jsstatSesh]
 
@@ -152,8 +138,6 @@ function logSessionFile(event) {
         batCapPercent("Beta")
         batCapPercentIndicator("Beta")
         
-
-
         jspowerAlpha += Math.floor(sesh.alphaPower*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
         jspowerAlpha = Math.min(jspowerAlpha,jsbatCapAlpha*1000)
         let jpA = jspowerAlpha / 1000
@@ -323,7 +307,20 @@ function makeLeaf(type) {
     img.style.transform = `rotate(${angle}deg)`
     const src = document.getElementById(`leafGarden${type}`)
     src.appendChild(img)
+
+    //TEST TREE STUFF BELOW
+
+    const img2 = document.createElement("img")
+    let randNode = Math.floor(Math.random() * 37)
+    console.log(randNode)
+    let x = treeNodes[randNode].x
+    let y = treeNodes[randNode].y
+    img2.src =`./assets/${type}WillowLeaf2.png`
+    img2.classList.add("willowLeaf2")
+    img2.style.cssText = `top: ${y}px; left: ${x}px; pointer-events: none;`
     
+    const src2 = document.getElementById("TreeButton2")
+    src2.appendChild(img2)
 }
 function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
     const cleanupB = document.getElementById('leafGardenBeta')
@@ -430,12 +427,14 @@ function buyBetaBatCap() {
         batCapLvlBeta += 1
         jscoinsBeta -= jsBatCapCostBeta
         jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
-        getBetaBatCap.innerHTML = jsbatCapBeta
+        setAllInners(getAllBetaBatCap,jsbatCapBeta)
         jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
         getBetaBatCapCost.innerHTML = jsBatCapCostBeta
         let jcB = jscoinsBeta
         setAllInners(getAllBetaCoins,jcB)
         makeBuilding("Battery","Beta")
+        jsuserBuildings.push({type:"Battery",wave:"Beta"})
+        console.log(jsuserBuildings)
     }
 }
 function buyAlphaBatCap() {
@@ -443,7 +442,7 @@ function buyAlphaBatCap() {
         batCapLvlAlpha += 1
         jscoinsAlpha -= jsBatCapCostAlpha
         jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
-        getAlphaBatCap.innerHTML = jsbatCapAlpha
+        setAllInners(getAllAlphaBatCap,jsbatCapAlpha)
         jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
         getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
         let jcA = jscoinsAlpha
@@ -456,7 +455,7 @@ function buyThetaBatCap() {
         batCapLvlTheta += 1
         jscoinsTheta -= jsBatCapCostTheta
         jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
-        getThetaBatCap.innerHTML = jsbatCapTheta
+        setAllInners(getAllThetaBatCap,jsbatCapTheta)
         jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
         getThetaBatCapCost.innerHTML = jsBatCapCostTheta
         let jcT = jscoinsTheta
@@ -514,7 +513,7 @@ Consume / Produce Functions
 */
 
 let producers = [ // timer is per second
-    {name:"mintBeta",numBuilt:1,consumeWave:"Beta",consumeStat:"power",consumeAmtThing:-300,consumeAmtTime:1,prodWave:"Beta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
+    {name:"mintBeta",numBuilt:1,consumeWave:"Beta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Beta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
     {name:"mintAlpha",numBuilt:1,consumeWave:"Alpha",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Alpha",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
     {name:"mintTheta",numBuilt:1,consumeWave:"Theta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Theta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
 ]
@@ -530,12 +529,12 @@ function getRates(stat,wave,pc) {
             .filter(p => p.consumeStat === stat)
             .filter(p => p.consumeWave === wave)
             .filter(p => p.active)
-            .reduce((sum,p) => sum + (p.numBuilt * p.consumeAmtThing),0)
+            .reduce((sum,p) => Math.floor(sum + (p.numBuilt * p.consumeAmtThing)),0)
         }
     if (pc==="prod")
         {return producers
             .filter(p => p.prodStat === stat)
-            .filter(p => p.consumeWave === wave)
+            .filter(p => p.prodWave === wave)
             .filter(p => p.active)
             .reduce((sum,p) => sum + Math.floor((p.numBuilt * p.prodAmtThing / p.prodAmtTime)*100)/100,0)
         }
@@ -587,11 +586,8 @@ function ratecolors() {
 
 //This is the conversion timer for minting coins
 let mintBeta = document.getElementById("mintBeta");
-let craftBeta = 0
 let mintAlpha = document.getElementById("mintAlpha");
-let craftAlpha = 0
 let mintTheta = document.getElementById("mintTheta");
-let craftTheta = 0
 setInterval(() => {
     let enoughBeta = consume("power","Beta")
     let enoughAlpha = consume("power","Alpha")
@@ -653,9 +649,8 @@ function save() {
     localStorage.setItem("mintBeta",JSON.stringify(mintBeta.checked))
     localStorage.setItem("mintAlpha",JSON.stringify(mintAlpha.checked))
     localStorage.setItem("mintTheta",JSON.stringify(mintTheta.checked))
-    localStorage.setItem("craftBeta",JSON.stringify(craftBeta))
-    localStorage.setItem("craftAlpha",JSON.stringify(craftAlpha))
-    localStorage.setItem("craftTheta",JSON.stringify(craftTheta))
+
+    localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
 
 console.log(localStorage)
 }
@@ -680,10 +675,7 @@ function load() {
     mintBeta.checked = JSON.parse(localStorage.getItem("mintBeta"))
     mintAlpha.checked = JSON.parse(localStorage.getItem("mintAlpha"))
     mintTheta.checked = JSON.parse(localStorage.getItem("mintTheta"))
-    craftBeta = JSON.parse(localStorage.getItem("craftBeta"))
-    craftAlpha = JSON.parse(localStorage.getItem("craftAlpha"))
-    craftTheta = JSON.parse(localStorage.getItem("craftTheta"))
-
+    
     getstatSesh.innerHTML = jsstatSesh
 
     let n=0
@@ -700,6 +692,9 @@ function load() {
     setAllInners(getAllAlphaPower,jpA)
     let jpT = jspowerTheta / 1000
     setAllInners(getAllThetaPower,jpT)
+    setAllInners(getAllThetaPower,jpT)
+    setAllInners(getAllThetaPower,jpT)
+    setAllInners(getAllThetaPower,jpT)
 
     setAllInners(getAllBetaCoins,jscoinsBeta)
     setAllInners(getAllAlphaCoins,jscoinsAlpha)
@@ -711,34 +706,35 @@ function load() {
     getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
     getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
     makeAllLeaves(boostLvlBeta,boostLvlAlpha,boostLvlTheta)
+
+    jsuserBuildings = JSON.parse(localStorage.getItem("jsuserBuildings"))
     makeAllBuildings()
 
     jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
-    getBetaBatCap.innerHTML = jsbatCapBeta
+    setAllInners(getAllBetaBatCap,jsbatCapBeta)
     jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
     getBetaBatCapCost.innerHTML = jsBatCapCostBeta
 
     jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
-    getAlphaBatCap.innerHTML = jsbatCapAlpha
+    setAllInners(getAllAlphaBatCap,jsbatCapAlpha)
     jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
     getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
 
     jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
-    getThetaBatCap.innerHTML = jsbatCapTheta
+    setAllInners(getAllThetaBatCap,jsbatCapTheta)
     jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
     getThetaBatCapCost.innerHTML = jsBatCapCostTheta
 }
 
 
+function testTree(event) {
+    let x = event.offsetX
+    let y = event.offsetY
+    console.log(x,",",y)
+}
 
-window.logSession = logSession
 window.logSessionFile = logSessionFile
-window.crankPower = crankPower
 window.rotateCrank = rotateCrank
-window.makeLeaf = makeLeaf
-window.makeAllLeaves = makeAllLeaves
-window.makeBuilding = makeBuilding
-window.makeAllBuildings = makeAllBuildings
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
 window.buyThetaLeaf = buyThetaLeaf
@@ -748,6 +744,49 @@ window.buyThetaBatCap = buyThetaBatCap
 window.buyBetaMint = buyBetaMint
 window.buyAlphaMint = buyAlphaMint
 window.buyThetaMint = buyThetaMint
-window.getRates = getRates
 window.save = save
 window.load = load
+
+window.testTree = testTree
+
+
+const treeNodes = [
+{x:227,y:126},
+{x:220,y:115},
+{x:237,y:108},
+{x:240,y:93},
+{x:236,y:78},
+{x:228,y:68},
+{x:204,y:85},
+{x:178,y:100},
+{x:161,y:111},
+{x:226,y:50},
+{x:220,y:45},
+{x:208,y:36},
+{x:200,y:32},
+{x:174,y:60},
+{x:188,y:25},
+{x:180,y:22},
+{x:164,y:14},
+{x:149,y:12},
+{x:140,y:40},
+{x:136,y:7},
+{x:123,y:7},
+{x:108,y:21},
+{x:98,y:7},
+{x:89,y:10},
+{x:79,y:14},
+{x:82,y:37},
+{x:64,y:22},
+{x:51,y:27},
+{x:41,y:38},
+{x:32,y:45},
+{x:28,y:59},
+{x:19,y:69},
+{x:17,y:83},
+{x:14,y:95},
+{x:28,y:111},
+{x:23,y:122},
+{x:60,y:78},
+{x:84,y:100},
+]
