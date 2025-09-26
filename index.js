@@ -1,12 +1,15 @@
 import {recordedSessions} from "./sessions.js";
 import {userBuildings} from "./user_buildings.js";
 
+console.log("PAGE INIT",localStorage)
+
 let getstatSesh = document.querySelector('.statSesh')
 let jsstatSesh = parseFloat(getstatSesh.innerHTML)
 let getstatMins = document.querySelector('.statMins')
 let jsstatMins = parseFloat(getstatMins.innerHTML)
 
-let jsFileButton = document.querySelector('.TreeButtonContainer')
+document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
+
 let jsTheGrid = document.querySelector('.theGrid')
 
 let getAllBetaPower = document.querySelectorAll('.powerBeta')
@@ -123,13 +126,14 @@ function logSessionFile(event) {
         const x = Math.min(event.offsetX,140)
         const y = Math.min(event.offsetY,305)
         
-        const div = document.createElement("div")
-        div.innerHTML = "No Session to Log!"
-        div.style.cssText = `color: red; position: absolute; top: ${y}px; left: ${x}px; pointer-events: none;`
-        jsFileButton.appendChild(div)
-        div.classList.add("seshUndefined")
+        const div = document.querySelector(".console")
+        const msg = document.createElement("span")
+        msg.innerHTML = "No Session to Log!"
+        //msg.style.cssText = `color: darkredred; position: absolute; top: ${y}px; left: ${x}px; pointer-events: none;`
+        div.appendChild(msg)
+        msg.classList.add("seshUndefined")
 
-        timeout(div,2800)
+        timeout(msg,2800)
     } else {
         jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
         jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
@@ -157,6 +161,8 @@ function logSessionFile(event) {
 
         jsstatSesh += 1
         getstatSesh.innerHTML = jsstatSesh
+
+        document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
 
         makeBolts(sesh.betaPower,sesh.alphaPower,sesh.thetaPower)
         bolts.forEach (function(i) {
@@ -290,50 +296,29 @@ function rotateCrank() {
 
 //Functions for adding art assets to the game after purchases
 function makeLeaf(type) {
-    const reverse = Math.random() <.5
-    let angle = Math.floor(Math.random() * 15) - 30
-    
-    const img = document.createElement("img")
-    if (reverse === true) {
-        img.src =`./assets/${type}WillowLeaf.png`
-        img.style.transformOrigin = "top right"
-    } else {
-        img.src =`./assets/${type}WillowLeaf-r.png`
-        angle = Math.abs(angle)
-        img.style.transformOrigin = "top left"
+     const src = document.getElementById("TreeButton")
+
+    for (let i = 0; i<baseLeafProdBoost; i++) {
+        const img = document.createElement("img")
+        let randNode = Math.floor(Math.random() * 38)
+        let radVec = Math.random()*2*Math.PI
+        let mag = Math.random()*15
+        let dx = Math.cos(radVec-(Math.PI/2))*mag
+        let dy = Math.sin(radVec-(Math.PI/2))*mag
+        let x = treeNodes[randNode].x
+        let y = treeNodes[randNode].y
+        img.src =`./assets/${type}WillowLeaf2.png`
+        img.classList.add("willowLeaf")
+        img.style.cssText = `top: ${y+7+dy}px; left: ${x+12+dx}px; pointer-events: none; rotate: ${radVec}rad;`
+        
+        src.appendChild(img)
     }
-    img.classList.add("willowLeaf")
-    img.classList.add("willowLeafExpand")
-    img.style.transform = `rotate(${angle}deg)`
-    const src = document.getElementById(`leafGarden${type}`)
-    src.appendChild(img)
-
-    //TEST TREE STUFF BELOW
-
-    const img2 = document.createElement("img")
-    let randNode = Math.floor(Math.random() * 37)
-    console.log(randNode)
-    let x = treeNodes[randNode].x
-    let y = treeNodes[randNode].y
-    img2.src =`./assets/${type}WillowLeaf2.png`
-    img2.classList.add("willowLeaf2")
-    img2.style.cssText = `top: ${y}px; left: ${x}px; pointer-events: none;`
-    
-    const src2 = document.getElementById("TreeButton2")
-    src2.appendChild(img2)
 }
+
 function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
-    const cleanupB = document.getElementById('leafGardenBeta')
-    const cleanupA = document.getElementById('leafGardenAlpha')
-    const cleanupT = document.getElementById('leafGardenTheta')
-    while(cleanupB.firstChild){
-        cleanupB.removeChild(cleanupB.firstChild)
-    }
-    while(cleanupA.firstChild){
-        cleanupA.removeChild(cleanupA.firstChild)
-    }
-    while(cleanupT.firstChild){
-        cleanupT.removeChild(cleanupT.firstChild)
+    const cleanup = document.getElementById('TreeButton')
+    while(cleanup.childNodes.length > 7){
+        cleanup.removeChild(cleanup.lastChild)
     }
     for (let i = 0; i < BetaVal; i++) {
         makeLeaf("Beta")
@@ -434,7 +419,6 @@ function buyBetaBatCap() {
         setAllInners(getAllBetaCoins,jcB)
         makeBuilding("Battery","Beta")
         jsuserBuildings.push({type:"Battery",wave:"Beta"})
-        console.log(jsuserBuildings)
     }
 }
 function buyAlphaBatCap() {
@@ -448,6 +432,7 @@ function buyAlphaBatCap() {
         let jcA = jscoinsAlpha
         setAllInners(getAllAlphaCoins,jcA)
         makeBuilding("Battery","Alpha")
+        jsuserBuildings.push({type:"Battery",wave:"Alpha"})
     }
 }
 function buyThetaBatCap() {
@@ -461,6 +446,7 @@ function buyThetaBatCap() {
         let jcT = jscoinsTheta
         setAllInners(getAllThetaCoins,jcT)
         makeBuilding("Battery","Theta")
+        jsuserBuildings.push({type:"Battery",wave:"Theta"})
     }
 }
 
@@ -476,6 +462,7 @@ function buyBetaMint() {
         let jcB = jscoinsBeta
         setAllInners(getAllBetaCoins,jcB)
         makeBuilding("Mint","Beta")
+        jsuserBuildings.push({type:"Mint",wave:"Beta"})
     }
 }
 function buyAlphaMint() {
@@ -489,6 +476,7 @@ function buyAlphaMint() {
         let jcB = jscoinsAlpha
         setAllInners(getAllAlphaCoins,jcB)
         makeBuilding("Mint","Alpha")
+        jsuserBuildings.push({type:"Mint",wave:"Alpha"})
     }
 }
 function buyThetaMint() {
@@ -502,6 +490,7 @@ function buyThetaMint() {
         let jcB = jscoinsTheta
         setAllInners(getAllThetaCoins,jcB)
         makeBuilding("Mint","Theta")
+        jsuserBuildings.push({type:"Mint",wave:"Theta"})
     }
 }
 
@@ -626,10 +615,24 @@ setInterval(() => {
     reparsefloats()
 },1000)
 
+/*
+--------------
+SAVE FUNCTIONS
+--------------
+*/
+setInterval(function() {
+    save()
+},300000)
+document.onvisibilitychange = () => {
+    if (document.visibilityState === "hidden") {
+        save()
+    }
+}
 function save() {
     localStorage.clear()
 
     localStorage.setItem("jsstatSesh",JSON.stringify(jsstatSesh))
+    localStorage.setItem("jsstatMins",JSON.stringify(jsstatMins))
     localStorage.setItem("jspowerBeta",JSON.stringify(jspowerBeta))
     localStorage.setItem("jspowerAlpha",JSON.stringify(jspowerAlpha))
     localStorage.setItem("jspowerTheta",JSON.stringify(jspowerTheta))
@@ -649,13 +652,34 @@ function save() {
     localStorage.setItem("mintBeta",JSON.stringify(mintBeta.checked))
     localStorage.setItem("mintAlpha",JSON.stringify(mintAlpha.checked))
     localStorage.setItem("mintTheta",JSON.stringify(mintTheta.checked))
+    localStorage.setItem("mintUpLvlBeta",JSON.stringify(mintUpLvlBeta))
+    localStorage.setItem("mintUpLvlAlpha",JSON.stringify(mintUpLvlAlpha))
+    localStorage.setItem("mintUpLvlTheta",JSON.stringify(mintUpLvlTheta))
+    localStorage.setItem("jsMintUpCostBeta",JSON.stringify(jsMintUpCostBeta))
+    localStorage.setItem("jsMintUpCostAlpha",JSON.stringify(jsMintUpCostAlpha))
+    localStorage.setItem("jsMintUpCostTheta",JSON.stringify(jsMintUpCostTheta))
 
     localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
 
+    const div = document.querySelector(".console")
+    const msg = document.createElement("span")
+    msg.innerHTML = "Saved!"
+    div.appendChild(msg)
+    msg.classList.add("seshUndefined")
+    timeout(msg,2000)
 console.log(localStorage)
 }
+
+document.addEventListener('DOMContentLoaded', function(){
+    load()
+    const div = document.querySelector(".loading")
+    div.innerHTML = "Loaded!"
+    div.classList.add("seshUndefined")
+    timeout(div,2800)
+})
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
+    jsstatMins = JSON.parse(localStorage.getItem("jsstatMins"))
     jspowerBeta = JSON.parse(localStorage.getItem("jspowerBeta"))
     jspowerAlpha = JSON.parse(localStorage.getItem("jspowerAlpha"))
     jspowerTheta = JSON.parse(localStorage.getItem("jspowerTheta"))
@@ -675,8 +699,16 @@ function load() {
     mintBeta.checked = JSON.parse(localStorage.getItem("mintBeta"))
     mintAlpha.checked = JSON.parse(localStorage.getItem("mintAlpha"))
     mintTheta.checked = JSON.parse(localStorage.getItem("mintTheta"))
+    mintUpLvlBeta = JSON.parse(localStorage.getItem("mintUpLvlBeta"))
+    mintUpLvlAlpha = JSON.parse(localStorage.getItem("mintUpLvlAlpha"))
+    mintUpLvlTheta = JSON.parse(localStorage.getItem("mintUpLvlTheta"))
+    jsMintUpCostBeta = JSON.parse(localStorage.getItem("jsMintUpCostBeta"))
+    jsMintUpCostAlpha = JSON.parse(localStorage.getItem("jsMintUpCostAlpha"))
+    jsMintUpCostTheta = JSON.parse(localStorage.getItem("jsMintUpCostTheta"))
     
     getstatSesh.innerHTML = jsstatSesh
+    document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
+    getstatMins.innerHTML = jsstatMins
 
     let n=0
     fillBar.forEach(function(i) {
@@ -696,6 +728,13 @@ function load() {
     setAllInners(getAllThetaPower,jpT)
     setAllInners(getAllThetaPower,jpT)
 
+    setAllInners(getAllBetaMintNums,mintUpLvlBeta)
+    setAllInners(getAllAlphaMintNums,mintUpLvlAlpha)
+    setAllInners(getAllThetaMintNums,mintUpLvlTheta)
+    getBetaMintUpCost.innerHTML = jsMintUpCostBeta
+    getAlphaMintUpCost.innerHTML = jsMintUpCostAlpha
+    getThetaMintUpCost.innerHTML = jsMintUpCostTheta
+
     setAllInners(getAllBetaCoins,jscoinsBeta)
     setAllInners(getAllAlphaCoins,jscoinsAlpha)
     setAllInners(getAllThetaCoins,jscoinsTheta)
@@ -705,6 +744,7 @@ function load() {
     getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
     getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
     getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
+    
     makeAllLeaves(boostLvlBeta,boostLvlAlpha,boostLvlTheta)
 
     jsuserBuildings = JSON.parse(localStorage.getItem("jsuserBuildings"))
@@ -726,11 +766,43 @@ function load() {
     getThetaBatCapCost.innerHTML = jsBatCapCostTheta
 }
 
+function reset() {
+    localStorage.clear()
 
-function testTree(event) {
-    let x = event.offsetX
-    let y = event.offsetY
-    console.log(x,",",y)
+    localStorage.setItem("jsstatSesh",JSON.stringify(0))
+    localStorage.setItem("jsstatMins",JSON.stringify(0))
+    localStorage.setItem("jspowerBeta",JSON.stringify(0))
+    localStorage.setItem("jspowerAlpha",JSON.stringify(0))
+    localStorage.setItem("jspowerTheta",JSON.stringify(0))
+    localStorage.setItem("jsCrankNum",JSON.stringify(0))
+    localStorage.setItem("jscoinsBeta",JSON.stringify(17000))
+    localStorage.setItem("jscoinsAlpha",JSON.stringify(7000))
+    localStorage.setItem("jscoinsTheta",JSON.stringify(7000))
+    localStorage.setItem("jsLeafCostBeta",JSON.stringify(5))
+    localStorage.setItem("jsLeafCostAlpha",JSON.stringify(5))
+    localStorage.setItem("jsLeafCostTheta",JSON.stringify(5))
+    localStorage.setItem("boostLvlBeta",JSON.stringify(0))
+    localStorage.setItem("boostLvlAlpha",JSON.stringify(0))
+    localStorage.setItem("boostLvlTheta",JSON.stringify(0))
+    localStorage.setItem("batCapLvlBeta",JSON.stringify(0))
+    localStorage.setItem("batCapLvlAlpha",JSON.stringify(0))
+    localStorage.setItem("batCapLvlTheta",JSON.stringify(0))
+    localStorage.setItem("mintBeta",JSON.stringify(false))
+    localStorage.setItem("mintAlpha",JSON.stringify(false))
+    localStorage.setItem("mintTheta",JSON.stringify(false))
+    localStorage.setItem("mintUpLvlBeta",JSON.stringify(1))
+    localStorage.setItem("mintUpLvlAlpha",JSON.stringify(1))
+    localStorage.setItem("mintUpLvlTheta",JSON.stringify(1))
+    localStorage.setItem("jsMintUpCostBeta",JSON.stringify(500))
+    localStorage.setItem("jsMintUpCostAlpha",JSON.stringify(500))
+    localStorage.setItem("jsMintUpCostTheta",JSON.stringify(500))
+    localStorage.setItem("jsuserBuildings",JSON.stringify(userBuildings))
+
+    console.log(localStorage)
+
+    load()
+
+    window.location.reload()
 }
 
 window.logSessionFile = logSessionFile
@@ -746,8 +818,8 @@ window.buyAlphaMint = buyAlphaMint
 window.buyThetaMint = buyThetaMint
 window.save = save
 window.load = load
+window.reset = reset
 
-window.testTree = testTree
 
 
 const treeNodes = [
