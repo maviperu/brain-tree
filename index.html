@@ -8,7 +8,7 @@
 </head>
 <body>
     <section>
-        <div class="main">
+        <div id="main" class="main">
             <!--STATS PANE-->
             <div class="stats">
                 <H3><u>Stats</u></H3>
@@ -18,6 +18,9 @@
                     </button>
                     <button class="util-button" onclick="load()">
                         Load
+                    </button>
+                    <button class="util-button del" onclick="reset()">
+                        Delete File
                     </button>
                 </div>
                 <div class="pad containerSmFlex">
@@ -80,9 +83,6 @@
                             </div>
                         </div>
                     </div>
-                    <button class="util-button" onclick="logSession()">
-                        Debug +Energy
-                    </button>
                 </div>
                 <div class="pad stats-Container">
                     <p><u>Mint</u></p>
@@ -147,18 +147,18 @@
                         </div>
                     </div>
                     <div class="TreeButtonContainer">
-                        <div class="TreeButton" onclick="logSessionFile(event)">
-                            <img src="./assets/TreeButton.png" alt="Synthesize" class="TreeIcon" draggable="false">
+                        <div id="TreeButton" class="TreeButton" onclick="logSessionFile(event)">
+                            <img src="./assets/TreeButtonEmpty.png" alt="Synthesize" class="TreeIcon" draggable="false">
+                            <p style="font-size:.8em">You have <span class="seshLen" style="font-size:1.2em; color:darkgreen; font-weight:500">0</span> sessions left to process</p>
                             <h5>Click to convert a Session's Brainpower to Energy</h5>
                         </div>
                     </div>
-                    <div class="gardens">
-                        <div id="leafGardenBeta" class="leafGarden"></div>
-                        <div id="leafGardenAlpha" class="leafGarden"></div>
-                        <div id="leafGardenTheta" class="leafGarden"></div>
-                    </div>   
+                    <div class="console">
+                        <span class="loading">Loading...</span>
+                    </div>
                 </div>
             </div>
+            <!--BUILDING ASSETS AND UPGRADES-->
             <div class="right">
                 <!--UPGRADES BUILDING-->
                 <div class="buildings">
@@ -166,7 +166,7 @@
                     <!--TREE UPGRADES-->
                     <div class="treeUpgradeBin">
                         <h3>Tree Upgrades</h3>
-                        <p>Add leaves to your tree to get more out of each session! Each Leaf gives +2% more energy</p>
+                        <p>Add leaves to your tree to get more out of each session! Each upgrade grows 2 Leaves (and gets you+2% more energy!)</p>
                         <div class="treeUpgrades">
                             <div class="leaf" onclick="buyBetaLeaf()">
                                 <h5>Current Boost: + <span class="boostBetaVal">0</span>%</h5>
@@ -254,7 +254,7 @@
                         </div>
                     </div>
                 </div>
-                
+                <!--BUILDING ASSETS ON DISPLAY-->
                 <div class="theGrid" id="theGrid">
                     <div class="buildHov"><img  src="./assets/building-1House.png"><span class="buildTooltip">House</span></div>
                     <div class="buildHov"><img  src="./assets/building-BetaBattery.png"><span class="buildTooltip">Battery</span></div>

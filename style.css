@@ -37,6 +37,19 @@ body {
     margin-bottom: 10px;
     margin-left: 10px;
 }
+
+.util-button {
+    border-radius: 10px;
+}
+
+.util-button.del{
+    margin-left: 18px;
+    margin-top: 8px;
+    border-radius: 0px;
+    background-color: rgb(226, 193, 193);
+    color: darkred;
+}
+
 .stats-Container{
     width: 190px;
     border: 1px solid black;
@@ -86,7 +99,7 @@ body {
     justify-items: left;
     padding: 2px;
     margin-right: 10px;
-    overflow-x: visible;
+    overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: black powderblue;
@@ -171,17 +184,20 @@ body {
     padding: 4px;
     text-align: center;
 }
-.TreeButton:hover{
-    opacity: .8;
-    cursor: pointer;
-}
-.TreeButton:active{
-    opacity: 1;
-    scale: .9
-}
 .TreeButton h5{
     margin-bottom: 0px;
+    padding: 4px;
+    border: 5px outset grey;
 }
+.TreeButton h5:hover{
+    filter:brightness(120%);
+    cursor: pointer;
+}
+.TreeButton h5:active{
+    scale: .97;
+    border: 5px inset grey;
+}
+
 .treeUpgradeBin{
     display: block;
     justify-items: center;
@@ -250,7 +266,7 @@ body {
     text-align: center;
 }
 .leaf:hover{
-    opacity: .8;
+    filter:brightness(120%);
     cursor: pointer;
 }
 .leaf:active{
@@ -258,24 +274,19 @@ body {
     scale: .9
 }
 
-.gardens{
-    display: flex;
-}
-.leafGarden{
-    display: grid;
-    grid-auto-rows: min-content;
-    padding: 70px 40px 0px 40px;
-    text-align: center;
-}
 .willowLeaf{
-    width: .5em;
+    position:absolute;
+    width: auto;
     height: auto;
-    transform: scale(.3);
-    margin-top: -3em;
+    opacity: .8;
+    transform-origin: 0% top;
+    transform: translate(-40%, -100%);
+    scale:.3;
 }
-.willowLeafExpand{
+/*.willowLeafExpand{
     transform: scale(1);
     transition: 1s linear;
+    animation-fill-mode: forwards;
 
     -webkit-animation: willowLeafExpand 3s Linear 1 ;
     -moz-animation: willowLeafExpand 3s Linear 1 ;
@@ -284,7 +295,7 @@ body {
 @keyframes willowLeafExpand {
     0% { scale: .3;}
   100% { scale: 1; }
-}
+}*/
 
 
 .buildings{
@@ -298,7 +309,7 @@ body {
     margin: 0px 10px 0px 10px;
     padding: 4px;
     text-align: center;
-    overflow-x: hidden;
+    overflow-x: visible;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: black blanchedalmond;
@@ -321,7 +332,7 @@ body {
     text-align: center;
 }
 .batCap:hover{
-    opacity: .8;
+    filter:brightness(120%);
     cursor: pointer;
 }
 .batCap:active{
@@ -340,7 +351,7 @@ body {
     text-align: center;
 }
 .mintUp:hover{
-    opacity: .8;
+    filter:brightness(120%);
     cursor: pointer;
 }
 .mintUp:active{
@@ -517,22 +528,6 @@ input:checked + .mint:before {
     padding: 5px;
     justify-items: center;
 }
-.testbutton {
-    border: 3px solid black;
-    border-radius: 10px;
-    justify-items: center;
-    margin: 0px 5px 0px 5px;
-    padding: 4px;
-    text-align: center;
-}
-.testbutton:hover {
-    opacity: .8;
-    cursor: pointer;
-}
-.testbutton:active {
-    opacity: 1;
-    scale: .9
-}
 
 
 .theGrid {
@@ -603,3 +598,8 @@ input:checked + .mint:before {
         left:0%;
     }
 }*/
+
+.console{
+    margin-top: 50px;
+    color:darkred; font-weight: bolder;
+}

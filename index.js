@@ -1,12 +1,15 @@
 import {recordedSessions} from "./sessions.js";
 import {userBuildings} from "./user_buildings.js";
 
+console.log("PAGE INIT",localStorage)
+
 let getstatSesh = document.querySelector('.statSesh')
 let jsstatSesh = parseFloat(getstatSesh.innerHTML)
 let getstatMins = document.querySelector('.statMins')
 let jsstatMins = parseFloat(getstatMins.innerHTML)
 
-let jsFileButton = document.querySelector('.TreeButtonContainer')
+document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
+
 let jsTheGrid = document.querySelector('.theGrid')
 
 let getAllBetaPower = document.querySelectorAll('.powerBeta')
@@ -18,6 +21,9 @@ let getThetaPower = document.querySelector('.powerTheta')
 let jspowerBeta = parseFloat(getBetaPower.innerHTML)*1000
 let jspowerAlpha = parseFloat(getAlphaPower.innerHTML)*1000
 let jspowerTheta = parseFloat(getThetaPower.innerHTML)*1000
+let getAllBetaBatCap = document.querySelectorAll('.batCapBeta')
+let getAllAlphaBatCap = document.querySelectorAll('.batCapAlpha')
+let getAllThetaBatCap = document.querySelectorAll('.batCapTheta')
 let getBetaBatCap = document.querySelector('.batCapBeta')
 let getAlphaBatCap = document.querySelector('.batCapAlpha')
 let getThetaBatCap = document.querySelector('.batCapTheta')
@@ -113,23 +119,6 @@ function setAllInners(thingToSet,mathToDo) {
 ENERGY GENERATION
 -----------------
 */
-
-function logSession() {
-    jspowerBeta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
-    let jpB = jspowerBeta / 1000
-    setAllInners(getAllBetaPower,jpB)
-    
-    jspowerAlpha += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
-    let jpA = jspowerAlpha / 1000
-    setAllInners(getAllAlphaPower,jpA)
-    
-    jspowerTheta += Math.floor((Math.floor(Math.random() * 8) + 7)*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
-    let jpT = jspowerTheta / 1000
-    setAllInners(getAllThetaPower,jpT)
-
-    jsstatSesh += 1
-    getstatSesh.innerHTML = jsstatSesh
-}
 function logSessionFile(event) {
     let sesh = recordedSessions[jsstatSesh]
 
@@ -137,13 +126,14 @@ function logSessionFile(event) {
         const x = Math.min(event.offsetX,140)
         const y = Math.min(event.offsetY,305)
         
-        const div = document.createElement("div")
-        div.innerHTML = "No Session to Log!"
-        div.style.cssText = `color: red; position: absolute; top: ${y}px; left: ${x}px; pointer-events: none;`
-        jsFileButton.appendChild(div)
-        div.classList.add("seshUndefined")
+        const div = document.querySelector(".console")
+        const msg = document.createElement("span")
+        msg.innerHTML = "No Session to Log!"
+        //msg.style.cssText = `color: darkredred; position: absolute; top: ${y}px; left: ${x}px; pointer-events: none;`
+        div.appendChild(msg)
+        msg.classList.add("seshUndefined")
 
-        timeout(div,2800)
+        timeout(msg,2800)
     } else {
         jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
         jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
@@ -152,8 +142,6 @@ function logSessionFile(event) {
         batCapPercent("Beta")
         batCapPercentIndicator("Beta")
         
-
-
         jspowerAlpha += Math.floor(sesh.alphaPower*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
         jspowerAlpha = Math.min(jspowerAlpha,jsbatCapAlpha*1000)
         let jpA = jspowerAlpha / 1000
@@ -173,6 +161,8 @@ function logSessionFile(event) {
 
         jsstatSesh += 1
         getstatSesh.innerHTML = jsstatSesh
+
+        document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
 
         makeBolts(sesh.betaPower,sesh.alphaPower,sesh.thetaPower)
         bolts.forEach (function(i) {
@@ -306,37 +296,29 @@ function rotateCrank() {
 
 //Functions for adding art assets to the game after purchases
 function makeLeaf(type) {
-    const reverse = Math.random() <.5
-    let angle = Math.floor(Math.random() * 15) - 30
-    
-    const img = document.createElement("img")
-    if (reverse === true) {
-        img.src =`./assets/${type}WillowLeaf.png`
-        img.style.transformOrigin = "top right"
-    } else {
-        img.src =`./assets/${type}WillowLeaf-r.png`
-        angle = Math.abs(angle)
-        img.style.transformOrigin = "top left"
+     const src = document.getElementById("TreeButton")
+
+    for (let i = 0; i<baseLeafProdBoost; i++) {
+        const img = document.createElement("img")
+        let randNode = Math.floor(Math.random() * 38)
+        let radVec = Math.random()*2*Math.PI
+        let mag = Math.random()*15
+        let dx = Math.cos(radVec-(Math.PI/2))*mag
+        let dy = Math.sin(radVec-(Math.PI/2))*mag
+        let x = treeNodes[randNode].x
+        let y = treeNodes[randNode].y
+        img.src =`./assets/${type}WillowLeaf2.png`
+        img.classList.add("willowLeaf")
+        img.style.cssText = `top: ${y+7+dy}px; left: ${x+12+dx}px; pointer-events: none; rotate: ${radVec}rad;`
+        
+        src.appendChild(img)
     }
-    img.classList.add("willowLeaf")
-    img.classList.add("willowLeafExpand")
-    img.style.transform = `rotate(${angle}deg)`
-    const src = document.getElementById(`leafGarden${type}`)
-    src.appendChild(img)
-    
 }
+
 function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
-    const cleanupB = document.getElementById('leafGardenBeta')
-    const cleanupA = document.getElementById('leafGardenAlpha')
-    const cleanupT = document.getElementById('leafGardenTheta')
-    while(cleanupB.firstChild){
-        cleanupB.removeChild(cleanupB.firstChild)
-    }
-    while(cleanupA.firstChild){
-        cleanupA.removeChild(cleanupA.firstChild)
-    }
-    while(cleanupT.firstChild){
-        cleanupT.removeChild(cleanupT.firstChild)
+    const cleanup = document.getElementById('TreeButton')
+    while(cleanup.childNodes.length > 7){
+        cleanup.removeChild(cleanup.lastChild)
     }
     for (let i = 0; i < BetaVal; i++) {
         makeLeaf("Beta")
@@ -430,12 +412,13 @@ function buyBetaBatCap() {
         batCapLvlBeta += 1
         jscoinsBeta -= jsBatCapCostBeta
         jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
-        getBetaBatCap.innerHTML = jsbatCapBeta
+        setAllInners(getAllBetaBatCap,jsbatCapBeta)
         jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
         getBetaBatCapCost.innerHTML = jsBatCapCostBeta
         let jcB = jscoinsBeta
         setAllInners(getAllBetaCoins,jcB)
         makeBuilding("Battery","Beta")
+        jsuserBuildings.push({type:"Battery",wave:"Beta"})
     }
 }
 function buyAlphaBatCap() {
@@ -443,12 +426,13 @@ function buyAlphaBatCap() {
         batCapLvlAlpha += 1
         jscoinsAlpha -= jsBatCapCostAlpha
         jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
-        getAlphaBatCap.innerHTML = jsbatCapAlpha
+        setAllInners(getAllAlphaBatCap,jsbatCapAlpha)
         jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
         getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
         let jcA = jscoinsAlpha
         setAllInners(getAllAlphaCoins,jcA)
         makeBuilding("Battery","Alpha")
+        jsuserBuildings.push({type:"Battery",wave:"Alpha"})
     }
 }
 function buyThetaBatCap() {
@@ -456,12 +440,13 @@ function buyThetaBatCap() {
         batCapLvlTheta += 1
         jscoinsTheta -= jsBatCapCostTheta
         jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
-        getThetaBatCap.innerHTML = jsbatCapTheta
+        setAllInners(getAllThetaBatCap,jsbatCapTheta)
         jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
         getThetaBatCapCost.innerHTML = jsBatCapCostTheta
         let jcT = jscoinsTheta
         setAllInners(getAllThetaCoins,jcT)
         makeBuilding("Battery","Theta")
+        jsuserBuildings.push({type:"Battery",wave:"Theta"})
     }
 }
 
@@ -477,6 +462,7 @@ function buyBetaMint() {
         let jcB = jscoinsBeta
         setAllInners(getAllBetaCoins,jcB)
         makeBuilding("Mint","Beta")
+        jsuserBuildings.push({type:"Mint",wave:"Beta"})
     }
 }
 function buyAlphaMint() {
@@ -490,6 +476,7 @@ function buyAlphaMint() {
         let jcB = jscoinsAlpha
         setAllInners(getAllAlphaCoins,jcB)
         makeBuilding("Mint","Alpha")
+        jsuserBuildings.push({type:"Mint",wave:"Alpha"})
     }
 }
 function buyThetaMint() {
@@ -503,6 +490,7 @@ function buyThetaMint() {
         let jcB = jscoinsTheta
         setAllInners(getAllThetaCoins,jcB)
         makeBuilding("Mint","Theta")
+        jsuserBuildings.push({type:"Mint",wave:"Theta"})
     }
 }
 
@@ -514,7 +502,7 @@ Consume / Produce Functions
 */
 
 let producers = [ // timer is per second
-    {name:"mintBeta",numBuilt:1,consumeWave:"Beta",consumeStat:"power",consumeAmtThing:-300,consumeAmtTime:1,prodWave:"Beta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
+    {name:"mintBeta",numBuilt:1,consumeWave:"Beta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Beta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
     {name:"mintAlpha",numBuilt:1,consumeWave:"Alpha",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Alpha",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
     {name:"mintTheta",numBuilt:1,consumeWave:"Theta",consumeStat:"power",consumeAmtThing:-1,consumeAmtTime:1,prodWave:"Theta",prodStat:"coins",prodAmtThing:1,prodAmtTime:9,active:false},
 ]
@@ -530,12 +518,12 @@ function getRates(stat,wave,pc) {
             .filter(p => p.consumeStat === stat)
             .filter(p => p.consumeWave === wave)
             .filter(p => p.active)
-            .reduce((sum,p) => sum + (p.numBuilt * p.consumeAmtThing),0)
+            .reduce((sum,p) => Math.floor(sum + (p.numBuilt * p.consumeAmtThing)),0)
         }
     if (pc==="prod")
         {return producers
             .filter(p => p.prodStat === stat)
-            .filter(p => p.consumeWave === wave)
+            .filter(p => p.prodWave === wave)
             .filter(p => p.active)
             .reduce((sum,p) => sum + Math.floor((p.numBuilt * p.prodAmtThing / p.prodAmtTime)*100)/100,0)
         }
@@ -587,11 +575,8 @@ function ratecolors() {
 
 //This is the conversion timer for minting coins
 let mintBeta = document.getElementById("mintBeta");
-let craftBeta = 0
 let mintAlpha = document.getElementById("mintAlpha");
-let craftAlpha = 0
 let mintTheta = document.getElementById("mintTheta");
-let craftTheta = 0
 setInterval(() => {
     let enoughBeta = consume("power","Beta")
     let enoughAlpha = consume("power","Alpha")
@@ -630,10 +615,24 @@ setInterval(() => {
     reparsefloats()
 },1000)
 
+/*
+--------------
+SAVE FUNCTIONS
+--------------
+*/
+setInterval(function() {
+    save()
+},300000)
+document.onvisibilitychange = () => {
+    if (document.visibilityState === "hidden") {
+        save()
+    }
+}
 function save() {
     localStorage.clear()
 
     localStorage.setItem("jsstatSesh",JSON.stringify(jsstatSesh))
+    localStorage.setItem("jsstatMins",JSON.stringify(jsstatMins))
     localStorage.setItem("jspowerBeta",JSON.stringify(jspowerBeta))
     localStorage.setItem("jspowerAlpha",JSON.stringify(jspowerAlpha))
     localStorage.setItem("jspowerTheta",JSON.stringify(jspowerTheta))
@@ -653,14 +652,34 @@ function save() {
     localStorage.setItem("mintBeta",JSON.stringify(mintBeta.checked))
     localStorage.setItem("mintAlpha",JSON.stringify(mintAlpha.checked))
     localStorage.setItem("mintTheta",JSON.stringify(mintTheta.checked))
-    localStorage.setItem("craftBeta",JSON.stringify(craftBeta))
-    localStorage.setItem("craftAlpha",JSON.stringify(craftAlpha))
-    localStorage.setItem("craftTheta",JSON.stringify(craftTheta))
+    localStorage.setItem("mintUpLvlBeta",JSON.stringify(mintUpLvlBeta))
+    localStorage.setItem("mintUpLvlAlpha",JSON.stringify(mintUpLvlAlpha))
+    localStorage.setItem("mintUpLvlTheta",JSON.stringify(mintUpLvlTheta))
+    localStorage.setItem("jsMintUpCostBeta",JSON.stringify(jsMintUpCostBeta))
+    localStorage.setItem("jsMintUpCostAlpha",JSON.stringify(jsMintUpCostAlpha))
+    localStorage.setItem("jsMintUpCostTheta",JSON.stringify(jsMintUpCostTheta))
 
+    localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
+
+    const div = document.querySelector(".console")
+    const msg = document.createElement("span")
+    msg.innerHTML = "Saved!"
+    div.appendChild(msg)
+    msg.classList.add("seshUndefined")
+    timeout(msg,2000)
 console.log(localStorage)
 }
+
+document.addEventListener('DOMContentLoaded', function(){
+    load()
+    const div = document.querySelector(".loading")
+    div.innerHTML = "Loaded!"
+    div.classList.add("seshUndefined")
+    timeout(div,2800)
+})
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
+    jsstatMins = JSON.parse(localStorage.getItem("jsstatMins"))
     jspowerBeta = JSON.parse(localStorage.getItem("jspowerBeta"))
     jspowerAlpha = JSON.parse(localStorage.getItem("jspowerAlpha"))
     jspowerTheta = JSON.parse(localStorage.getItem("jspowerTheta"))
@@ -680,11 +699,16 @@ function load() {
     mintBeta.checked = JSON.parse(localStorage.getItem("mintBeta"))
     mintAlpha.checked = JSON.parse(localStorage.getItem("mintAlpha"))
     mintTheta.checked = JSON.parse(localStorage.getItem("mintTheta"))
-    craftBeta = JSON.parse(localStorage.getItem("craftBeta"))
-    craftAlpha = JSON.parse(localStorage.getItem("craftAlpha"))
-    craftTheta = JSON.parse(localStorage.getItem("craftTheta"))
-
+    mintUpLvlBeta = JSON.parse(localStorage.getItem("mintUpLvlBeta"))
+    mintUpLvlAlpha = JSON.parse(localStorage.getItem("mintUpLvlAlpha"))
+    mintUpLvlTheta = JSON.parse(localStorage.getItem("mintUpLvlTheta"))
+    jsMintUpCostBeta = JSON.parse(localStorage.getItem("jsMintUpCostBeta"))
+    jsMintUpCostAlpha = JSON.parse(localStorage.getItem("jsMintUpCostAlpha"))
+    jsMintUpCostTheta = JSON.parse(localStorage.getItem("jsMintUpCostTheta"))
+    
     getstatSesh.innerHTML = jsstatSesh
+    document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
+    getstatMins.innerHTML = jsstatMins
 
     let n=0
     fillBar.forEach(function(i) {
@@ -700,6 +724,16 @@ function load() {
     setAllInners(getAllAlphaPower,jpA)
     let jpT = jspowerTheta / 1000
     setAllInners(getAllThetaPower,jpT)
+    setAllInners(getAllThetaPower,jpT)
+    setAllInners(getAllThetaPower,jpT)
+    setAllInners(getAllThetaPower,jpT)
+
+    setAllInners(getAllBetaMintNums,mintUpLvlBeta)
+    setAllInners(getAllAlphaMintNums,mintUpLvlAlpha)
+    setAllInners(getAllThetaMintNums,mintUpLvlTheta)
+    getBetaMintUpCost.innerHTML = jsMintUpCostBeta
+    getAlphaMintUpCost.innerHTML = jsMintUpCostAlpha
+    getThetaMintUpCost.innerHTML = jsMintUpCostTheta
 
     setAllInners(getAllBetaCoins,jscoinsBeta)
     setAllInners(getAllAlphaCoins,jscoinsAlpha)
@@ -710,35 +744,69 @@ function load() {
     getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
     getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
     getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
+    
     makeAllLeaves(boostLvlBeta,boostLvlAlpha,boostLvlTheta)
+
+    jsuserBuildings = JSON.parse(localStorage.getItem("jsuserBuildings"))
     makeAllBuildings()
 
     jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
-    getBetaBatCap.innerHTML = jsbatCapBeta
+    setAllInners(getAllBetaBatCap,jsbatCapBeta)
     jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
     getBetaBatCapCost.innerHTML = jsBatCapCostBeta
 
     jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
-    getAlphaBatCap.innerHTML = jsbatCapAlpha
+    setAllInners(getAllAlphaBatCap,jsbatCapAlpha)
     jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
     getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
 
     jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
-    getThetaBatCap.innerHTML = jsbatCapTheta
+    setAllInners(getAllThetaBatCap,jsbatCapTheta)
     jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
     getThetaBatCapCost.innerHTML = jsBatCapCostTheta
 }
 
+function reset() {
+    localStorage.clear()
 
+    localStorage.setItem("jsstatSesh",JSON.stringify(0))
+    localStorage.setItem("jsstatMins",JSON.stringify(0))
+    localStorage.setItem("jspowerBeta",JSON.stringify(0))
+    localStorage.setItem("jspowerAlpha",JSON.stringify(0))
+    localStorage.setItem("jspowerTheta",JSON.stringify(0))
+    localStorage.setItem("jsCrankNum",JSON.stringify(0))
+    localStorage.setItem("jscoinsBeta",JSON.stringify(17000))
+    localStorage.setItem("jscoinsAlpha",JSON.stringify(7000))
+    localStorage.setItem("jscoinsTheta",JSON.stringify(7000))
+    localStorage.setItem("jsLeafCostBeta",JSON.stringify(5))
+    localStorage.setItem("jsLeafCostAlpha",JSON.stringify(5))
+    localStorage.setItem("jsLeafCostTheta",JSON.stringify(5))
+    localStorage.setItem("boostLvlBeta",JSON.stringify(0))
+    localStorage.setItem("boostLvlAlpha",JSON.stringify(0))
+    localStorage.setItem("boostLvlTheta",JSON.stringify(0))
+    localStorage.setItem("batCapLvlBeta",JSON.stringify(0))
+    localStorage.setItem("batCapLvlAlpha",JSON.stringify(0))
+    localStorage.setItem("batCapLvlTheta",JSON.stringify(0))
+    localStorage.setItem("mintBeta",JSON.stringify(false))
+    localStorage.setItem("mintAlpha",JSON.stringify(false))
+    localStorage.setItem("mintTheta",JSON.stringify(false))
+    localStorage.setItem("mintUpLvlBeta",JSON.stringify(1))
+    localStorage.setItem("mintUpLvlAlpha",JSON.stringify(1))
+    localStorage.setItem("mintUpLvlTheta",JSON.stringify(1))
+    localStorage.setItem("jsMintUpCostBeta",JSON.stringify(500))
+    localStorage.setItem("jsMintUpCostAlpha",JSON.stringify(500))
+    localStorage.setItem("jsMintUpCostTheta",JSON.stringify(500))
+    localStorage.setItem("jsuserBuildings",JSON.stringify(userBuildings))
 
-window.logSession = logSession
+    console.log(localStorage)
+
+    load()
+
+    window.location.reload()
+}
+
 window.logSessionFile = logSessionFile
-window.crankPower = crankPower
 window.rotateCrank = rotateCrank
-window.makeLeaf = makeLeaf
-window.makeAllLeaves = makeAllLeaves
-window.makeBuilding = makeBuilding
-window.makeAllBuildings = makeAllBuildings
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
 window.buyThetaLeaf = buyThetaLeaf
@@ -748,6 +816,49 @@ window.buyThetaBatCap = buyThetaBatCap
 window.buyBetaMint = buyBetaMint
 window.buyAlphaMint = buyAlphaMint
 window.buyThetaMint = buyThetaMint
-window.getRates = getRates
 window.save = save
 window.load = load
+window.reset = reset
+
+
+
+const treeNodes = [
+{x:227,y:126},
+{x:220,y:115},
+{x:237,y:108},
+{x:240,y:93},
+{x:236,y:78},
+{x:228,y:68},
+{x:204,y:85},
+{x:178,y:100},
+{x:161,y:111},
+{x:226,y:50},
+{x:220,y:45},
+{x:208,y:36},
+{x:200,y:32},
+{x:174,y:60},
+{x:188,y:25},
+{x:180,y:22},
+{x:164,y:14},
+{x:149,y:12},
+{x:140,y:40},
+{x:136,y:7},
+{x:123,y:7},
+{x:108,y:21},
+{x:98,y:7},
+{x:89,y:10},
+{x:79,y:14},
+{x:82,y:37},
+{x:64,y:22},
+{x:51,y:27},
+{x:41,y:38},
+{x:32,y:45},
+{x:28,y:59},
+{x:19,y:69},
+{x:17,y:83},
+{x:14,y:95},
+{x:28,y:111},
+{x:23,y:122},
+{x:60,y:78},
+{x:84,y:100},
+]
