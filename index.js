@@ -670,13 +670,13 @@ function save() {
 console.log(localStorage)
 }
 
-document.addEventListener('DOMContentLoaded', function(){
+/*document.addEventListener('DOMContentLoaded', function(){
     load()
     const div = document.querySelector(".loading")
     div.innerHTML = "Loaded!"
     div.classList.add("seshUndefined")
     timeout(div,2800)
-})
+})*/
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
     jsstatMins = JSON.parse(localStorage.getItem("jsstatMins"))
