@@ -11,18 +11,27 @@ body {
     font-style: normal;
 }
 
+.menu{
+    display: block;
+}
+
 .main{
-    display: flex;
+    /*display: flex; */
+    display: none;
     width: 95vw;
     margin: 0;
     padding: 0;
     place-items: center; 
 }
 
+.holdForStats{
+    width: 248px;
+}
 .stats{
     width: 224px;
     height: 95vh;
-    display: block;
+    /*display: block; */
+    display: none;
     border: 5px solid black;
     border-radius: 10px;
     justify-items: left;
@@ -96,7 +105,8 @@ body {
     display: block;
     border: 5px solid black;
     border-radius: 10px;
-    justify-items: left;
+    align-items: center;
+    justify-items: center;
     padding: 2px;
     margin-right: 10px;
     overflow-x: hidden;
@@ -117,11 +127,6 @@ body {
     scrollbar-width: thin;
     scrollbar-color: black #78b933;
     background-image: url("./assets/CityBackground.png")
-}
-
-.TreeGrow{
-    align-items: center;
-    justify-items: center;
 }
 
 .laborBin{
@@ -167,14 +172,15 @@ body {
 }
 
 
-.TreeIcon{
+.treeIcon{
     width: 256px;
     height: auto;
 }
-.TreeButtonContainer{
+.treeButtonContainer{
+    display: none;
     position: relative;
 }
-.TreeButton{
+.treeButton{
     width: 256px;
     height: auto;
     border: 3px solid black;
@@ -184,18 +190,32 @@ body {
     padding: 4px;
     text-align: center;
 }
-.TreeButton h5{
+.treeButton h5{
     margin-bottom: 0px;
     padding: 4px;
     border: 5px outset grey;
 }
-.TreeButton h5:hover{
+.treeButton h5:hover{
     filter:brightness(120%);
     cursor: pointer;
 }
-.TreeButton h5:active{
+.treeButton h5:active{
     scale: .97;
     border: 5px inset grey;
+}
+.treeTip {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-auto-rows: max-content;
+    background-color: blanchedalmond;
+}
+.treeTip div {
+    padding: 0px 4px;
+}
+.nextSeshWaste {
+    border-left: 1px solid #aa0000;
+    color: #aa0000;
+    font-weight: 400;
 }
 
 .treeUpgradeBin{
@@ -256,8 +276,7 @@ body {
     color: #a5a5a5;
 }
 .leaf{
-    border: 3px solid black;
-    border-radius: 10px;
+    border: 5px outset grey;
     justify-items: center;
     margin: 0px 3px 0px 3px;
     padding: 4px;
@@ -270,8 +289,8 @@ body {
     cursor: pointer;
 }
 .leaf:active{
-    opacity: 1;
-    scale: .9
+    scale: .97;
+    border: 5px inset grey;
 }
 
 .willowLeaf{
@@ -300,7 +319,8 @@ body {
 
 .buildings{
     width: 300px;
-    display: grid;
+    /*display: grid;*/
+    display: none;
     grid-auto-rows: min-content;
     border: 3px solid black;
     background-color: blanchedalmond;
@@ -485,10 +505,13 @@ input:checked + .mint:before {
   100% { opacity: 1; }
 }
 
-.seshUndefined {
+.seshUndefinedShort {
     animation: undText 3s;
-
 }
+.seshUndefinedLong {
+    animation: undText 5s;
+}
+
 @keyframes undText {
     0% {opacity: 0;}
     05% {opacity: 1;}
@@ -531,7 +554,8 @@ input:checked + .mint:before {
 
 
 .theGrid {
-    display: grid;
+    /*display: grid;*/
+    display: none;
     grid-template-columns: repeat(2, 160px);
     grid-auto-rows: 40px;
     justify-items: center;
@@ -559,16 +583,36 @@ input:checked + .mint:before {
     filter:grayscale(60%);
     filter:brightness(120%);
 }
-.buildHov:hover .buildTooltip {
+.tooltipHover:hover .buildTooltip {
     display: block;
 }
 .buildTooltip {
     display: none;
-    background: #C8C8C8;
-    margin-left: 28px;
-    padding: 10px;
+    width: max-content;
+    margin: 100px 8px 8px 8px;
+    border: 25px solid transparent;
+    border-radius: 4px;
+    background-color: blanchedalmond;
+    border-image:
+        url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
     position: absolute;
     z-index: 1000;
+}
+
+.upgradeTooltip {
+    display: none;
+    font-weight: 400;
+    border: 25px solid transparent;
+    border-radius: 4px;
+    background-color: blanchedalmond;
+    border-image:
+        url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
+    margin-top: 16px;
+    position: absolute;
+    z-index: 1000;
+}
+.upgradeHov:hover .upgradeTooltip {
+    display: block;
 }
 
 .positive-value{
@@ -600,6 +644,6 @@ input:checked + .mint:before {
 }*/
 
 .console{
-    margin-top: 50px;
+    margin: 50px 8px 0px 8px;
     color:darkred; font-weight: bolder;
 }

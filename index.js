@@ -77,12 +77,11 @@ let baseBatCapBoost = 100
 let rateMintUpCostGrowth = 2
 let baseMintUpCost = 2000
 
-let getBetaBoostVal = document.querySelector('.boostBetaVal')
-let getAlphaBoostVal = document.querySelector('.boostAlphaVal')
-let getThetaBoostVal = document.querySelector('.boostThetaVal')
-let boostLvlBeta = 0
-let boostLvlAlpha = 0
-let boostLvlTheta = 0
+const boostLvl = {
+    Beta: 0,
+    Alpha: 0,
+    Theta: 0,
+}
 let batCapLvlBeta = 0
 let batCapLvlAlpha = 0
 let batCapLvlTheta = 0
@@ -97,7 +96,40 @@ let getcoinspsBeta = document.querySelector('.coinspsBeta')
 let getcoinspsAlpha = document.querySelector('.coinspsAlpha')
 let getcoinspsTheta = document.querySelector('.coinspsTheta')
 
+const progress = {
+    crankedTheCrank: {completed:false,elem:".stats",dispStyle:"block"},
+    crankedSomeMore: {completed:false,elem:".treeButtonContainer",dispStyle:"contents"},
+    usedTheTree: {completed:false,elem:".buildings",dispStyle:"grid"},
+    boughtABat: {completed:false,elem:".theGrid",dispStyle:"grid"},
+}
 
+
+function dispGame() {
+    dispGameElem(".main","flex")
+    dispGameElem(".menu","none")
+    consoleMsg ("Hello There!","short")
+    load()
+}
+function dispGameElem(elem, dispStyle) {
+    let loadWindow = document.querySelector(`${elem}`)
+    loadWindow.style.display = `${dispStyle}`
+}
+
+function consoleMsg (i,decay) {
+    const div = document.querySelector(".console")
+    const msg = document.createElement("span")
+    msg.innerHTML = "<br>"+i
+    div.appendChild(msg)
+    let time = 0
+    if (decay == "long") {
+        msg.classList.add("seshUndefinedLong")
+        time = 4900
+    } else {
+        msg.classList.add("seshUndefinedShort")
+        time = 2900
+    }
+    timeout(msg,time)
+}
 
 function reparsefloats() {
     jspowerBeta = parseFloat(getBetaPower.innerHTML)*1000
@@ -126,30 +158,28 @@ function logSessionFile(event) {
         const x = Math.min(event.offsetX,140)
         const y = Math.min(event.offsetY,305)
         
-        const div = document.querySelector(".console")
-        const msg = document.createElement("span")
-        msg.innerHTML = "No Session to Log!"
-        //msg.style.cssText = `color: darkredred; position: absolute; top: ${y}px; left: ${x}px; pointer-events: none;`
-        div.appendChild(msg)
-        msg.classList.add("seshUndefined")
-
-        timeout(msg,2800)
+        consoleMsg("No Session to Log!","short")
     } else {
-        jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvlBeta*baseLeafProdBoost/100))*1000)
+        if (progress.usedTheTree.completed === false) {
+            progress.usedTheTree.completed = true
+            dispGameElem(progress.usedTheTree.elem,progress.usedTheTree.dispStyle)
+            consoleMsg("Ooh, upgrades! Now we're talking","long")
+        }
+        jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvl["Beta"]*baseLeafProdBoost/100))*1000)
         jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
         batCapPercent("Beta")
         batCapPercentIndicator("Beta")
         
-        jspowerAlpha += Math.floor(sesh.alphaPower*(1+(boostLvlAlpha*baseLeafProdBoost/100))*1000)
+        jspowerAlpha += Math.floor(sesh.alphaPower*(1+(boostLvl["Alpha"]*baseLeafProdBoost/100))*1000)
         jspowerAlpha = Math.min(jspowerAlpha,jsbatCapAlpha*1000)
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
         batCapPercent("Alpha")
         batCapPercentIndicator("Alpha")
 
-        jspowerTheta += Math.floor(sesh.thetaPower*(1+(boostLvlTheta*baseLeafProdBoost/100))*1000)
+        jspowerTheta += Math.floor(sesh.thetaPower*(1+(boostLvl["Theta"]*baseLeafProdBoost/100))*1000)
         jspowerTheta = Math.min(jspowerTheta,jsbatCapTheta*1000)
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
@@ -165,39 +195,32 @@ function logSessionFile(event) {
         document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
 
         makeBolts(sesh.betaPower,sesh.alphaPower,sesh.thetaPower)
-        bolts.forEach (function(i) {
-            let x = event.clientX + (i.randX*30)
-            let y = event.clientY + (i.randY*30)
-            let element = document.querySelector(`.dest${i.type}`)
-            let div = element.getBoundingClientRect()
-
-            let particle = document.createElement("img")
-            particle.src =`./assets/${i.type}Bolt.png`
-            particle.style.cssText = `top: ${y}px; left: ${x}px; pointer-events: none;`
-            particle.classList.add("particle")
-            particle.classList.add("statsIcons")
-            element.appendChild(particle)
-
-            let dur = Math.random()-.5
-            const moveToTarget = [
-                {},
-                {offset:.03,top:`${event.clientX + (i.randY*200)}px`,left:`${event.clientX + (i.randX*200)}px`},
-                {top:`${div.y}px`,left:`${div.x}px`},
-            ]
-            let moveOptions = {
-                iterations: 1,
-                easing: 'ease-in-out',
-            }
-            moveOptions.duration = 2000+(dur*2000)           
-            particle.animate(moveToTarget,moveOptions)
-            setTimeout(() => {
-                particle.remove()
-            }, (1900+(dur*2000)))
-        })
+        moveBolts (event)
         bolts.length = 0
     }
 }
 
+function nextSeshInfo() {
+    let nextSesh = recordedSessions[jsstatSesh]
+    let msg = document.querySelector(".nextSeshInfo")
+    let waste = document.querySelector(".nextSeshWaste")
+    if (nextSesh === undefined) {
+        msg.innerHTML = "No next session to Log!"
+        waste.innerHTML = `Waste<br>0 kJ<br>0 kJ<br>0 kJ`
+    } else {
+        let nextBeta = nextSesh.betaPower
+        let nextAlpha = nextSesh.alphaPower
+        let nextTheta = nextSesh.thetaPower
+        msg.innerHTML = `Your next session has...<br>${nextBeta} kJ Beta Power<br>${nextAlpha} kJ Alph Power<br>${nextTheta} kJ Theta Power`
+
+        let wasteBeta = Math.ceil(Math.max(nextBeta*1000 - ((jsbatCapBeta*1000) - jspowerBeta),0)/100)/10
+        let wasteAlpha = Math.ceil(Math.max(nextAlpha*1000 - ((jsbatCapAlpha*1000) - jspowerAlpha),0)/100)/10
+        let wasteTheta = Math.ceil(Math.max(nextTheta*1000 - ((jsbatCapTheta*1000) - jspowerTheta),0)/100)/10
+        
+        waste.innerHTML = `Waste<br>${wasteBeta} kJ<br>${wasteAlpha} kJ<br>${wasteTheta} kJ`
+        
+    }
+}
 
 function batCapPercent(type) {
     let power = parseFloat(document.querySelector(`.power${type}`).innerHTML)
@@ -235,6 +258,37 @@ function makeBolts (seshBeta,seshAlpha,seshTheta) {
         bolts.push({type:"Theta",randX:`${randX}`,randY:`${randY}`})
     }
 }
+function moveBolts (event) {
+    bolts.forEach (function(i) {
+            let x = event.clientX + (i.randX*30)
+            let y = event.clientY + (i.randY*30)
+            let element = document.querySelector(`.dest${i.type}`)
+            let div = element.getBoundingClientRect()
+
+            let particle = document.createElement("img")
+            particle.src =`./assets/${i.type}Bolt.png`
+            particle.style.cssText = `top: ${y}px; left: ${x}px; pointer-events: none;`
+            particle.classList.add("particle")
+            particle.classList.add("statsIcons")
+            element.appendChild(particle)
+
+            let dur = Math.random()-.5
+            const moveToTarget = [
+                {},
+                {offset:.03,top:`${event.clientX + (i.randY*200)}px`,left:`${event.clientX + (i.randX*200)}px`},
+                {top:`${div.y}px`,left:`${div.x}px`},
+            ]
+            let moveOptions = {
+                iterations: 1,
+                easing: 'ease-in-out',
+            }
+            moveOptions.duration = 2000+(dur*2000)           
+            particle.animate(moveToTarget,moveOptions)
+            setTimeout(() => {
+                particle.remove()
+            }, (1900+(dur*2000)))
+        })
+}
 
 
 const timeout = (div,time) => {
@@ -265,25 +319,54 @@ function crankPower(be,al,th) {
 }
 
 let jsCrankNum = 0
+let jsCranksComplete = 0
 let cranking = 0
 let fillBar = document.querySelectorAll('.crankIndicatorLight')
 let segment = 6
-function rotateCrank() {
+const startupLog = [
+    "Oh hey, little bolts!",
+    "",
+    "wow, this is quite a bit of work, eh?",
+    "",
+    "",
+    "If only there was a way to get those bolts easier...",
+    "",
+    "",
+    "",
+    "A hah! a BRAIN TREE!",
+]
+function rotateCrank(event) {
     if (cranking == 0) {
         cranking += 1
         let crankIsCranking = document.getElementById('crankbutton');
         crankIsCranking.classList.add("crankRot");
         
         jsCrankNum += 1
+        if (jsCrankNum == 5 && progress.crankedTheCrank.completed === false) {
+            progress.crankedTheCrank.completed = true
+            dispGameElem(progress.crankedTheCrank.elem,progress.crankedTheCrank.dispStyle)
+            consoleMsg("Ooh, a stats screen!","long")
+        }
         if (jsCrankNum < 7) {
             let activeSegment = segment-jsCrankNum
             fillBar[activeSegment].classList.add("active")
         } else {
             jsCrankNum = 0
+            if (jsCranksComplete < 10) {
+                consoleMsg(startupLog[jsCranksComplete],"long")
+                jsCranksComplete += 1
+            }
             crankPower(5,5,5)
+            makeBolts(2,2,2)
+            moveBolts (event)
+            bolts.length = 0
             fillBar.forEach(function(i) {
                 i.classList.remove("active")
             })
+        }
+        if (jsCranksComplete == 10 && progress.crankedSomeMore.completed === false) {
+            progress.crankedSomeMore.completed = true
+            dispGameElem(progress.crankedSomeMore.elem,progress.crankedSomeMore.dispStyle)
         }
 
         setTimeout(() => {
@@ -296,7 +379,7 @@ function rotateCrank() {
 
 //Functions for adding art assets to the game after purchases
 function makeLeaf(type) {
-     const src = document.getElementById("TreeButton")
+     const src = document.getElementById("treeButton")
 
     for (let i = 0; i<baseLeafProdBoost; i++) {
         const img = document.createElement("img")
@@ -316,7 +399,7 @@ function makeLeaf(type) {
 }
 
 function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
-    const cleanup = document.getElementById('TreeButton')
+    const cleanup = document.getElementById('treeButton')
     while(cleanup.childNodes.length > 7){
         cleanup.removeChild(cleanup.lastChild)
     }
@@ -332,7 +415,7 @@ function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
 }
 function makeBuilding(type,wave) {
     const div = document.createElement("div")
-        div.classList.add("buildHov")
+        div.classList.add("tooltipHover")
     const img = document.createElement("img")
         img.src = `./assets/building-${wave}${type}.png`
     const span = document.createElement("span")
@@ -362,47 +445,60 @@ UPGRADE BUTTONS
 ---------------
 */
 
+let upgradeTips = document.querySelectorAll('.upgradeTooltip')
+document.addEventListener("mousemove", showTip, false)
+function showTip(event) {
+    for (let i=upgradeTips.length; i--;) {
+        upgradeTips[i].style.left = event.offsetX + 'px' 
+    }
+}
+function upgradeInfo(upgrade,wave) {
+    let upgradeButton = document.querySelector(`.${upgrade}.${wave}`)
+    let buttonSpan = upgradeButton.querySelector(".upgradeTooltip")
+    buttonSpan.innerHTML = `Total Boost: +${boostLvl[wave] * baseLeafProdBoost}%`
+}
+
 //Functions for buying Leaf Upgrades
 function buyBetaLeaf() {
     if (jspowerBeta >= (jsLeafCostBeta*1000)) {
-        boostLvlBeta += 1
+        boostLvl["Beta"] += 1
         jspowerBeta -= (jsLeafCostBeta*1000)
-        jsLeafCostBeta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvlBeta))
+        jsLeafCostBeta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Beta"]))
         getBetaLeafCost.innerHTML = jsLeafCostBeta
         let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
-        getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
         batCapPercent("Beta")
         batCapPercentIndicator("Beta")
         makeLeaf("Beta")
+        upgradeInfo("leaf","Beta")
     }
 }
 function buyAlphaLeaf() {
     if (jspowerAlpha >= (jsLeafCostAlpha*1000)) {
-        boostLvlAlpha += 1
+        boostLvl["Alpha"] += 1
         jspowerAlpha -= (jsLeafCostAlpha*1000)
-        jsLeafCostAlpha = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvlAlpha))
+        jsLeafCostAlpha = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Alpha"]))
         getAlphaLeafCost.innerHTML = jsLeafCostAlpha
         let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
-        getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
         batCapPercent("Alpha")
         batCapPercentIndicator("Alpha")
         makeLeaf("Alpha")
+        upgradeInfo("leaf","Alpha")
     }
 }
 function buyThetaLeaf() {
     if (jspowerTheta >= (jsLeafCostTheta*1000)) {
-        boostLvlTheta += 1
+        boostLvl["Theta"] += 1
         jspowerTheta -= (jsLeafCostTheta*1000)
-        jsLeafCostTheta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvlTheta))
+        jsLeafCostTheta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Theta"]))
         getThetaLeafCost.innerHTML = jsLeafCostTheta
         let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
-        getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
         batCapPercent("Theta")
         batCapPercentIndicator("Theta")
         makeLeaf("Theta")
+        upgradeInfo("leaf","Theta")
     }
 }
 
@@ -420,6 +516,11 @@ function buyBetaBatCap() {
         makeBuilding("Battery","Beta")
         jsuserBuildings.push({type:"Battery",wave:"Beta"})
     }
+    if (progress.boughtABat.completed === false) {
+        progress.boughtABat.completed = true
+        dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
+        consoleMsg("Some extra breathing room for all this power","long")
+    }
 }
 function buyAlphaBatCap() {
     if(jscoinsAlpha >= jsBatCapCostAlpha) {
@@ -434,6 +535,11 @@ function buyAlphaBatCap() {
         makeBuilding("Battery","Alpha")
         jsuserBuildings.push({type:"Battery",wave:"Alpha"})
     }
+    if (progress.boughtABat.completed === false) {
+        progress.boughtABat.completed = true
+        dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
+        consoleMsg("Some extra breathing room for all this power","long")
+    }
 }
 function buyThetaBatCap() {
     if(jscoinsTheta >= jsBatCapCostTheta) {
@@ -447,6 +553,11 @@ function buyThetaBatCap() {
         setAllInners(getAllThetaCoins,jcT)
         makeBuilding("Battery","Theta")
         jsuserBuildings.push({type:"Battery",wave:"Theta"})
+    }
+    if (progress.boughtABat.completed === false) {
+        progress.boughtABat.completed = true
+        dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
+        consoleMsg("Some extra breathing room for all this power","long")
     }
 }
 
@@ -643,9 +754,9 @@ function save() {
     localStorage.setItem("jsLeafCostBeta",JSON.stringify(jsLeafCostBeta))
     localStorage.setItem("jsLeafCostAlpha",JSON.stringify(jsLeafCostAlpha))
     localStorage.setItem("jsLeafCostTheta",JSON.stringify(jsLeafCostTheta))
-    localStorage.setItem("boostLvlBeta",JSON.stringify(boostLvlBeta))
-    localStorage.setItem("boostLvlAlpha",JSON.stringify(boostLvlAlpha))
-    localStorage.setItem("boostLvlTheta",JSON.stringify(boostLvlTheta))
+    localStorage.setItem("boostLvl['Beta']",JSON.stringify(boostLvl["Beta"]))
+    localStorage.setItem("boostLvl['Alpha']",JSON.stringify(boostLvl["Alpha"]))
+    localStorage.setItem("boostLvl['Theta']",JSON.stringify(boostLvl["Theta"]))
     localStorage.setItem("batCapLvlBeta",JSON.stringify(batCapLvlBeta))
     localStorage.setItem("batCapLvlAlpha",JSON.stringify(batCapLvlAlpha))
     localStorage.setItem("batCapLvlTheta",JSON.stringify(batCapLvlTheta))
@@ -660,23 +771,12 @@ function save() {
     localStorage.setItem("jsMintUpCostTheta",JSON.stringify(jsMintUpCostTheta))
 
     localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
+    localStorage.setItem("progress",JSON.stringify(progress))
 
-    const div = document.querySelector(".console")
-    const msg = document.createElement("span")
-    msg.innerHTML = "Saved!"
-    div.appendChild(msg)
-    msg.classList.add("seshUndefined")
-    timeout(msg,2000)
+    consoleMsg("Saved!","short")
 console.log(localStorage)
 }
 
-/*document.addEventListener('DOMContentLoaded', function(){
-    load()
-    const div = document.querySelector(".loading")
-    div.innerHTML = "Loaded!"
-    div.classList.add("seshUndefined")
-    timeout(div,2800)
-})*/
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
     jsstatMins = JSON.parse(localStorage.getItem("jsstatMins"))
@@ -690,9 +790,9 @@ function load() {
     jsLeafCostBeta = JSON.parse(localStorage.getItem("jsLeafCostBeta"))
     jsLeafCostAlpha = JSON.parse(localStorage.getItem("jsLeafCostAlpha"))
     jsLeafCostTheta = JSON.parse(localStorage.getItem("jsLeafCostTheta"))
-    boostLvlBeta = JSON.parse(localStorage.getItem("boostLvlBeta"))
-    boostLvlAlpha = JSON.parse(localStorage.getItem("boostLvlAlpha"))
-    boostLvlTheta = JSON.parse(localStorage.getItem("boostLvlTheta"))
+    boostLvl["Beta"] = JSON.parse(localStorage.getItem("boostLvl['Beta']"))
+    boostLvl["Alpha"] = JSON.parse(localStorage.getItem("boostLvl['Alpha']"))
+    boostLvl["Theta"] = JSON.parse(localStorage.getItem("boostLvl['Theta']"))
     batCapLvlBeta = JSON.parse(localStorage.getItem("batCapLvlBeta"))
     batCapLvlAlpha = JSON.parse(localStorage.getItem("batCapLvlAlpha"))
     batCapLvlTheta = JSON.parse(localStorage.getItem("batCapLvlTheta"))
@@ -741,14 +841,17 @@ function load() {
     getBetaLeafCost.innerHTML = jsLeafCostBeta
     getAlphaLeafCost.innerHTML = jsLeafCostAlpha
     getThetaLeafCost.innerHTML = jsLeafCostTheta
-    getBetaBoostVal.innerHTML = (boostLvlBeta*baseLeafProdBoost)
-    getAlphaBoostVal.innerHTML = (boostLvlAlpha*baseLeafProdBoost)
-    getThetaBoostVal.innerHTML = (boostLvlTheta*baseLeafProdBoost)
     
-    makeAllLeaves(boostLvlBeta,boostLvlAlpha,boostLvlTheta)
+    makeAllLeaves(boostLvl["Beta"],boostLvl["Alpha"],boostLvl["Theta"])
 
     jsuserBuildings = JSON.parse(localStorage.getItem("jsuserBuildings"))
     makeAllBuildings()
+
+    let loadprogress = JSON.parse(localStorage.getItem("progress"))
+    for (const key in loadprogress) {
+        progress[key] = loadprogress[key]
+        if (progress[key].completed === true) {dispGameElem(progress[key].elem,progress[key].dispStyle)}
+    }
 
     jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
     setAllInners(getAllBetaBatCap,jsbatCapBeta)
@@ -781,9 +884,9 @@ function reset() {
     localStorage.setItem("jsLeafCostBeta",JSON.stringify(5))
     localStorage.setItem("jsLeafCostAlpha",JSON.stringify(5))
     localStorage.setItem("jsLeafCostTheta",JSON.stringify(5))
-    localStorage.setItem("boostLvlBeta",JSON.stringify(0))
-    localStorage.setItem("boostLvlAlpha",JSON.stringify(0))
-    localStorage.setItem("boostLvlTheta",JSON.stringify(0))
+    localStorage.setItem("boostLvl['Beta']",JSON.stringify(0))
+    localStorage.setItem("boostLvl['Alpha']",JSON.stringify(0))
+    localStorage.setItem("boostLvl['Theta']",JSON.stringify(0))
     localStorage.setItem("batCapLvlBeta",JSON.stringify(0))
     localStorage.setItem("batCapLvlAlpha",JSON.stringify(0))
     localStorage.setItem("batCapLvlTheta",JSON.stringify(0))
@@ -805,8 +908,11 @@ function reset() {
     window.location.reload()
 }
 
+window.dispGame = dispGame
 window.logSessionFile = logSessionFile
+window.nextSeshInfo = nextSeshInfo
 window.rotateCrank = rotateCrank
+window.upgradeInfo = upgradeInfo
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
 window.buyThetaLeaf = buyThetaLeaf
