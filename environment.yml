@@ -12,6 +12,8 @@ dependencies:
   - seaborn=0.13
   - tensorflow=2.18
   - pytest=8.4
+  - fastapi=0.116
   - pip=25.2
   - pip:
     - pylsl==1.17
+    - fastapi[standard]
