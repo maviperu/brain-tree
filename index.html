@@ -8,19 +8,18 @@
 </head>
 <body>
     <section class="header">
-
-    </section>
+        <div><a href="https://cafemajo.com">Back home</a></div>
+        <div onclick="skipTut()">||</div>
+        <div>Thanks for playing! Feedback? <a href="mailto:gnomeofdoom314@gmail.com">Email us!</a></div>
+    </section> 
     <section class ="menu">
         <h1>Hello World</h1>
-        <button class="util-button" onclick="dispGame()">Start</button>
-        <button class="util-button" onclick="dispGame()">
-            Load
-        </button>
+        <button class="util-button" onclick="dispGame('new')">New Game</button>
+        <button class="util-button" onclick="dispGame('load')">Load Game</button>
     </section>
     <section class="game"> <!--MAIN GAME WINDOWS-->
         <div id="main" class="main">
             <!--STATS PANE-->
-            
             <div class="holdForStats"><div class="stats">
                 <H3><u>Stats</u></H3>
                 <div class="pad util-buttons">
@@ -39,7 +38,7 @@
                     <strong>Brain Time: </strong><span class="statMins">0</span> minutes
                 </div>
                 <div class="pad stats-Container">
-                    <p><u>Energy</u></p>
+                    <p><u>Energy</u><span class="infoHov"><img src="./assets/info.png" class="statsIconsSm"><span class="infoTooltip">The brain produces several different waves within specific frequency bands, and each serves a particular purpose in modulating brain activity. Your Brain Tree collects the energy output of three of these waves, much like a regular tree collects the sun's energy.</span></span></p>
                     <div class="pad containerSmFlex">
                         <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0</span>/s)<br>
                         <span class ="destBeta"><img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"></span><span class="powerBeta">0</span> kJ
@@ -213,29 +212,32 @@
                         <H3>Batteries</H3>
                         <p>Batteries store Brainpower as Energy, but have a limited Capacity. Each upgrade gives +100 kJ</p>
                         <div class="batteryUpgrades">
-                            <div class="batCap" onclick="buyBetaBatCap()">
+                            <div class="batCap Beta upgradeHov" onclick="buyBetaBatCap()" onmouseover="upgradeInfo('batCap','Beta')">
                                 <h5>Current Capacity: <span class="batCapBeta">100</span> kJ</h5>
                                 <div>
                                     <img src="./assets/BetaBattery.png" alt="Beta" class="batIcons" draggable="false">
                                 </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costBatCapBeta"> 500</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="batCap" onclick="buyAlphaBatCap()">
+                            <div class="batCap Alpha upgradeHov" onclick="buyAlphaBatCap()" onmouseover="upgradeInfo('batCap','Alpha')">
                                 <h5>Current Capacity: <span class="batCapAlpha">100</span> kJ</h5>
                                 <div>
                                     <img src="./assets/AlphaBattery.png" alt="Alpha" class="batIcons" draggable="false">
                                 </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costBatCapAlpha"> 500</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="batCap" onclick="buyThetaBatCap()">
+                            <div class="batCap Theta upgradeHov" onclick="buyThetaBatCap()" onmouseover="upgradeInfo('batCap','Theta')">
                                 <h5>Current Capacity: <span class="batCapTheta">100</span> kJ</h5>
                                 <div>
                                     <img src="./assets/ThetaBattery.png" alt="Theta" class="batIcons" draggable="false">
                                 </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costBatCapTheta"> 500</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                         </div>
                     </div>
@@ -244,29 +246,32 @@
                         <H3>Mints</H3>
                         <p>Mints slowly produce Coins, but require Energy to operate. Each mint consumes 1 Watt and produces a coin every 9 seconds</p>
                         <div class="mintUpgrades">
-                            <div class="mintUp" onclick="buyBetaMint()">
+                            <div class="mintUp Beta upgradeHov" onclick="buyBetaMint()" onmouseover="upgradeInfo('mintUp','Beta')">
                                 <h5>Current Count: <span class="mintNumBeta">1</span></h5>
                                 <div>
                                     <img src="./assets/BetaMint.png" alt="Beta" class="mintIcons" draggable="false">
                                 </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costMintUpBeta"> 4000</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="mintUp" onclick="buyAlphaMint()">
+                            <div class="mintUp Alpha upgradeHov" onclick="buyAlphaMint()" onmouseover="upgradeInfo('mintUp','Alpha')">
                                 <h5>Current Count: <span class="mintNumAlpha">1</span></h5>
                                 <div>
                                     <img src="./assets/AlphaMint.png" alt="Alpha" class="mintIcons" draggable="false">
                                 </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costMintUpAlpha"> 4000</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="mintUp" onclick="buyThetaMint()">
+                            <div class="mintUp Theta upgradeHov" onclick="buyThetaMint()" onmouseover="upgradeInfo('mintUp','Theta')">
                                 <h5>Current Count: <span class="mintNumTheta">1</span></h5>
                                 <div>
                                     <img src="./assets/ThetaMint.png" alt="Theta" class="mintIcons" draggable="false">
                                 </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costMintUpTheta"> 4000</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                         </div>
                     </div>
