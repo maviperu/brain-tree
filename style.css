@@ -1,71 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
 body {
     display: grid;
     background-color: PowderBlue;
     user-select: none;
+
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.header{
+    display: flex;
+    font-weight: 400;
+    border-bottom: 3px solid black;
+    margin-bottom: 5px;
+}
+.header div{
+    margin: 0px 4px 2px;
+}
+
+.menu{
+    display: block;
 }
 
 .main{
-    display: flex;
+    /*display: flex; */
+    display: none;
     width: 95vw;
     margin: 0;
     padding: 0;
     place-items: center; 
 }
 
+.holdForStats{
+    width: 248px;
+}
 .stats{
-    width: 15vw;
-    height: 95vh;
-    display: block;
+    width: 224px;
+    height: 90vh;
+    /*display: block; */
+    display: none;
     border: 5px solid black;
     border-radius: 10px;
     justify-items: left;
     padding: 2px;
-    margin-right: 20px;
+    margin-right: 10px;
+    overflow-x: visible;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: black powderblue;
 }
-.stats div{
+.stats  div.pad{
     margin-bottom: 10px;
     margin-left: 10px;
 }
+
+.util-button {
+    border-radius: 10px;
+}
+
+.util-button.del{
+    margin-left: 18px;
+    margin-top: 8px;
+    border-radius: 0px;
+    background-color: rgb(226, 193, 193);
+    color: darkred;
+}
+
 .stats-Container{
+    width: 190px;
     border: 1px solid black;
     border-radius: 10px;
     padding: 5px;
 }
+.statBatCap{
+    margin: 6px 0px 16px 0px;
+    font-size:.8em;
+}
+
+.battery {
+    display: grid;
+    grid-template-columns: repeat(10, 10%);
+    grid-auto-rows: auto;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0px 4px;
+    margin-left: 4px;
+}
+.battery.Beta {background-color: #f6ccaa;}
+.battery.Alpha {background-color: #e7d98b;}
+.battery.Theta {background-color: #c5db85;}
+.batCapIndicatorLight {
+    height: 32px;
+    width: auto;
+    border: 1px solid black;
+    border-radius: 16px;
+    padding: 0px;
+    margin: 3px 2px;
+    background-color: #f6ccaa;
+}
+.batCapIndicatorLight.Beta.active {background-color: #f7770a;}
+.batCapIndicatorLight.Alpha.active {background-color: #dcbd00;}
+.batCapIndicatorLight.Theta.active {background-color: #92bc1e;}
+
 .statsIcons{
     height: 1em;
     width: 1em;
 }
-.top{
-    width: 78vw;
-    height: 95vh;
+.statsIconsSm{
+    height: .8em;
+    width: .8em;
+}
+.homestead{
+    width: 294px;
+    height: 90vh;
+    display: block;
+    border: 5px solid black;
+    border-radius: 10px;
+    align-items: center;
+    justify-items: center;
+    padding: 2px;
+    margin-right: 10px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: black powderblue;
+}
+.right{
+    height: 90vh;
     display: flex;
+    flex-grow: 1;
     border: 5px solid black;
     border-radius: 10px;
     justify-items: center;
     padding: 2px;
-    overflow-x: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: black #78b933;
+    background-image: url("./assets/CityBackground.png")
 }
 
-.buildings{
-    width: 300px;
-    display: grid;
+.laborBin{
+    width: 256px;
+    display: flex;
     border: 3px solid black;
-    background-color: blanchedalmond;
     border-radius: 10px;
     justify-items: center;
-    margin: 0px 10px 0px 10px;
+    margin: 5px 0px 5px 0px;
     padding: 4px;
     text-align: center;
+    align-items: center;
+    justify-content: space-between;
+}
+.crank {
+    height: 48px;
+    width: 48px;
+    transform: rotate(0deg);
+    margin-left: 10px;
+}
+.crankRot {
+    transform: rotate(360deg);
+    transition: .25s linear;
+}
+.crankIndicator {
+    display: grid;
+    height: 36px;
+    width: 6px;
+    border: 2px solid black;
+    padding: 0px;
+    margin-left: 4px;
+}
+.crankIndicatorLight {
+    height: 4px;
+    width: 4px;
+    border: 1px solid black;
+    padding: 0px;
+    margin: 0px;
+    background-color: lightgrey;
+}
+.crankIndicatorLight.active {
+    background-color: red;
 }
 
-.TreeIcon{
+
+.treeIcon{
     width: 256px;
     height: auto;
 }
-.TreeButtonContainer{
+.treeButtonContainer{
+    /*display: block */
+    display: none;
     position: relative;
 }
-.TreeButton{
+.treeButton{
     width: 256px;
     height: auto;
     border: 3px solid black;
@@ -75,17 +205,34 @@ body {
     padding: 4px;
     text-align: center;
 }
-.TreeButton:hover{
-    opacity: .8;
+.treeButton h5{
+    margin-bottom: 0px;
+    padding: 4px;
+    border: 5px outset grey;
+}
+.treeButton h5:hover{
+    filter:brightness(120%);
     cursor: pointer;
 }
-.TreeButton:active{
-    opacity: 1;
-    scale: .9
+.treeButton h5:active{
+    scale: .97;
+    border: 5px inset grey;
 }
-.TreeButton h5{
-    margin-bottom: 0px;
+.treeTip {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-auto-rows: max-content;
+    background-color: blanchedalmond;
 }
+.treeTip div {
+    padding: 0px 4px;
+}
+.nextSeshWaste {
+    border-left: 1px solid #aa0000;
+    color: #aa0000;
+    font-weight: 400;
+}
+
 .treeUpgradeBin{
     display: block;
     justify-items: center;
@@ -102,6 +249,38 @@ body {
     margin-top: 0px;
     margin-bottom: 0px;
 }
+.batUpgradeBin{
+    display: block;
+    justify-items: center;
+    padding: 2px;
+}
+.batteryUpgrades{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px;
+    padding: 10px;
+}
+.batteryUpgrades h5{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+.mintUpgradeBin{
+    display: block;
+    justify-items: center;
+    padding: 2px;
+}
+.mintUpgrades{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0px;
+    padding: 10px;
+}
+.mintUpgrades h5{
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
 
 .leafIcons{
     width: 48px;
@@ -112,8 +291,7 @@ body {
     color: #a5a5a5;
 }
 .leaf{
-    border: 3px solid black;
-    border-radius: 10px;
+    border: 5px outset grey;
     justify-items: center;
     margin: 0px 3px 0px 3px;
     padding: 4px;
@@ -122,85 +300,84 @@ body {
     text-align: center;
 }
 .leaf:hover{
-    opacity: .8;
+    filter:brightness(120%);
     cursor: pointer;
 }
 .leaf:active{
-    opacity: 1;
-    scale: .9
+    scale: .97;
+    border: 5px inset grey;
 }
 
-.crank {
-    height: 48px;
-    width: 48px;
-    transform: rotate(0deg);
-}
-.crankRot {
-    transform: rotate(360deg);
-    transition: .25s linear;
-}
-.crankIndicator {
-    display: grid;
-    height: 36px;
-    width: 6px;
-    border: 2px solid black;
-    padding: 0px;
-    margin-left: 4px;
-}
-.indicatorLight {
-    height: 4px;
-    width: 4px;
-    border: 1px solid black;
-    padding: 0px;
-    margin: 0px;
-    background-color: lightgrey;
-}
-.indicatorLight.active {
-    background-color: red;
+.willowLeaf{
+    position:absolute;
+    width: auto;
+    height: auto;
+    opacity: .8;
+    transform-origin: 0% top;
+    transform: translate(-40%, -100%);
+    scale:.3;
 }
 
-.batteryBin{
-    width: 280px;
-    display: flex;
+.buildings{
+    width: 300px;
+    /*display: grid;*/
+    display: none;
+    grid-auto-rows: min-content;
     border: 3px solid black;
+    background-color: blanchedalmond;
     border-radius: 10px;
     justify-items: center;
-    margin: 20px 0px 20px 0px;
+    margin: 0px 10px 0px 10px;
     padding: 4px;
     text-align: center;
-    align-items: center;
-    justify-content: space-between;
+    overflow-x: visible;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: black blanchedalmond;
 }
-.batteryBin h3{
-    margin:0px 0px 0px 0px;
+.buildings h3{
+    margin: 10px 0px 0px 0px;
 }
-.batCapUpgrades {
-    display: grid;
-    align-items: center;
-    justify-content: space-between;
+.buildings p{
     margin: 0px;
 }
+
 .batCap {
-    border: 3px solid black;
-    border-radius: 10px;
+    border: 5px outset grey;
     justify-items: center;
-    margin: 10px 3px 0px 3px;
+    margin: 0px 3px 0px 3px;
     padding: 4px;
 
     position: relative;
     text-align: center;
 }
 .batCap:hover{
-    opacity: .8;
+    filter:brightness(120%);
     cursor: pointer;
 }
 .batCap:active{
-    opacity: 1;
-    scale: .9
+    scale: .97;
+    border: 5px inset grey;
 }
-.batCap h5{
-    margin: 0px;
+
+.mintUp {
+    border: 5px outset grey;
+    justify-items: center;
+    margin: 0px 3px 0px 3px;
+    padding: 4px;
+
+    position: relative;
+    text-align: center;
 }
+.mintUp:hover{
+    filter:brightness(120%);
+    cursor: pointer;
+}
+.mintUp:active{
+    scale: .97;
+    border: 5px inset grey;
+}
+
 .batTick{
     display: block;
     width: 5px;
@@ -209,52 +386,37 @@ body {
     border: 2px solid black;
 }
 .batIcons{
-    height: 96px;
-    width: auto;
+    height: 24px;
+    width: 45px;
     margin-right: 5px;
 }
 
-.mintBin{
-    width: 280px;
-    display: grid;
-    border: 3px solid black;
-    border-radius: 10px;
-    justify-items: center;
-    margin: 10px 0px 10px 0px;
-    padding: 4px;
-    text-align: center;
-    align-items: center;
+.mintIcons{
+    width: 48px;
+    height: auto;
 }
-
 .mintAction{
-    width: 280px;
+    width: 140px;
     display: flex;
     align-items: center;
     justify-items: stretch;
     justify-content: space-between;
 }
-.mintCoins{
-    width: 108px;
-    display: flex;
-    align-items: center;
-    padding-left: 10px;
+.mintNums{
+    width: 3em;
 }
-.mintCoins h2{
-    margin: 0px 0px 0px 5px;
-}
+
 .coinsIcons{
     width: 34px;
     height: 34px;
 }
 
-/* The switch - the box around the slider */
+/* The switch - the box around the mint slider */
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
-  margin-left: 5px;
-  margin-right: 5px;
+  width: 48px;
+  height: 16px;
 }
 /* Hide default HTML checkbox */
 .switch input {
@@ -262,8 +424,8 @@ body {
     width: 0;
     height: 0;
 }
-/* The slider */
-.slider {
+/* The mint slider */
+.mint {
     position: absolute;
     cursor: pointer;
     top: 0;
@@ -272,45 +434,46 @@ body {
     bottom: 0;
     -webkit-transition: .4s;
     transition: .4s;
-    border-radius: 34px;
+    border: 1px solid grey;
+    border-radius: 16px;
 }
-.slider.Beta {
+.mint.Beta {
     background-color: #f6ccaa;
 }
-.slider.Alpha {
+.mint.Alpha {
     background-color: #e7d98b;
 }
-.slider.Theta {
+.mint.Theta {
     background-color: #c5db85;
 }
-.slider:before {
+.mint:before {
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 8px;
+    width: 8px;
     left: 4px;
-    bottom: 4px;
+    bottom: 3px;
     background-color: white;
     -webkit-transition: .4s;
     transition: .4s;
-    border-radius: 50px;
+    border-radius: 25px;
 }
-input:checked + .slider.Beta {
+input:checked + .mint.Beta {
     background-color: #f7770a;
 }
-input:checked + .slider.Alpha {
+input:checked + .mint.Alpha {
     background-color: #dcbd00;
 }
-input:checked + .slider.Theta {
+input:checked + .mint.Theta {
     background-color: #92bc1e;
 }
-input:focus + .slider {
+input:focus + .mint {
     box-shadow: 0 0 1px #000000;
 }
-input:checked + .slider:before {
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
-    transform: translateX(26px);
+input:checked + .mint:before {
+    -webkit-transform: translateX(30px);
+    -ms-transform: translateX(30px);
+    transform: translateX(30px);
 }
 
 .ConvArrow {
@@ -341,10 +504,13 @@ input:checked + .slider:before {
   100% { opacity: 1; }
 }
 
-.seshUndefined {
+.seshUndefinedShort {
     animation: undText 3s;
-
 }
+.seshUndefinedLong {
+    animation: undText 5s;
+}
+
 @keyframes undText {
     0% {opacity: 0;}
     05% {opacity: 1;}
@@ -364,6 +530,7 @@ input:checked + .slider:before {
 .ContainerSmFlex{
     display: flex;
     align-items: center;
+    border: 1px solid black
 }
 .containerSmGrid{
     display: grid;
@@ -383,19 +550,103 @@ input:checked + .slider:before {
     padding: 5px;
     justify-items: center;
 }
-.testbutton {
-    border: 3px solid black;
-    border-radius: 10px;
+
+
+.theGrid {
+    /*display: grid;*/
+    display: none;
+    grid-template-columns: repeat(2, 160px);
+    grid-auto-rows: 40px;
     justify-items: center;
-    margin: 0px 5px 0px 5px;
-    padding: 4px;
-    text-align: center;
 }
-.testbutton:hover {
-    opacity: .8;
-    cursor: pointer;
+.theGrid div {
+    &:nth-child(4n+1){
+        margin-left: 30%;
+        margin-right: -50%;
+    }
+    &:nth-child(4n+2){
+        margin-left: 30%;
+        margin-right: -50%;
+    }
+    &:nth-child(4n+3){
+        margin-left: -20%;
+        margin-right: 0%;
+    }
+    &:nth-child(4n+4){
+        margin-left: -20%;
+        margin-right: 0%;
+    }
 }
-.testbutton:active {
-    opacity: 1;
-    scale: .9
+
+.buildHov:hover {
+    filter:grayscale(60%);
+    filter:brightness(120%);
+}
+.tooltipHover:hover .buildTooltip {
+    display: block;
+}
+.buildTooltip {
+    display: none;
+    width: max-content;
+    margin: 100px 8px 8px 8px;
+    border: 25px solid transparent;
+    border-radius: 4px;
+    background-color: blanchedalmond;
+    border-image:
+        url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
+    position: absolute;
+    z-index: 1000;
+}
+
+.upgradeTooltip {
+    display: none;
+    font-weight: 400;
+    border: 25px solid transparent;
+    border-radius: 4px;
+    background-color: blanchedalmond;
+    border-image:
+        url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
+    margin-top: 16px;
+    position: absolute;
+    z-index: 1000;
+}
+.upgradeHov:hover .upgradeTooltip {
+    display: block;
+}
+
+.infoTooltip {
+    display: none;
+    width: 300px;
+    font-weight: 400;
+    border: 25px solid transparent;
+    border-radius: 4px;
+    background-color: blanchedalmond;
+    border-image:
+        url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
+    margin-top: 16px;
+    position: absolute;
+    z-index: 1000;
+}
+.infoHov:hover .infoTooltip {
+    display: block;
+}
+
+.positive-value{
+    color:darkgreen;
+    font-weight:500;
+}
+.negative-value{
+    color:darkred;
+    font-weight:500;
+}
+
+.particle {
+    position: absolute;
+    z-index: 1;
+}
+
+
+.console{
+    margin: 50px 8px 0px 8px;
+    color:darkred; font-weight: bolder;
 }

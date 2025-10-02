@@ -7,264 +7,286 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <section>
-        <div class="main">
-            <!--STATS WINDOW-->
-            <div class="stats">
+    <section class="header">
+        <div><a href="https://cafemajo.com">Back home</a></div>
+        <div onclick="skipTut()">||</div>
+        <div>Thanks for playing! Feedback? <a href="mailto:gnomeofdoom314@gmail.com">Email us!</a></div>
+    </section> 
+    <section class ="menu">
+        <h1>Hello World</h1>
+        <button class="util-button" onclick="dispGame('new')">New Game</button>
+        <button class="util-button" onclick="dispGame('load')">Load Game</button>
+    </section>
+    <section class="game"> <!--MAIN GAME WINDOWS-->
+        <div id="main" class="main">
+            <!--STATS PANE-->
+            <div class="holdForStats"><div class="stats">
                 <H3><u>Stats</u></H3>
-                <div class="containerSmFlex">
-                    <strong>Sessions Logged: </strong><span class="statSesh">0</span><br>
-                    <strong>Brain Time: </strong><span class="statSesh">0</span> minutes
-                </div>
-                <div class="stats-Container">
-                    <p><u>Energy</u></p>
-                    <div class="containerSmFlex">
-                        <strong>Beta Power: </strong>
-                        <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="powerBeta">0.0</span> kJ
-                    </div>
-                    <div class="containerSmFlex">                        
-                        <strong>Alpha Power: </strong>
-                        <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="powerAlpha">0.0</span> kJ
-                    </div>
-                    <div class="containerSmFlex">
-                        <strong>Theta Power: </strong>
-                        <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="powerTheta">0.0</span> kJ
-                    </div>
-                    <button class="util-button" onclick="logSession()">
-                        Debug +Energy
-                    </button>
-                </div>
-                <div class="stats-Container">
-                    <p><u>Coins</u></p>
-                    <div class="containerSmFlex">
-                        <strong>Beta Coins: </strong>
-                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">7000</span>
-                    </div>
-                    <div class="containerSmFlex">                        
-                        <strong>Alpha Coins: </strong>
-                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">7000</span>
-                    </div>
-                    <div class="containerSmFlex">
-                        <strong>Theta Coins: </strong>
-                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">7000</span>
-                    </div>
-                </div>
-                <div class="util-buttons">
+                <div class="pad util-buttons">
                     <button class="util-button" onclick="save()">
                         Save
                     </button>
                     <button class="util-button" onclick="load()">
                         Load
                     </button>
+                    <button class="util-button del" onclick="reset()">
+                        Delete File
+                    </button>
                 </div>
-                
-            </div>
-            <div class="top">
-                <!--TREE BUILDING-->
-                <div class="buildings">
-                    <H3>Brainwave Tree</H3>
-                    <div class="TreeButtonContainer">
-                        <div class="TreeButton" onclick="logSessionFile(event)">
-                            <img src="./assets/TreeButton.png" alt="Synthesize" class="TreeIcon" draggable="false">
-                            <h5>Click to convert a Session's Brainpower to Energy</h5>
+                <div class="pad containerSmFlex">
+                    <strong>Sessions Logged: </strong><span class="statSesh">0</span><br>
+                    <strong>Brain Time: </strong><span class="statMins">0</span> minutes
+                </div>
+                <div class="pad stats-Container">
+                    <p><u>Energy</u><span class="infoHov"><img src="./assets/info.png" class="statsIconsSm"><span class="infoTooltip">The brain produces several different waves within specific frequency bands, and each serves a particular purpose in modulating brain activity. Your Brain Tree collects the energy output of three of these waves, much like a regular tree collects the sun's energy.</span></span></p>
+                    <div class="pad containerSmFlex">
+                        <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0</span>/s)<br>
+                        <span class ="destBeta"><img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"></span><span class="powerBeta">0</span> kJ
+                        <div class="statBatCap">Capacity: <span class="batCapBeta">100</span> kJ - <span class="batCapPercentBeta">0</span> %
+                            <div class="battery Beta">
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                                <div class="batCapIndicatorLight Beta"></div>
+                            </div>
                         </div>
                     </div>
+                    <div class="pad containerSmFlex">                        
+                        <strong>Alpha Power: </strong> (<span class="kJpsAlpha rate">0</span>/s)<br>
+                        <span class ="destAlpha"><img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"></span><span class="powerAlpha">0</span> kJ
+                        <div class="statBatCap">Capacity: <span class="batCapAlpha">100</span> kJ - <span class="batCapPercentAlpha">0</span> %
+                            <div class="battery Alpha">
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                                <div class="batCapIndicatorLight Alpha"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pad containerSmFlex">
+                        <strong>Theta Power: </strong> (<span class="kJpsTheta rate">0</span>/s)<br>
+                        <span class ="destTheta"><img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"></span><span class="powerTheta">0</span> kJ
+                        <div class="statBatCap">Capacity: <span class="batCapTheta">100</span> kJ - <span class="batCapPercentTheta">0</span> %
+                            <div class="battery Theta">
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                                <div class="batCapIndicatorLight Theta"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pad stats-Container">
+                    <p><u>Mint</u></p>
+                    <div class="pad mintAction">
+                        <span class="mintNums"><span class="mintNumBeta">1</span>x </span>
+                        <img src="./assets/BetaWave.png" alt="Beta" class="statsIcons">
+                        <label class="switch">
+                            <input type="checkbox" id="mintBeta">
+                            <span class="mint Beta"></span>
+                        </label>
+                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons">
+                    </div>
+                    <div class="pad mintAction">
+                        <span class="mintNums"><span class="mintNumAlpha">1</span>x </span>
+                        <img src="./assets/AlphaWave.png" alt="Alpha" class="statsIcons">
+                        <label class="switch">
+                            <input type="checkbox" id="mintAlpha">
+                            <span class="mint Alpha"></span>
+                        </label>
+                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons">
+                    </div>
+                    <div class="pad mintAction">
+                        <span class="mintNums"><span class="mintNumTheta">1</span>x </span>
+                        <img src="./assets/ThetaWave.png" alt="Theta" class="statsIcons">
+                        <label class="switch">
+                            <input type="checkbox" id="mintTheta">
+                            <span class="mint Theta"></span>
+                        </label>
+                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons">
+                    </div>
+                </div>
+                <div class="pad stats-Container">
+                    <p><u>Coins</u></p>
+                    <div class="pad containerSmFlex">
+                        <strong>Beta Coins: </strong> (<span class="coinspsBeta rate">0.0</span>/s)<br>
+                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">17000</span>
+                    </div>
+                    <div class="pad containerSmFlex">                        
+                        <strong>Alpha Coins: </strong> (<span class="coinspsAlpha rate">0.0</span>/s)<br>
+                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">7000</span>
+                    </div>
+                    <div class="pad containerSmFlex">
+                        <strong>Theta Coins: </strong> (<span class="coinspsTheta rate">0.0</span>/s)<br>
+                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">7000</span>
+                    </div>
+                </div>
+            </div></div>
+            <!--HOMESTEAD PANE-->
+            <div class="homestead">
+                <H3><u>Homestead</u></H3>
+                <div class="laborBin">
+                    <h5>Manual Labor: create a tiny amount of energy by turning this crank!</h5>
+                    <img src="./assets/crank.png" class="crank" id="crankbutton" onclick="rotateCrank(event)">
+                    <div class="crankIndicator">
+                        <div class="crankIndicatorLight"></div>
+                        <div class="crankIndicatorLight"></div>
+                        <div class="crankIndicatorLight"></div>
+                        <div class="crankIndicatorLight"></div>
+                        <div class="crankIndicatorLight"></div>
+                        <div class="crankIndicatorLight"></div>
+                    </div>
+                </div>
+                <div class="treeButtonContainer tooltipHover" onmouseover="nextSeshInfo()">
+                    <div id="treeButton" class="treeButton" onclick="logSessionFile(event), nextSeshInfo()">
+                        <img src="./assets/treeButtonEmpty.png" alt="Synthesize" class="treeIcon" draggable="false">
+                        <p style="font-size:.8em">You have <span class="seshLen" style="font-size:1.2em; color:darkgreen; font-weight:500">0</span> sessions left to process</p>
+                        <h5>Click to convert a Session's Brainpower to Energy</h5>
+                    </div>
+                    <div class="buildTooltip">
+                        <div class="treeTip">
+                            <div class="nextSeshInfo">If you see this, something's broke</div>
+                            <div class="nextSeshWaste">Waste</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="console">
+                </div>
+            </div>
+            <!--BUILDING ASSETS AND UPGRADES-->
+            <div class="right">
+                <!--UPGRADES BUILDING-->
+                <div class="buildings">
+                    <H3><u>Upgrades</u></H3>
+                    <!--TREE UPGRADES-->
                     <div class="treeUpgradeBin">
                         <h3>Tree Upgrades</h3>
-                        <p>Add leaves to your tree to get more out of each session!</p>
+                        <p>Add leaves to your tree to get more out of each session! Each upgrade grows 2 Leaves (and gets you+2% more energy!)</p>
                         <div class="treeUpgrades">
-                            <div class="leaf" onclick="buyBetaLeaf()">
-                                <h5>Current Boost: + <span class="boostBetaVal">0</span>%</h5>
+                            <div class="leaf Beta upgradeHov" onclick="buyBetaLeaf()" onmouseover="upgradeInfo('leaf','Beta')">
+                                <h5>Click for +2% Beta Power</h5>
                                 <div>
                                     <img src="./assets/BetaLeaf.png" alt="Beta" class="leafIcons" draggable="false">
                                 </div>
                                 <h5>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="costLeafBeta">5</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="leaf" onclick="buyAlphaLeaf()">
-                                <h5>Current Boost: + <span class="boostAlphaVal">0</span>%</h5>
+                            <div class="leaf Alpha upgradeHov" onclick="buyAlphaLeaf()" onmouseover="upgradeInfo('leaf','Alpha')">
+                                <h5>Click for +2% Alpha Power</h5>
                                 <div>
                                     <img src="./assets/AlphaLeaf.png" alt="Alpha" class="leafIcons" draggable="false">
                                 </div>
                                 <h5>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="costLeafAlpha">5</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="leaf" onclick="buyThetaLeaf()">
-                                <h5>Current Boost: + <span class="boostThetaVal">0</span>%</h5>
+                            <div class="leaf Theta upgradeHov" onclick="buyThetaLeaf()" onmouseover="upgradeInfo('leaf','Theta')">
+                                <h5>Click for +2% Theta Power</h5>
                                 <div>
                                     <img src="./assets/ThetaLeaf.png" alt="Theta" class="leafIcons" draggable="false">
                                 </div>
                                 <h5>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="costLeafTheta">5</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!--BATTERY BUILDING-->
-                <div class="buildings">
-                    <H3>Batteries</H3>
-                    <p>Batteries store Brainpower as Energy, but have a limited Capacity</p>
-                    <div class="batteryBin">
-                        <h5>Manual Labor: create a tiny amount of energy by turning this crank!</h5>
-                        <img src="./assets/crank.png" class="crank" id="crankbutton" onclick="rotateCrank()">
-                        <div class="crankIndicator">
-                            <div class="indicatorLight"></div>
-                            <div class="indicatorLight"></div>
-                            <div class="indicatorLight"></div>
-                            <div class="indicatorLight"></div>
-                            <div class="indicatorLight"></div>
-                            <div class="indicatorLight"></div>
-                        </div>
-                    </div>
-                    <div class="batteryBin">
-                        <div>
-                            <img src="./assets/BetaBattery.png" alt="Beta" class="batIcons" draggable="false">
-                        </div>
-                        <div>
-                            <h3>Charge:</h3>
-                            <h3><span class="powerBeta">0.0</span> kJ</h3>
-                            <br>
-                            <h3>Capacity:</h3>
-                            <h3><span class="batCapBeta">100</span> kJ</h3>
-                        </div>
-                        <div class ="batCapUpgrades">
-                            <div>Capacity:<br>
-                            +100 kJ</div>
-                            <div class="batCap" onclick="buyBetaBatCap()">
+                    <!--BATTERY UPGRADES-->
+                    <div class="batUpgradeBin">
+                        <H3>Batteries</H3>
+                        <p>Batteries store Brainpower as Energy, but have a limited Capacity. Each upgrade gives +100 kJ</p>
+                        <div class="batteryUpgrades">
+                            <div class="batCap Beta upgradeHov" onclick="buyBetaBatCap()" onmouseover="upgradeInfo('batCap','Beta')">
+                                <h5>Current Capacity: <span class="batCapBeta">100</span> kJ</h5>
+                                <div>
+                                    <img src="./assets/BetaBattery.png" alt="Beta" class="batIcons" draggable="false">
+                                </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costBatCapBeta"> 500</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="batteryBin">
-                        <div>
-                            <img src="./assets/AlphaBattery.png" alt="Alpha" class="batIcons" draggable="false">
-                        </div>
-                        <div>
-                            <h3>Charge:</h3>
-                            <h3><span class="powerAlpha">0.0</span> kJ</h3>
-                            <br>
-                            <h3>Capacity:</h3>
-                            <h3><span class="batCapAlpha">100</span> kJ</h3>
-                        </div>
-                        <div class ="batCapUpgrades">
-                            <div>Capacity:<br>
-                            +100 kJ</div>
-                            <div class="batCap" onclick="buyAlphaBatCap()">
+                            <div class="batCap Alpha upgradeHov" onclick="buyAlphaBatCap()" onmouseover="upgradeInfo('batCap','Alpha')">
+                                <h5>Current Capacity: <span class="batCapAlpha">100</span> kJ</h5>
+                                <div>
+                                    <img src="./assets/AlphaBattery.png" alt="Alpha" class="batIcons" draggable="false">
+                                </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costBatCapAlpha"> 500</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="batteryBin">
-                        <div>
-                            <img src="./assets/ThetaBattery.png" alt="Theta" class="batIcons" draggable="false">
-                        </div>
-                        <div>
-                            <h3>Charge:</h3>
-                            <h3><span class="powerTheta">0.0</span> kJ</h3>
-                            <br>
-                            <h3>Capacity:</h3>
-                            <h3><span class="batCapTheta">100</span> kJ</h3>
-                        </div>
-                        <div class ="batCapUpgrades">
-                            <div>Capacity:<br>
-                            +100 kJ</div>
-                            <div class="batCap" onclick="buyThetaBatCap()">
+                            <div class="batCap Theta upgradeHov" onclick="buyThetaBatCap()" onmouseover="upgradeInfo('batCap','Theta')">
+                                <h5>Current Capacity: <span class="batCapTheta">100</span> kJ</h5>
+                                <div>
+                                    <img src="./assets/ThetaBattery.png" alt="Theta" class="batIcons" draggable="false">
+                                </div>
                                 <h5>Cost:</h5>
                                 <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costBatCapTheta"> 500</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--MINT UPGRADES-->
+                    <div class="mintUpgradeBin">
+                        <H3>Mints</H3>
+                        <p>Mints slowly produce Coins, but require Energy to operate. Each mint consumes 1 Watt and produces a coin every 9 seconds</p>
+                        <div class="mintUpgrades">
+                            <div class="mintUp Beta upgradeHov" onclick="buyBetaMint()" onmouseover="upgradeInfo('mintUp','Beta')">
+                                <h5>Current Count: <span class="mintNumBeta">1</span></h5>
+                                <div>
+                                    <img src="./assets/BetaMint.png" alt="Beta" class="mintIcons" draggable="false">
+                                </div>
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costMintUpBeta"> 4000</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
+                            </div>
+                            <div class="mintUp Alpha upgradeHov" onclick="buyAlphaMint()" onmouseover="upgradeInfo('mintUp','Alpha')">
+                                <h5>Current Count: <span class="mintNumAlpha">1</span></h5>
+                                <div>
+                                    <img src="./assets/AlphaMint.png" alt="Alpha" class="mintIcons" draggable="false">
+                                </div>
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costMintUpAlpha"> 4000</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
+                            </div>
+                            <div class="mintUp Theta upgradeHov" onclick="buyThetaMint()" onmouseover="upgradeInfo('mintUp','Theta')">
+                                <h5>Current Count: <span class="mintNumTheta">1</span></h5>
+                                <div>
+                                    <img src="./assets/ThetaMint.png" alt="Theta" class="mintIcons" draggable="false">
+                                </div>
+                                <h5>Cost:</h5>
+                                <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costMintUpTheta"> 4000</span></h5>
+                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!--MINT BUILDING-->
-                <div class="buildings">
-                    <H3>Mints</H3>
-                    <p>Mints convert Energy to Currency over time!</p>
-                    <div class="mintBin">
-                        <div>
-                            <img src="./assets/BetaMint2.png" alt="Beta Mint" class="batIcons" draggable="false">
-                            Consumes: 1W
-                            Produces: 0.15 Coins / second
-                        </div>
-                        <div class="mintAction">
-                            <div class="ContainerSmFlex">
-                                <label class="switch">
-                                    <input type="checkbox" id="sliderBeta">
-                                    <span class="slider Beta"></span>
-                                </label>
-                            </div>
-                            <div class="ContainerSmFlex">
-                                <img src="./assets/BetaWave.png" alt="Beta" class="coinsIcons">
-                            </div>
-                            <div class="ContainerSmFlex">
-                                <div class="ConvArrow"></div>
-                                <div class="ConvArrow"></div>
-                                <div class="ConvArrow"></div>
-                            </div>
-                            <div class="mintCoins">
-                                <img src="./assets/BetaCoin.png" alt="Beta" class="coinsIcons">
-                                <h2>x<span class="coinsBeta">7000</span></h2>
-                            </div>
-                        </div>    
-                    </div>
-                    <div class="mintBin">
-                        <div>
-                            <img src="./assets/AlphaMint2.png" alt="Alpha Mint" class="batIcons" draggable="false">
-                            Consumes: 1W
-                            Produces: 1 Coin / 15 minutes
-                        </div>
-                        <div class="mintAction">
-                            <div class="ContainerSmFlex">
-                                <label class="switch">
-                                    <input type="checkbox" id="sliderAlpha">
-                                    <span class="slider Alpha"></span>
-                                </label>
-                            </div>
-                            <div class="ContainerSmFlex">
-                                <img src="./assets/AlphaWave.png" alt="Alpha" class="coinsIcons">
-                            </div>
-                            <div class="ContainerSmFlex">
-                                <div class="ConvArrow"></div>
-                                <div class="ConvArrow"></div>
-                                <div class="ConvArrow"></div>
-                            </div>
-                            <div class="mintCoins">
-                                <img src="./assets/AlphaCoin.png" alt="Alpha" class="coinsIcons">
-                                <h2>x<span class="coinsAlpha">7000</span></h2>
-                            </div>
-                        </div>    
-                    </div>
-                    <div class="mintBin">
-                        <div>
-                            <img src="./assets/ThetaMint2.png" alt="Theta Mint" class="batIcons" draggable="false">
-                            Consumes: 1W
-                            Produces: 1 Coin / 15 minutes
-                        </div>
-                        <div class="mintAction">
-                            <div class="ContainerSmFlex">
-                                <label class="switch">
-                                    <input type="checkbox" id="sliderTheta">
-                                    <span class="slider Theta"></span>
-                                </label>
-                            </div>
-                            <div class="ContainerSmFlex">
-                                <img src="./assets/ThetaWave.png" alt="Theta" class="coinsIcons">
-                            </div>
-                            <div class="ContainerSmFlex">
-                                <div class="ConvArrow"></div>
-                                <div class="ConvArrow"></div>
-                                <div class="ConvArrow"></div>
-                            </div>
-                            <div class="mintCoins">
-                                <img src="./assets/ThetaCoin.png" alt="Theta" class="coinsIcons">
-                                <h2>x<span class="coinsTheta">7000</span></h2>
-                            </div>
-                        </div>    
-                    </div>
+                <!--BUILDING ASSETS ON DISPLAY-->
+                <div class="theGrid" id="theGrid">
+                    <div class="buildHov tooltipHover"><img  src="./assets/building-1House.png"><span class="buildTooltip">House</span></div>
+                    <div class="buildHov tooltipHover"><img  src="./assets/building-BetaBattery.png"><span class="buildTooltip">Battery</span></div>
+                    <div class="buildHov tooltipHover"><img  src="./assets/building-AlphaMint.png"><span class="buildTooltip">Mint</span></div>
+                    <div class="buildHov tooltipHover"><img  src="./assets/building-BetaMint.png"><span class="buildTooltip">Mint</span></div>
+                    <div class="buildHov tooltipHover"><img  src="./assets/building-AlphaBattery.png"><span class="buildTooltip">Battery</span></div>
+                    <div class="buildHov tooltipHover"><img  src="./assets/building-ThetaBattery.png"><span class="buildTooltip">Battery</span></div>
+                    <div class="buildHov tooltipHover"><img  src="./assets/building-ThetaMint.png"><span class="buildTooltip">Mint</span></div>
+                    
                 </div>
-                 <!--TEMP BUILDING-->
-<!--                <div class="buildings">
-                    <p>asdf</p>
-                    <img src="./assets/TreeButton.png" alt="Synthesize" class="TreeIcon" draggable="false">
-                </div> -->
             </div> 
         </div>
     </section>
