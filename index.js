@@ -98,28 +98,38 @@ let getcoinspsTheta = document.querySelector('.coinspsTheta')
 
 const progress = {
     crankedTheCrank: {completed:false,elem:".stats",dispStyle:"block"},
-    crankedSomeMore: {completed:false,elem:".treeButtonContainer",dispStyle:"contents"},
+    crankedSomeMore: {completed:false,elem:".treeButtonContainer",dispStyle:"block"},
     usedTheTree: {completed:false,elem:".buildings",dispStyle:"grid"},
     boughtABat: {completed:false,elem:".theGrid",dispStyle:"grid"},
 }
 
 
-function dispGame() {
+function dispGame(val) {
     dispGameElem(".main","flex")
     dispGameElem(".menu","none")
     consoleMsg ("Hello There!","short")
-    load()
+    if (val === "load") {load()}
+    if (val === "new") {defaultGame()}
 }
 function dispGameElem(elem, dispStyle) {
     let loadWindow = document.querySelector(`${elem}`)
     loadWindow.style.display = `${dispStyle}`
 }
+function skipTut() {
+    for (const key in progress) {
+        console.log(progress[key])
+        progress[key].completed = true
+        dispGameElem(progress[key].elem,progress[key].dispStyle)
+    }
+}
 
 function consoleMsg (i,decay) {
     const div = document.querySelector(".console")
     const msg = document.createElement("span")
-    msg.innerHTML = "<br>"+i
-    div.appendChild(msg)
+    const checkFirstChild = div.firstChild
+    msg.innerHTML = i+"<br>"
+    div.insertBefore(msg,checkFirstChild)
+    //div.appendChild(msg)
     let time = 0
     if (decay == "long") {
         msg.classList.add("seshUndefinedLong")
@@ -379,7 +389,8 @@ function rotateCrank(event) {
 
 //Functions for adding art assets to the game after purchases
 function makeLeaf(type) {
-     const src = document.getElementById("treeButton")
+    const src = document.getElementById("treeButton")
+    console.log(src.style)
 
     for (let i = 0; i<baseLeafProdBoost; i++) {
         const img = document.createElement("img")
@@ -446,10 +457,19 @@ UPGRADE BUTTONS
 */
 
 let upgradeTips = document.querySelectorAll('.upgradeTooltip')
-document.addEventListener("mousemove", showTip, false)
-function showTip(event) {
+document.addEventListener("mousemove", showTipBelow, false)
+function showTipBelow(event) {
     for (let i=upgradeTips.length; i--;) {
         upgradeTips[i].style.left = event.offsetX + 'px' 
+    }
+}
+
+let infoTips = document.querySelectorAll('.infoTooltip')
+document.addEventListener("mousemove", showTipCursor, false)
+function showTipCursor(event) {
+    for (let i=infoTips.length; i--;) {
+        infoTips[i].style.left = event.clientX + 'px' 
+        infoTips[i].style.top = event.clientY + 'px' 
     }
 }
 function upgradeInfo(upgrade,wave) {
@@ -869,7 +889,7 @@ function load() {
     getThetaBatCapCost.innerHTML = jsBatCapCostTheta
 }
 
-function reset() {
+function defaultGame() {
     localStorage.clear()
 
     localStorage.setItem("jsstatSesh",JSON.stringify(0))
@@ -901,14 +921,23 @@ function reset() {
     localStorage.setItem("jsMintUpCostTheta",JSON.stringify(500))
     localStorage.setItem("jsuserBuildings",JSON.stringify(userBuildings))
 
+    for (const key in progress) {
+        console.log(progress[key])
+        progress[key].completed = false
+        dispGameElem(progress[key].elem,"none")
+    }
+
     console.log(localStorage)
-
+}
+function reset() {
+    defaultGame()
     load()
-
     window.location.reload()
 }
 
 window.dispGame = dispGame
+
+window.skipTut = skipTut
 window.logSessionFile = logSessionFile
 window.nextSeshInfo = nextSeshInfo
 window.rotateCrank = rotateCrank

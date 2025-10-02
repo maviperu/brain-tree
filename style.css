@@ -11,6 +11,16 @@ body {
     font-style: normal;
 }
 
+.header{
+    display: flex;
+    font-weight: 400;
+    border-bottom: 3px solid black;
+    margin-bottom: 5px;
+}
+.header div{
+    margin: 0px 4px 2px;
+}
+
 .menu{
     display: block;
 }
@@ -29,7 +39,7 @@ body {
 }
 .stats{
     width: 224px;
-    height: 95vh;
+    height: 90vh;
     /*display: block; */
     display: none;
     border: 5px solid black;
@@ -99,9 +109,13 @@ body {
     height: 1em;
     width: 1em;
 }
+.statsIconsSm{
+    height: .8em;
+    width: .8em;
+}
 .homestead{
     width: 294px;
-    height: 95vh;
+    height: 90vh;
     display: block;
     border: 5px solid black;
     border-radius: 10px;
@@ -115,7 +129,7 @@ body {
     scrollbar-color: black powderblue;
 }
 .right{
-    height: 95vh;
+    height: 90vh;
     display: flex;
     flex-grow: 1;
     border: 5px solid black;
@@ -177,6 +191,7 @@ body {
     height: auto;
 }
 .treeButtonContainer{
+    /*display: block */
     display: none;
     position: relative;
 }
@@ -302,20 +317,6 @@ body {
     transform: translate(-40%, -100%);
     scale:.3;
 }
-/*.willowLeafExpand{
-    transform: scale(1);
-    transition: 1s linear;
-    animation-fill-mode: forwards;
-
-    -webkit-animation: willowLeafExpand 3s Linear 1 ;
-    -moz-animation: willowLeafExpand 3s Linear 1 ;
-    animation: willowLeafExpand 3s Linear 1 ;
-}
-@keyframes willowLeafExpand {
-    0% { scale: .3;}
-  100% { scale: 1; }
-}*/
-
 
 .buildings{
     width: 300px;
@@ -342,10 +343,9 @@ body {
 }
 
 .batCap {
-    border: 3px solid black;
-    border-radius: 10px;
+    border: 5px outset grey;
     justify-items: center;
-    margin: 10px 3px 0px 3px;
+    margin: 0px 3px 0px 3px;
     padding: 4px;
 
     position: relative;
@@ -356,15 +356,14 @@ body {
     cursor: pointer;
 }
 .batCap:active{
-    opacity: 1;
-    scale: .9
+    scale: .97;
+    border: 5px inset grey;
 }
 
 .mintUp {
-    border: 3px solid black;
-    border-radius: 10px;
+    border: 5px outset grey;
     justify-items: center;
-    margin: 10px 3px 0px 3px;
+    margin: 0px 3px 0px 3px;
     padding: 4px;
 
     position: relative;
@@ -375,8 +374,8 @@ body {
     cursor: pointer;
 }
 .mintUp:active{
-    opacity: 1;
-    scale: .9
+    scale: .97;
+    border: 5px inset grey;
 }
 
 .batTick{
@@ -615,6 +614,23 @@ input:checked + .mint:before {
     display: block;
 }
 
+.infoTooltip {
+    display: none;
+    width: 300px;
+    font-weight: 400;
+    border: 25px solid transparent;
+    border-radius: 4px;
+    background-color: blanchedalmond;
+    border-image:
+        url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
+    margin-top: 16px;
+    position: absolute;
+    z-index: 1000;
+}
+.infoHov:hover .infoTooltip {
+    display: block;
+}
+
 .positive-value{
     color:darkgreen;
     font-weight:500;
@@ -627,21 +643,8 @@ input:checked + .mint:before {
 .particle {
     position: absolute;
     z-index: 1;
-   /* -webkit-animation: moveToCoordinate 1s Linear 1 ;
-    -moz-animation: moveToCoordinate 1s Linear 1 ;
-    animation: moveToCoordinate 1s Linear 1 ; 
-    
-    transition: top 1s ease-in-out left 1s ease-in-out; */
 }
-/*@keyframes moveToCoordinate {
-    0% {
-        
-    }
-    100% {
-        top:0%;
-        left:0%;
-    }
-}*/
+
 
 .console{
     margin: 50px 8px 0px 8px;
