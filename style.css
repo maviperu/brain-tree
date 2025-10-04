@@ -51,7 +51,23 @@ body {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: black powderblue;
+    z-index: 10;
 }
+/*.stats.fadeIn{
+    -webkit-animation: fade-in 2s 1 linear;
+    -moz-animation: fade-in 2s 1 linear;
+    animation: fade-in 2s 1 linear;
+
+    animation-fill-mode: forwards;
+}
+.stats.slideRight{
+    -webkit-animation: slide-right 2s 1 linear;
+    -moz-animation: slide-right 2s 1 linear;
+    animation: slide-right 2s 1 linear;
+
+    animation-fill-mode: forwards;
+    z-index: 10;
+}*/
 .stats  div.pad{
     margin-bottom: 10px;
     margin-left: 10px;
@@ -145,22 +161,28 @@ body {
 
 .laborBin{
     width: 256px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 184px 72px;
     border: 3px solid black;
     border-radius: 10px;
     justify-items: center;
     margin: 5px 0px 5px 0px;
-    padding: 4px;
+    padding: 4px 4px 0px;
     text-align: center;
     align-items: center;
     justify-content: space-between;
 }
+.laborBinLvl2{
+    display: grid;
+    grid-template-columns: 58px 14px;
+    align-items: center;
+        text-align: center;
+
+}
 .crank {
     height: 48px;
     width: 48px;
-    transform: rotate(0deg);
-    margin-left: 10px;
-}
+    transform: rotate(0deg);}
 .crankRot {
     transform: rotate(360deg);
     transition: .25s linear;
@@ -171,7 +193,6 @@ body {
     width: 6px;
     border: 2px solid black;
     padding: 0px;
-    margin-left: 4px;
 }
 .crankIndicatorLight {
     height: 4px;
@@ -184,6 +205,19 @@ body {
 .crankIndicatorLight.active {
     background-color: red;
 }
+.mindCircle {
+    height: 48px;
+    width: 48px;
+    background-color: #dcbd00;
+    border: 2px solid black;
+    border-radius: 24px;
+    align-content: center;
+}
+.drainBar {
+    height: 0%;
+    min-width: 10px;
+    background-color: #f7770a;
+}
 
 
 .treeIcon{
@@ -195,6 +229,13 @@ body {
     display: none;
     position: relative;
 }
+.treeButtonContainer.slideRight{
+    -webkit-animation: slide-right 2s 1 linear;
+    -moz-animation: slide-right 2s 1 linear;
+    animation: slide-right 2s 1 linear;
+
+    animation-fill-mode: forwards;
+}
 .treeButton{
     width: 256px;
     height: auto;
@@ -204,6 +245,7 @@ body {
     margin: 0px 5px 0px 5px;
     padding: 4px;
     text-align: center;
+    z-index: 1;
 }
 .treeButton h5{
     margin-bottom: 0px;
@@ -319,7 +361,7 @@ body {
 }
 
 .buildings{
-    width: 300px;
+    width: 310px;
     /*display: grid;*/
     display: none;
     grid-auto-rows: min-content;
@@ -334,6 +376,13 @@ body {
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: black blanchedalmond;
+}
+.buildings.slideRight{
+    -webkit-animation: slide-right 2s 1 linear;
+    -moz-animation: slide-right 2s 1 linear;
+    animation: slide-right 2s 1 linear;
+
+    animation-fill-mode: forwards;
 }
 .buildings h3{
     margin: 10px 0px 0px 0px;
@@ -559,6 +608,13 @@ input:checked + .mint:before {
     grid-auto-rows: 40px;
     justify-items: center;
 }
+.theGrid.fadeIn{
+    -webkit-animation: fade-in 2s 1 linear;
+    -moz-animation: fade-in 2s 1 linear;
+    animation: fade-in 2s 1 linear;
+
+    animation-fill-mode: forwards;
+}
 .theGrid div {
     &:nth-child(4n+1){
         margin-left: 30%;
@@ -585,17 +641,22 @@ input:checked + .mint:before {
 .tooltipHover:hover .buildTooltip {
     display: block;
 }
+.tooltipHover:hover .tooltip {
+    display: block;
+}
 .buildTooltip {
     display: none;
     width: max-content;
-    margin: 100px 8px 8px 8px;
+    margin: 10px 8px 8px 8px;
+    /*top: 8px;
+    left: 8px;*/
     border: 25px solid transparent;
     border-radius: 4px;
     background-color: blanchedalmond;
     border-image:
         url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
     position: absolute;
-    z-index: 1000;
+    z-index: 900;
 }
 
 .upgradeTooltip {
@@ -608,15 +669,15 @@ input:checked + .mint:before {
         url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
     margin-top: 16px;
     position: absolute;
-    z-index: 1000;
+    z-index: 900;
 }
 .upgradeHov:hover .upgradeTooltip {
     display: block;
 }
 
-.infoTooltip {
+.tooltip {
     display: none;
-    width: 300px;
+    width: max-content;
     font-weight: 400;
     border: 25px solid transparent;
     border-radius: 4px;
@@ -625,10 +686,11 @@ input:checked + .mint:before {
         url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
     margin-top: 16px;
     position: absolute;
-    z-index: 1000;
+    z-index: 900;
 }
-.infoHov:hover .infoTooltip {
+.infoHov:hover .tooltip {
     display: block;
+    width: 300px;
 }
 
 .positive-value{
@@ -642,11 +704,27 @@ input:checked + .mint:before {
 
 .particle {
     position: absolute;
-    z-index: 1;
+    z-index: 10;
 }
 
 
 .console{
     margin: 50px 8px 0px 8px;
     color:darkred; font-weight: bolder;
+}
+
+@keyframes fade-in {
+  0%   { opacity: 0; }
+  50%  { opacity: .6; }
+  100% { opacity: 1; }
+}
+@keyframes slide-right {
+  0%   { translate: -50%; opacity: .3 }
+  50%  { translate: -15%; opacity: .9}
+  100% { translate: .5%; opacity: 1; z-index: 1}
+}
+@keyframes slide-down {
+  0%   { translate: 0 -50%; opacity: .3 }
+  50%  { translate: 0 -15%; opacity: .9}
+  100% { translate: 0%; opacity: 1}
 }
