@@ -117,7 +117,6 @@ function dispGameElem(elem, dispStyle) {
 }
 function skipTut() {
     for (const key in progress) {
-        console.log(progress[key])
         progress[key].completed = true
         dispGameElem(progress[key].elem,progress[key].dispStyle)
     }
@@ -173,7 +172,7 @@ function logSessionFile(event) {
         if (progress.usedTheTree.completed === false) {
             progress.usedTheTree.completed = true
             dispGameElem(progress.usedTheTree.elem,progress.usedTheTree.dispStyle)
-            consoleMsg("Ooh, upgrades! Now we're talking","long")
+            consoleMsg("Ooh, upgrades! Now we're talking, let's get a battery!","long")
         }
         jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvl["Beta"]*baseLeafProdBoost/100))*1000)
         jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
@@ -232,6 +231,7 @@ function nextSeshInfo() {
     }
 }
 
+
 function batCapPercent(type) {
     let power = parseFloat(document.querySelector(`.power${type}`).innerHTML)
     let cap = parseFloat(document.querySelector(`.batCap${type}`).innerHTML)
@@ -277,7 +277,7 @@ function moveBolts (event) {
 
             let particle = document.createElement("img")
             particle.src =`./assets/${i.type}Bolt.png`
-            particle.style.cssText = `top: ${y}px; left: ${x}px; pointer-events: none;`
+            particle.style.cssText = `top: ${y}px; left: ${x}px; pointer-events: none; z-index: 1000`
             particle.classList.add("particle")
             particle.classList.add("statsIcons")
             element.appendChild(particle)
@@ -343,7 +343,7 @@ const startupLog = [
     "",
     "",
     "",
-    "A hah! a BRAIN TREE!",
+    "A hah! a BRAIN TREE! I wonder what this does?",
 ]
 function rotateCrank(event) {
     if (cranking == 0) {
@@ -352,28 +352,35 @@ function rotateCrank(event) {
         crankIsCranking.classList.add("crankRot");
         
         jsCrankNum += 1
+        //Checks First Progress Milestone
         if (jsCrankNum == 5 && progress.crankedTheCrank.completed === false) {
             progress.crankedTheCrank.completed = true
             dispGameElem(progress.crankedTheCrank.elem,progress.crankedTheCrank.dispStyle)
             consoleMsg("Ooh, a stats screen!","long")
         }
+        //Indexes the Indicator lights or resets the indicators
         if (jsCrankNum < 7) {
             let activeSegment = segment-jsCrankNum
             fillBar[activeSegment].classList.add("active")
+            crankPower(Math.ceil(jsCrankNum/2),Math.ceil(counting/5),0)
+            makeBolts(1,Math.ceil(counting/10),0)
+            moveBolts (event)
+            bolts.length = 0
         } else {
             jsCrankNum = 0
             if (jsCranksComplete < 10) {
                 consoleMsg(startupLog[jsCranksComplete],"long")
                 jsCranksComplete += 1
             }
-            crankPower(5,5,5)
-            makeBolts(2,2,2)
+            crankPower(4,1,1)
+            makeBolts(4,1,1)
             moveBolts (event)
             bolts.length = 0
             fillBar.forEach(function(i) {
                 i.classList.remove("active")
             })
         }
+        //Checks Second Progress Milestone
         if (jsCranksComplete == 10 && progress.crankedSomeMore.completed === false) {
             progress.crankedSomeMore.completed = true
             dispGameElem(progress.crankedSomeMore.elem,progress.crankedSomeMore.dispStyle)
@@ -386,11 +393,34 @@ function rotateCrank(event) {
 
     }
 }
+let counting = 0
+function countdown() {
+    if (counting == 0) {
+        const drainBar = document.getElementById("drainBar")
+        drainBar.animate([
+            {height:`100%`},
+            {height:`0%`},
+        ],{
+            duration: 11000,
+            iterations: 1,
+            easing: 'linear',
+        })
+
+        counting = 11
+        let cdT = setInterval(function() {
+            counting -= 1
+            document.querySelector(".countdownTimer").innerHTML = String(counting).padStart(2,"0")
+
+            if (counting==0) {
+                clearInterval(cdT)
+            }
+        },1000)
+    }
+}
 
 //Functions for adding art assets to the game after purchases
 function makeLeaf(type) {
     const src = document.getElementById("treeButton")
-    console.log(src.style)
 
     for (let i = 0; i<baseLeafProdBoost; i++) {
         const img = document.createElement("img")
@@ -464,12 +494,12 @@ function showTipBelow(event) {
     }
 }
 
-let infoTips = document.querySelectorAll('.infoTooltip')
+let infoTips = document.querySelectorAll('.tooltip')
 document.addEventListener("mousemove", showTipCursor, false)
 function showTipCursor(event) {
     for (let i=infoTips.length; i--;) {
-        infoTips[i].style.left = event.clientX + 'px' 
-        infoTips[i].style.top = event.clientY + 'px' 
+        infoTips[i].style.left = 0 //(event.offsetX) + 'px' 
+        infoTips[i].style.top = (event.offsetY +15) + 'px' 
     }
 }
 function upgradeInfo(upgrade,wave) {
@@ -941,6 +971,7 @@ window.skipTut = skipTut
 window.logSessionFile = logSessionFile
 window.nextSeshInfo = nextSeshInfo
 window.rotateCrank = rotateCrank
+window.countdown = countdown
 window.upgradeInfo = upgradeInfo
 window.buyBetaLeaf = buyBetaLeaf
 window.buyAlphaLeaf = buyAlphaLeaf
@@ -954,8 +985,6 @@ window.buyThetaMint = buyThetaMint
 window.save = save
 window.load = load
 window.reset = reset
-
-
 
 const treeNodes = [
 {x:227,y:126},

@@ -10,7 +10,7 @@
     <section class="header">
         <div><a href="https://cafemajo.com">Back home</a></div>
         <div onclick="skipTut()">||</div>
-        <div>Thanks for playing! Feedback? <a href="mailto:gnomeofdoom314@gmail.com">Email us!</a></div>
+        <div>Thanks for playing! Bugs? Feedback? <a href="mailto:gnomeofdoom314@gmail.com">Email us!</a></div>
     </section> 
     <section class ="menu">
         <h1>Hello World</h1>
@@ -20,7 +20,7 @@
     <section class="game"> <!--MAIN GAME WINDOWS-->
         <div id="main" class="main">
             <!--STATS PANE-->
-            <div class="holdForStats"><div class="stats">
+            <div class="holdForStats"><div class="stats slideRight">
                 <H3><u>Stats</u></H3>
                 <div class="pad util-buttons">
                     <button class="util-button" onclick="save()">
@@ -38,7 +38,7 @@
                     <strong>Brain Time: </strong><span class="statMins">0</span> minutes
                 </div>
                 <div class="pad stats-Container">
-                    <p><u>Energy</u><span class="infoHov"><img src="./assets/info.png" class="statsIconsSm"><span class="infoTooltip">The brain produces several different waves within specific frequency bands, and each serves a particular purpose in modulating brain activity. Your Brain Tree collects the energy output of three of these waves, much like a regular tree collects the sun's energy.</span></span></p>
+                    <p><u>Energy</u><span class="infoHov"><img src="./assets/info.png" class="statsIconsSm"><span class="tooltip">The brain produces several different waves within specific frequency bands, and each serves a particular purpose in modulating brain activity. Your Brain Tree collects the energy output of three of these waves, much like a regular tree collects the sun's energy.</span></span></p>
                     <div class="pad containerSmFlex">
                         <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0</span>/s)<br>
                         <span class ="destBeta"><img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"></span><span class="powerBeta">0</span> kJ
@@ -144,24 +144,35 @@
             <div class="homestead">
                 <H3><u>Homestead</u></H3>
                 <div class="laborBin">
-                    <h5>Manual Labor: create a tiny amount of energy by turning this crank!</h5>
-                    <img src="./assets/crank.png" class="crank" id="crankbutton" onclick="rotateCrank(event)">
-                    <div class="crankIndicator">
-                        <div class="crankIndicatorLight"></div>
-                        <div class="crankIndicatorLight"></div>
-                        <div class="crankIndicatorLight"></div>
-                        <div class="crankIndicatorLight"></div>
-                        <div class="crankIndicatorLight"></div>
-                        <div class="crankIndicatorLight"></div>
+                    <h5>Manual Labor: create a tiny amount of Beta energy by turning this crank!</h5>
+                    <div class="laborBinLvl2">
+                        <img src="./assets/crankBeta.png" class="crank" id="crankbutton" onclick="rotateCrank(event)">
+                        <div class="crankIndicator">
+                            <div class="crankIndicatorLight"></div>
+                            <div class="crankIndicatorLight"></div>
+                            <div class="crankIndicatorLight"></div>
+                            <div class="crankIndicatorLight"></div>
+                            <div class="crankIndicatorLight"></div>
+                            <div class="crankIndicatorLight"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="treeButtonContainer tooltipHover" onmouseover="nextSeshInfo()">
+                <div class="laborBin">
+                    <h5>Mindful Labor: Enhance your Manual Labor with a bit of mindfulness</h5>
+                    <div class="laborBinLvl2">
+                        <div class="mindCircle" onclick="countdown()">
+                            :<span class="countdownTimer">00</span>
+                        </div>
+                        <div id="drainBar" class="drainBar"></div>
+                    </div>
+                </div>
+                <div class="treeButtonContainer tooltipHover slideRight" onmouseover="nextSeshInfo()">
                     <div id="treeButton" class="treeButton" onclick="logSessionFile(event), nextSeshInfo()">
                         <img src="./assets/treeButtonEmpty.png" alt="Synthesize" class="treeIcon" draggable="false">
                         <p style="font-size:.8em">You have <span class="seshLen" style="font-size:1.2em; color:darkgreen; font-weight:500">0</span> sessions left to process</p>
                         <h5>Click to convert a Session's Brainpower to Energy</h5>
                     </div>
-                    <div class="buildTooltip">
+                    <div class="tooltip">
                         <div class="treeTip">
                             <div class="nextSeshInfo">If you see this, something's broke</div>
                             <div class="nextSeshWaste">Waste</div>
@@ -174,7 +185,7 @@
             <!--BUILDING ASSETS AND UPGRADES-->
             <div class="right">
                 <!--UPGRADES BUILDING-->
-                <div class="buildings">
+                <div class="buildings slideRight">
                     <H3><u>Upgrades</u></H3>
                     <!--TREE UPGRADES-->
                     <div class="treeUpgradeBin">
@@ -277,7 +288,7 @@
                     </div>
                 </div>
                 <!--BUILDING ASSETS ON DISPLAY-->
-                <div class="theGrid" id="theGrid">
+                <div class="theGrid fadeIn" id="theGrid">
                     <div class="buildHov tooltipHover"><img  src="./assets/building-1House.png"><span class="buildTooltip">House</span></div>
                     <div class="buildHov tooltipHover"><img  src="./assets/building-BetaBattery.png"><span class="buildTooltip">Battery</span></div>
                     <div class="buildHov tooltipHover"><img  src="./assets/building-AlphaMint.png"><span class="buildTooltip">Mint</span></div>
