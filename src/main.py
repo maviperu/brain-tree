@@ -22,7 +22,7 @@ async def upload(file: UploadFile = File(...)):
     # buffer.close()
     # file.file.close()
     # # return df.mean().to_dict()
-    return {"theta":314, "alpha":325, "beta":2}
+    return {"deltaPower": 99, "thetaPower": 9, "alphaPower": 5, "betaPower": 10, "gammaPower": 3, "sessionMinutes": 21, "percentKept": 73}
     # return {"filename": file.filename}
 
 # @app.post("/submit")
