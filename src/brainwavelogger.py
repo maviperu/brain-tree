@@ -4,8 +4,6 @@ import numpy as np
 import glob
 # import matplotlib.pyplot as plt
 
-EEG_FOLDER = r"C:\Users\mavip\Desktop\Research Kit\Recordings"
-
 
 def get_filepaths(folder):
     """Returns a list of all CSV file paths in the given folder."""
@@ -42,8 +40,7 @@ def format_session_for_file(mean_brain_power_dict,
         "betaPower": int(mean_brain_power_dict.get("beta", 0)),
         "gammaPower": int(mean_brain_power_dict.get("gamma", 0)),
         "sessionMinutes": int(session_minutes),
-        "percentKept": int(percentage_kept),
-        "seshType": "none"
+        "percentKept": int(percentage_kept)
     }
     # Format as JS object
     formatted_session = "    {" + ", ".join(f"{k}: {v}" for k, v in session_dict.items()) + "},\n"  # noqa
@@ -64,19 +61,9 @@ def update_sessions_file(formatted_session):
         f.write("]")
 
 
-filepath = r"C:\Users\mavip\Desktop\Research Kit\Recordings\Day_2_Focus_Protocol_afternoon_work_session_8cab610dc2b61529.csv"  # noqa
-filepath = r"C:\Users\mavip\Desktop\Research Kit\Recordings\Day_4_Focus_Protocol_afternoon_work_session_dd24a8ab9e33fe97.csv" # noqa
-filepath = r"C:\Users\mavip\Desktop\Research Kit\Recordings\Day_5_No_Protocol_morning_work_session_42b436667eceaea3.csv" # noqa
-
-filepaths = get_filepaths(EEG_FOLDER)
-sampling_rate = 500
-seconds_in_minute = 60
-
-for filepath in filepaths:
-    if is_in_sessions_logged(filepath):
-        continue
-    print(f"Loading file {filepath}")
-    df = read_eeg_csv(filepath)
+def brainwavelogger(df):
+    sampling_rate = 500
+    seconds_in_minute = 60
     eeg_channels = signalproc.eeg_channels_to_use()
     freq_bands = signalproc.define_freq_bands()
     filtered_df = signalproc.bandpass_filter(df, eeg_channels, sampling_rate)
@@ -91,9 +78,7 @@ for filepath in filepaths:
     formatted_session = format_session_for_file(mean_brain_power_dict,
                                                 session_minutes,
                                                 percentage_kept)
-    update_sessions_file(formatted_session)
-    add_to_sessions_logged(filepath)
-print("Finished logging files")
+    return formatted_session
 
 
 # Inspecting outputs for correctness.
@@ -128,4 +113,4 @@ print("Finished logging files")
 # @TODO: Check output of Welch transform. Does it look like FFT?
 # @TODO: Remove outliers at the feature level. 
 # @TODO: Add bat file for brainwavelogger.py
-# @TODO: Create instructions and try them in new user: https://conda.github.io/conda-pack/
+# @TODO: Create instructions and try them in new user: https://conda.github.io/conda-pack/ # noqa

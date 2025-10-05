@@ -6,6 +6,7 @@ from typing import Annotated
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import FileResponse 
 from typing import List
+from src.brainwavelogger import brainwavelogger
 
 
 app = FastAPI()
@@ -16,14 +17,13 @@ async def read_item(item_id: int):
 
 @app.post("/upload")
 async def upload(file: UploadFile = File(...)):
-    # contents = file.file.read()
-    # buffer = BytesIO(contents)
-    # df = pd.read_csv(buffer)
-    # buffer.close()
-    # file.file.close()
-    # # return df.mean().to_dict()
-    return {"theta":314, "alpha":325, "beta":2}
-    # return {"filename": file.filename}
+    contents = file.file.read()
+    buffer = BytesIO(contents)
+    df = pd.read_csv(buffer)
+    buffer.close()
+    file.file.close()
+    formatted_session = brainwavelogger(df)
+    return formatted_session
 
 # @app.post("/submit")
 # def submit(
