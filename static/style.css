@@ -176,8 +176,7 @@ body {
     display: grid;
     grid-template-columns: 58px 14px;
     align-items: center;
-        text-align: center;
-
+    text-align: center;
 }
 .crank {
     height: 48px;
@@ -273,6 +272,23 @@ body {
     border-left: 1px solid #aa0000;
     color: #aa0000;
     font-weight: 400;
+}
+.uploadBin {
+    width: 256px;
+    display: grid;
+    border: 3px solid black;
+    border-radius: 10px;
+    justify-items: center;
+    margin: 5px 0px 5px 0px;
+    padding: 4px;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+}
+.uploadBin h5 {
+    margin-bottom: 0px;
+    padding: 4px;
+    border: 5px outset grey;
 }
 
 .treeUpgradeBin{
@@ -710,6 +726,8 @@ input:checked + .mint:before {
 
 .console{
     margin: 50px 8px 0px 8px;
+    height: 3em;
+    overflow:hidden;
     color:darkred; font-weight: bolder;
 }
 

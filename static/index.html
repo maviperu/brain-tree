@@ -143,7 +143,9 @@
             <!--HOMESTEAD PANE-->
             <div class="homestead">
                 <H3><u>Homestead</u></H3>
-                <div class="laborBin">
+                <div class="console">
+                </div>
+                <div class="laborBin"> <!-- Beta Crank -->
                     <h5>Manual Labor: create a tiny amount of Beta energy by turning this crank!</h5>
                     <div class="laborBinLvl2">
                         <img src="./assets/crankBeta.png" class="crank" id="crankbutton" onclick="rotateCrank(event)">
@@ -157,7 +159,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="laborBin">
+                <div class="laborBin"> <!-- Mind Circle -->
                     <h5>Mindful Labor: Enhance your Manual Labor with a bit of mindfulness</h5>
                     <div class="laborBinLvl2">
                         <div class="mindCircle" onclick="countdown()">
@@ -166,7 +168,7 @@
                         <div id="drainBar" class="drainBar"></div>
                     </div>
                 </div>
-                <div class="treeButtonContainer tooltipHover slideRight" onmouseover="nextSeshInfo()">
+                <div class="treeButtonContainer tooltipHover slideRight" onmouseover="nextSeshInfo()"> <!-- Brain Tree -->
                     <div id="treeButton" class="treeButton" onclick="logSessionFile(event), nextSeshInfo()">
                         <img src="./assets/treeButtonEmpty.png" alt="Synthesize" class="treeIcon" draggable="false">
                         <p style="font-size:.8em">You have <span class="seshLen" style="font-size:1.2em; color:darkgreen; font-weight:500">0</span> sessions left to process</p>
@@ -179,7 +181,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="console">
+                <div class="uploadBin"> <!-- Upload File -->
+                    <h4>Got some Brain Data for the Brain Tree?</h4>
+                    <input type="file" id="csvFile" accept=".csv">
+                    <h5 class="up3"onclick="uploadFile(event)">Click to convert a Session's Brainpower to Energy</h5>
                 </div>
             </div>
             <!--BUILDING ASSETS AND UPGRADES-->

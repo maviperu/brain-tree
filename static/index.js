@@ -231,6 +231,35 @@ function nextSeshInfo() {
     }
 }
 
+let uploadReturn = []
+async function uploadFile(event) {
+    const formData = new FormData();
+    const file = document.getElementById("csvFile").files[0]
+    formData.append("file", file);
+    document.getElementById("csvFile").value=""
+
+    try {
+       let r = await fetch('/upload', {
+        method: "POST",
+        body: formData,
+        })
+        console.log('HTTP response code:',r.status); 
+        if (r.status === 422) {
+            consoleMsg("No file Selected!","long")
+        } else {
+
+            uploadReturn = await r.json()
+            crankPower(uploadReturn.betaPower*1000,uploadReturn.alphaPower*1000,uploadReturn.thetaPower*1000)
+            makeBolts(uploadReturn.betaPower,uploadReturn.alphaPower,uploadReturn.thetaPower)
+            moveBolts (event)
+            bolts.length = 0
+        }
+
+    } catch(e) {
+       console.log('Huston we have problem...:', e);
+    }
+    
+}
 
 function batCapPercent(type) {
     let power = parseFloat(document.querySelector(`.power${type}`).innerHTML)
@@ -969,6 +998,7 @@ window.dispGame = dispGame
 
 window.skipTut = skipTut
 window.logSessionFile = logSessionFile
+window.uploadFile = uploadFile
 window.nextSeshInfo = nextSeshInfo
 window.rotateCrank = rotateCrank
 window.countdown = countdown
