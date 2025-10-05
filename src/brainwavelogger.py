@@ -44,7 +44,8 @@ def format_session_for_file(mean_brain_power_dict,
     }
     # Format as JS object
     formatted_session = "    {" + ", ".join(f"{k}: {v}" for k, v in session_dict.items()) + "},\n"  # noqa
-    return formatted_session
+    # Sending dictionary directly now that we are using FastAPI instead of writing to sessions.js # noqa
+    return session_dict
 
 
 def update_sessions_file(formatted_session):
