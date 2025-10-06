@@ -99,6 +99,8 @@ let getcoinspsTheta = document.querySelector('.coinspsTheta')
 const progress = {
     crankedTheCrank: {completed:false,elem:".stats",dispStyle:"block"},
     crankedSomeMore: {completed:false,elem:".treeButtonContainer",dispStyle:"block"},
+    crankedSomeMore2: {completed:false,elem:".uploadBin",dispStyle:"grid"},
+    mindfulCranking: {completed:false,elem:".laborBin.Alpha",dispStyle:"grid"},
     usedTheTree: {completed:false,elem:".buildings",dispStyle:"grid"},
     boughtABat: {completed:false,elem:".theGrid",dispStyle:"grid"},
 }
@@ -249,10 +251,16 @@ async function uploadFile(event) {
         } else {
 
             uploadReturn = await r.json()
+            console.log(uploadReturn)
             crankPower(uploadReturn.betaPower*1000,uploadReturn.alphaPower*1000,uploadReturn.thetaPower*1000)
             makeBolts(uploadReturn.betaPower,uploadReturn.alphaPower,uploadReturn.thetaPower)
             moveBolts (event)
             bolts.length = 0
+            if (progress.usedTheTree.completed === false) {
+                progress.usedTheTree.completed = true
+                dispGameElem(progress.usedTheTree.elem,progress.usedTheTree.dispStyle)
+                consoleMsg("Ooh, upgrades! Now we're talking, let's get a battery!","long")
+            }
         }
 
     } catch(e) {
@@ -366,10 +374,10 @@ const startupLog = [
     "Oh hey, little bolts!",
     "",
     "wow, this is quite a bit of work, eh?",
+    "Time to get in the zone",
     "",
     "",
     "If only there was a way to get those bolts easier...",
-    "",
     "",
     "",
     "A hah! a BRAIN TREE! I wonder what this does?",
@@ -409,10 +417,17 @@ function rotateCrank(event) {
                 i.classList.remove("active")
             })
         }
-        //Checks Second Progress Milestone
+        //Checks Alpha Button Progress Milestone
+        if (jsCranksComplete == 4 && progress.mindfulCranking.completed === false) {
+            progress.mindfulCranking.completed = true
+            dispGameElem(progress.mindfulCranking.elem,progress.mindfulCranking.dispStyle)
+        }
+        //Checks Tree Progress Milestone
         if (jsCranksComplete == 10 && progress.crankedSomeMore.completed === false) {
             progress.crankedSomeMore.completed = true
             dispGameElem(progress.crankedSomeMore.elem,progress.crankedSomeMore.dispStyle)
+            progress.crankedSomeMore2.completed = true
+            dispGameElem(progress.crankedSomeMore2.elem,progress.crankedSomeMore2.dispStyle)
         }
 
         setTimeout(() => {
@@ -451,7 +466,7 @@ function countdown() {
 function makeLeaf(type) {
     const src = document.getElementById("treeButton")
 
-    for (let i = 0; i<baseLeafProdBoost; i++) {
+    for (let i = 0; i<baseLeafProdBoost; i++) { //Makes 2 leaves (baseLeafProdBoost) every time it's called
         const img = document.createElement("img")
         let randNode = Math.floor(Math.random() * 38)
         let radVec = Math.random()*2*Math.PI
@@ -519,7 +534,7 @@ let upgradeTips = document.querySelectorAll('.upgradeTooltip')
 document.addEventListener("mousemove", showTipBelow, false)
 function showTipBelow(event) {
     for (let i=upgradeTips.length; i--;) {
-        upgradeTips[i].style.left = event.offsetX + 'px' 
+        upgradeTips[i].style.left = (event.offsetX)/10 - 25 + 'px' 
     }
 }
 
@@ -533,8 +548,8 @@ function showTipCursor(event) {
 }
 function upgradeInfo(upgrade,wave) {
     let upgradeButton = document.querySelector(`.${upgrade}.${wave}`)
-    let buttonSpan = upgradeButton.querySelector(".upgradeTooltip")
-    buttonSpan.innerHTML = `Total Boost: +${boostLvl[wave] * baseLeafProdBoost}%`
+    let buttonSpan = upgradeButton.querySelector(".upgradeEffect")
+    buttonSpan.innerHTML = `${boostLvl[wave] * baseLeafProdBoost}% => <span class="positive-value">${(boostLvl[wave]+1) * baseLeafProdBoost}%</span> ${wave}`
 }
 
 //Functions for buying Leaf Upgrades

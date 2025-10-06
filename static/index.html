@@ -145,46 +145,48 @@
                 <H3><u>Homestead</u></H3>
                 <div class="console">
                 </div>
-                <div class="laborBin"> <!-- Beta Crank -->
-                    <h5>Manual Labor: create a tiny amount of Beta energy by turning this crank!</h5>
-                    <div class="laborBinLvl2">
-                        <img src="./assets/crankBeta.png" class="crank" id="crankbutton" onclick="rotateCrank(event)">
-                        <div class="crankIndicator">
-                            <div class="crankIndicatorLight"></div>
-                            <div class="crankIndicatorLight"></div>
-                            <div class="crankIndicatorLight"></div>
-                            <div class="crankIndicatorLight"></div>
-                            <div class="crankIndicatorLight"></div>
-                            <div class="crankIndicatorLight"></div>
+                <div class="homesteadScrollable">
+                    <div class="laborBin"> <!-- Beta Crank -->
+                        <h5>Manual Labor: create a tiny amount of Beta energy by turning this crank!</h5>
+                        <div class="laborBinLvl2">
+                            <img src="./assets/crankBeta.png" class="crank" id="crankbutton" onclick="rotateCrank(event)">
+                            <div class="crankIndicator">
+                                <div class="crankIndicatorLight"></div>
+                                <div class="crankIndicatorLight"></div>
+                                <div class="crankIndicatorLight"></div>
+                                <div class="crankIndicatorLight"></div>
+                                <div class="crankIndicatorLight"></div>
+                                <div class="crankIndicatorLight"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="laborBin"> <!-- Mind Circle -->
-                    <h5>Mindful Labor: Enhance your Manual Labor with a bit of mindfulness</h5>
-                    <div class="laborBinLvl2">
-                        <div class="mindCircle" onclick="countdown()">
-                            :<span class="countdownTimer">00</span>
-                        </div>
-                        <div id="drainBar" class="drainBar"></div>
-                    </div>
-                </div>
-                <div class="treeButtonContainer tooltipHover slideRight" onmouseover="nextSeshInfo()"> <!-- Brain Tree -->
-                    <div id="treeButton" class="treeButton" onclick="logSessionFile(event), nextSeshInfo()">
-                        <img src="./assets/treeButtonEmpty.png" alt="Synthesize" class="treeIcon" draggable="false">
-                        <p style="font-size:.8em">You have <span class="seshLen" style="font-size:1.2em; color:darkgreen; font-weight:500">0</span> sessions left to process</p>
-                        <h5>Click to convert a Session's Brainpower to Energy</h5>
-                    </div>
-                    <div class="tooltip">
-                        <div class="treeTip">
-                            <div class="nextSeshInfo">If you see this, something's broke</div>
-                            <div class="nextSeshWaste">Waste</div>
+                    <div class="laborBin Alpha"> <!-- Mind Circle -->
+                        <h5>Mindful Labor: Manual Labor crank makes extra Alpha Energy for a short time</h5>
+                        <div class="laborBinLvl2">
+                            <div class="mindCircle" onclick="countdown()">
+                                :<span class="countdownTimer">00</span>
+                            </div>
+                            <div id="drainBar" class="drainBar"></div>
                         </div>
                     </div>
-                </div>
-                <div class="uploadBin"> <!-- Upload File -->
-                    <h4>Got some Brain Data for the Brain Tree?</h4>
-                    <input type="file" id="csvFile" accept=".csv">
-                    <h5 class="up3"onclick="uploadFile(event)">Click to convert a Session's Brainpower to Energy</h5>
+                    <div class="treeButtonContainer tooltipHover slideRight" onmouseover="nextSeshInfo()"> <!-- Brain Tree -->
+                        <div id="treeButton" class="treeButton" onclick="logSessionFile(event), nextSeshInfo()">
+                            <img src="./assets/treeButtonEmpty.png" alt="Synthesize" class="treeIcon" draggable="false">
+                            <p style="font-size:.8em">You have <span class="seshLen" style="font-size:1.2em; color:darkgreen; font-weight:500">0</span> sample sessions left to process</p>
+                            <h5>Click to convert a Session's Brainpower to Energy</h5>
+                        </div>
+                        <div class="tooltip">
+                            <div class="treeTip">
+                                <div class="nextSeshInfo">If you see this, something's broke</div>
+                                <div class="nextSeshWaste">Waste</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="uploadBin"> <!-- Upload File -->
+                        <h4>Got some Brain Data for the Brain Tree?</h4>
+                        <input type="file" id="csvFile" accept=".csv">
+                        <h5 class="up3"onclick="uploadFile(event)">Click to convert a Session's Brainpower to Energy</h5>
+                    </div>
                 </div>
             </div>
             <!--BUILDING ASSETS AND UPGRADES-->
@@ -195,31 +197,37 @@
                     <!--TREE UPGRADES-->
                     <div class="treeUpgradeBin">
                         <h3>Tree Upgrades</h3>
-                        <p>Add leaves to your tree to get more out of each session! Each upgrade grows 2 Leaves (and gets you+2% more energy!)</p>
+                        <p style="font-size:.8em">Add leaves to your tree to get more out of each session!</p>
                         <div class="treeUpgrades">
                             <div class="leaf Beta upgradeHov" onclick="buyBetaLeaf()" onmouseover="upgradeInfo('leaf','Beta')">
-                                <h5>Click for +2% Beta Power</h5>
-                                <div>
-                                    <img src="./assets/BetaLeaf.png" alt="Beta" class="leafIcons" draggable="false">
+                                <img src="./assets/BetaLeaf.png" alt="Beta" class="leafIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each leaf allows your tree to harvest 2% more energy</div>
+                                        <div>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="costLeafBeta">5</span></div>
+                                        <div>Effect: <span class="upgradeEffect">0% => 2% Beta</span> Energy Harvesting</div>
+                                    </div>
                                 </div>
-                                <h5>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="costLeafBeta">5</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                             <div class="leaf Alpha upgradeHov" onclick="buyAlphaLeaf()" onmouseover="upgradeInfo('leaf','Alpha')">
-                                <h5>Click for +2% Alpha Power</h5>
-                                <div>
-                                    <img src="./assets/AlphaLeaf.png" alt="Alpha" class="leafIcons" draggable="false">
+                                <img src="./assets/AlphaLeaf.png" alt="Alpha" class="leafIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each leaf allows your tree to harvest 2% more energy</div>
+                                        <div>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="costLeafAlpha">5</span></div>
+                                        <div>Effect: <span class="upgradeEffect">0% => 2% Alpha</span> Energy Harvesting</div>
+                                    </div>
                                 </div>
-                                <h5>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="costLeafAlpha">5</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                             <div class="leaf Theta upgradeHov" onclick="buyThetaLeaf()" onmouseover="upgradeInfo('leaf','Theta')">
-                                <h5>Click for +2% Theta Power</h5>
-                                <div>
-                                    <img src="./assets/ThetaLeaf.png" alt="Theta" class="leafIcons" draggable="false">
+                                <img src="./assets/ThetaLeaf.png" alt="Theta" class="leafIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each leaf allows your tree to harvest 2% more energy</div>
+                                        <div>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="costLeafTheta">5</span></div>
+                                        <div>Effect: <span class="upgradeEffect">0% => 2% Theta</span> Energy Harvesting</div>
+                                    </div>
                                 </div>
-                                <h5>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="costLeafTheta">5</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                         </div>
                     </div>
