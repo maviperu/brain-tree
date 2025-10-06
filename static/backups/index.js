@@ -15,12 +15,12 @@ let jsTheGrid = document.querySelector('.theGrid')
 let getAllBetaPower = document.querySelectorAll('.powerBeta')
 let getAllAlphaPower = document.querySelectorAll('.powerAlpha')
 let getAllThetaPower = document.querySelectorAll('.powerTheta')
-const power = {
-    Beta: 0,
-    Alpha: 0,
-    Theta: 0,
-}
-
+let getBetaPower = document.querySelector('.powerBeta')
+let getAlphaPower = document.querySelector('.powerAlpha')
+let getThetaPower = document.querySelector('.powerTheta')
+let jspowerBeta = parseFloat(getBetaPower.innerHTML)*1000
+let jspowerAlpha = parseFloat(getAlphaPower.innerHTML)*1000
+let jspowerTheta = parseFloat(getThetaPower.innerHTML)*1000
 let getAllBetaBatCap = document.querySelectorAll('.batCapBeta')
 let getAllAlphaBatCap = document.querySelectorAll('.batCapAlpha')
 let getAllThetaBatCap = document.querySelectorAll('.batCapTheta')
@@ -143,6 +143,9 @@ function consoleMsg (i,decay) {
 }
 
 function reparsefloats() {
+    jspowerBeta = parseFloat(getBetaPower.innerHTML)*1000
+    jspowerAlpha = parseFloat(getAlphaPower.innerHTML)*1000
+    jspowerTheta = parseFloat(getThetaPower.innerHTML)*1000
     jscoinsBeta = parseFloat(getBetaCoins.innerHTML)
     jscoinsAlpha = parseFloat(getAlphaCoins.innerHTML)
     jscoinsTheta = parseFloat(getThetaCoins.innerHTML)
@@ -163,17 +166,36 @@ function logSessionFile(event) {
     let sesh = recordedSessions[jsstatSesh]
 
     if (sesh === undefined) {
+        const x = Math.min(event.offsetX,140)
+        const y = Math.min(event.offsetY,305)
+        
         consoleMsg("No Session to Log!","short")
     } else {
-        if (progress.usedTheTree.completed === false) { //Checks for first Brain Tree Progress
+        if (progress.usedTheTree.completed === false) {
             progress.usedTheTree.completed = true
             dispGameElem(progress.usedTheTree.elem,progress.usedTheTree.dispStyle)
             consoleMsg("Ooh, upgrades! Now we're talking, let's get a battery!","long")
         }
-        let harvestBeta = sesh.betaPower*(1+(boostLvl["Beta"]*baseLeafProdBoost/100))*1000
-        let harvestAlpha = sesh.alphaPower*(1+(boostLvl["Alpha"]*baseLeafProdBoost/100))*1000
-        let harvestTheta = sesh.thetaPower*(1+(boostLvl["Theta"]*baseLeafProdBoost/100))*1000
-        incPower(harvestBeta,harvestAlpha,harvestTheta)
+        jspowerBeta += Math.floor(sesh.betaPower*(1+(boostLvl["Beta"]*baseLeafProdBoost/100))*1000)
+        jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
+        let jpB = jspowerBeta / 1000
+        setAllInners(getAllBetaPower,jpB)
+        batCapPercent("Beta")
+        batCapPercentIndicator("Beta")
+        
+        jspowerAlpha += Math.floor(sesh.alphaPower*(1+(boostLvl["Alpha"]*baseLeafProdBoost/100))*1000)
+        jspowerAlpha = Math.min(jspowerAlpha,jsbatCapAlpha*1000)
+        let jpA = jspowerAlpha / 1000
+        setAllInners(getAllAlphaPower,jpA)
+        batCapPercent("Alpha")
+        batCapPercentIndicator("Alpha")
+
+        jspowerTheta += Math.floor(sesh.thetaPower*(1+(boostLvl["Theta"]*baseLeafProdBoost/100))*1000)
+        jspowerTheta = Math.min(jspowerTheta,jsbatCapTheta*1000)
+        let jpT = jspowerTheta / 1000
+        setAllInners(getAllThetaPower,jpT)
+        batCapPercent("Theta")
+        batCapPercentIndicator("Theta")
         
         jsstatMins += sesh.sessionMinutes
         getstatMins.innerHTML = jsstatMins
@@ -202,9 +224,10 @@ function nextSeshInfo() {
         let nextTheta = nextSesh.thetaPower
         msg.innerHTML = `Your next session has...<br>${nextBeta} kJ Beta Power<br>${nextAlpha} kJ Alph Power<br>${nextTheta} kJ Theta Power`
 
-        let wasteBeta = Math.ceil(Math.max(nextBeta*1000 - ((jsbatCapBeta*1000) - power["Beta"]),0)/100)/10
-        let wasteAlpha = Math.ceil(Math.max(nextAlpha*1000 - ((jsbatCapAlpha*1000) - power["Alpha"]),0)/100)/10
-        let wasteTheta = Math.ceil(Math.max(nextTheta*1000 - ((jsbatCapTheta*1000) - power["Theta"]),0)/100)/10
+        let wasteBeta = Math.ceil(Math.max(nextBeta*1000 - ((jsbatCapBeta*1000) - jspowerBeta),0)/100)/10
+        let wasteAlpha = Math.ceil(Math.max(nextAlpha*1000 - ((jsbatCapAlpha*1000) - jspowerAlpha),0)/100)/10
+        let wasteTheta = Math.ceil(Math.max(nextTheta*1000 - ((jsbatCapTheta*1000) - jspowerTheta),0)/100)/10
+        
         waste.innerHTML = `Waste<br>${wasteBeta} kJ<br>${wasteAlpha} kJ<br>${wasteTheta} kJ`
         
     }
@@ -216,10 +239,9 @@ async function uploadFile(event) {
     const file = document.getElementById("csvFile").files[0]
     formData.append("file", file);
     document.getElementById("csvFile").value=""
-    addLoader("uploadButton")
 
     try {
-       let r = await fetch('./upload', {
+       let r = await fetch('/upload', {
         method: "POST",
         body: formData,
         })
@@ -230,7 +252,7 @@ async function uploadFile(event) {
 
             uploadReturn = await r.json()
             console.log(uploadReturn)
-            incPower(uploadReturn.betaPower*1000,uploadReturn.alphaPower*1000,uploadReturn.thetaPower*1000)
+            crankPower(uploadReturn.betaPower*1000,uploadReturn.alphaPower*1000,uploadReturn.thetaPower*1000)
             makeBolts(uploadReturn.betaPower,uploadReturn.alphaPower,uploadReturn.thetaPower)
             moveBolts (event)
             bolts.length = 0
@@ -244,30 +266,8 @@ async function uploadFile(event) {
     } catch(e) {
        console.log('Huston we have problem...:', e);
     }
-    let test = document.getElementById("uploadButton")
-    test.removeChild(test.lastChild)
+    
 }
-
-function addLoader(elemID) {
-    let element = document.getElementById(elemID)
-    let loader = document.createElement("img")
-
-    loader.src = "./assets/loader.png"
-    loader.classList.add("loader")
-
-    element.appendChild(loader)
-
-    const spinning = [
-        {transform: "rotate(360deg)"}
-    ]
-    let spinOptions = {
-        duration: 500,
-        easing: 'ease-in-out',
-        iterations: Infinity,
-    }
-    loader.animate(spinning,spinOptions)
-}
-
 
 function batCapPercent(type) {
     let power = parseFloat(document.querySelector(`.power${type}`).innerHTML)
@@ -337,25 +337,23 @@ function moveBolts (event) {
         })
 }
 
+
 const timeout = (div,time) => {
     setTimeout(() => {
         div.remove()
     }, time)
 }
 
-function incPower(be,al,th) {
-    console.log("beta: ",be,"alpha: ",al,"theta: ",th)
-    power["Beta"] += be
-    power["Alpha"] += al
-    power["Theta"] += th
-    console.log("beta: ",power["Beta"],"alpha: ",power["Alpha"],"theta: ",power["Theta"])
-    power["Beta"] = Math.min(power["Beta"],jsbatCapBeta*1000)
-    power["Alpha"] = Math.min(power["Alpha"],jsbatCapAlpha*1000)
-    power["Theta"] = Math.min(power["Theta"],jsbatCapTheta*1000)
-    console.log("beta: ",power["Beta"],"alpha: ",power["Alpha"],"theta: ",power["Theta"])
-    let jpB = power["Beta"] / 1000
-    let jpA = power["Alpha"] / 1000
-    let jpT = power["Theta"] / 1000
+function crankPower(be,al,th) {
+    jspowerBeta += be
+    jspowerAlpha += al
+    jspowerTheta += th
+    jspowerBeta = Math.min(jspowerBeta,jsbatCapBeta*1000)
+    jspowerAlpha = Math.min(jspowerAlpha,jsbatCapAlpha*1000)
+    jspowerTheta = Math.min(jspowerTheta,jsbatCapTheta*1000)
+    let jpB = jspowerBeta / 1000
+    let jpA = jspowerAlpha / 1000
+    let jpT = jspowerTheta / 1000
     setAllInners(getAllBetaPower,jpB)
     setAllInners(getAllAlphaPower,jpA)
     setAllInners(getAllThetaPower,jpT)
@@ -401,7 +399,7 @@ function rotateCrank(event) {
         if (jsCrankNum < 7) {
             let activeSegment = segment-jsCrankNum
             fillBar[activeSegment].classList.add("active")
-            incPower(Math.ceil(jsCrankNum/2),Math.ceil(counting/5),0)
+            crankPower(Math.ceil(jsCrankNum/2),Math.ceil(counting/5),0)
             makeBolts(1,Math.ceil(counting/10),0)
             moveBolts (event)
             bolts.length = 0
@@ -411,7 +409,7 @@ function rotateCrank(event) {
                 consoleMsg(startupLog[jsCranksComplete],"long")
                 jsCranksComplete += 1
             }
-            incPower(4,1,1)
+            crankPower(4,1,1)
             makeBolts(4,1,1)
             moveBolts (event)
             bolts.length = 0
@@ -556,12 +554,12 @@ function upgradeInfo(upgrade,wave) {
 
 //Functions for buying Leaf Upgrades
 function buyBetaLeaf() {
-    if (power["Beta"] >= (jsLeafCostBeta*1000)) {
+    if (jspowerBeta >= (jsLeafCostBeta*1000)) {
         boostLvl["Beta"] += 1
-        power["Beta"] -= (jsLeafCostBeta*1000)
+        jspowerBeta -= (jsLeafCostBeta*1000)
         jsLeafCostBeta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Beta"]))
         getBetaLeafCost.innerHTML = jsLeafCostBeta
-        let jpB = power["Beta"] / 1000
+        let jpB = jspowerBeta / 1000
         setAllInners(getAllBetaPower,jpB)
         batCapPercent("Beta")
         batCapPercentIndicator("Beta")
@@ -570,12 +568,12 @@ function buyBetaLeaf() {
     }
 }
 function buyAlphaLeaf() {
-    if (power["Alpha"] >= (jsLeafCostAlpha*1000)) {
+    if (jspowerAlpha >= (jsLeafCostAlpha*1000)) {
         boostLvl["Alpha"] += 1
-        power["Alpha"] -= (jsLeafCostAlpha*1000)
+        jspowerAlpha -= (jsLeafCostAlpha*1000)
         jsLeafCostAlpha = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Alpha"]))
         getAlphaLeafCost.innerHTML = jsLeafCostAlpha
-        let jpA = power["Alpha"] / 1000
+        let jpA = jspowerAlpha / 1000
         setAllInners(getAllAlphaPower,jpA)
         batCapPercent("Alpha")
         batCapPercentIndicator("Alpha")
@@ -584,12 +582,12 @@ function buyAlphaLeaf() {
     }
 }
 function buyThetaLeaf() {
-    if (power["Theta"] >= (jsLeafCostTheta*1000)) {
+    if (jspowerTheta >= (jsLeafCostTheta*1000)) {
         boostLvl["Theta"] += 1
-        power["Theta"] -= (jsLeafCostTheta*1000)
+        jspowerTheta -= (jsLeafCostTheta*1000)
         jsLeafCostTheta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Theta"]))
         getThetaLeafCost.innerHTML = jsLeafCostTheta
-        let jpT = power["Theta"] / 1000
+        let jpT = jspowerTheta / 1000
         setAllInners(getAllThetaPower,jpT)
         batCapPercent("Theta")
         batCapPercentIndicator("Theta")
@@ -840,9 +838,9 @@ function save() {
 
     localStorage.setItem("jsstatSesh",JSON.stringify(jsstatSesh))
     localStorage.setItem("jsstatMins",JSON.stringify(jsstatMins))
-    localStorage.setItem("power['Beta']",JSON.stringify(power["Beta"]))
-    localStorage.setItem("power['Alpha']",JSON.stringify(power["Alpha"]))
-    localStorage.setItem("power['Theta']",JSON.stringify(power["Theta"]))
+    localStorage.setItem("jspowerBeta",JSON.stringify(jspowerBeta))
+    localStorage.setItem("jspowerAlpha",JSON.stringify(jspowerAlpha))
+    localStorage.setItem("jspowerTheta",JSON.stringify(jspowerTheta))
     localStorage.setItem("jsCrankNum",JSON.stringify(jsCrankNum))
     localStorage.setItem("jscoinsBeta",JSON.stringify(jscoinsBeta))
     localStorage.setItem("jscoinsAlpha",JSON.stringify(jscoinsAlpha))
@@ -876,9 +874,9 @@ console.log(localStorage)
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
     jsstatMins = JSON.parse(localStorage.getItem("jsstatMins"))
-    power["Beta"] = JSON.parse(localStorage.getItem("power['Beta']"))
-    power["Alpha"] = JSON.parse(localStorage.getItem("power['Alpha']"))
-    power["Theta"] = JSON.parse(localStorage.getItem("power['Theta']"))
+    jspowerBeta = JSON.parse(localStorage.getItem("jspowerBeta"))
+    jspowerAlpha = JSON.parse(localStorage.getItem("jspowerAlpha"))
+    jspowerTheta = JSON.parse(localStorage.getItem("jspowerTheta"))
     jsCrankNum = JSON.parse(localStorage.getItem("jsCrankNum"))
     jscoinsBeta = JSON.parse(localStorage.getItem("jscoinsBeta"))
     jscoinsAlpha = JSON.parse(localStorage.getItem("jscoinsAlpha"))
@@ -914,11 +912,11 @@ function load() {
         n += 1
     })
 
-    let jpB = power["Beta"] / 1000
+    let jpB = jspowerBeta / 1000
     setAllInners(getAllBetaPower,jpB)
-    let jpA = power["Alpha"] / 1000
+    let jpA = jspowerAlpha / 1000
     setAllInners(getAllAlphaPower,jpA)
-    let jpT = power["Theta"] / 1000
+    let jpT = jspowerTheta / 1000
     setAllInners(getAllThetaPower,jpT)
     setAllInners(getAllThetaPower,jpT)
     setAllInners(getAllThetaPower,jpT)
@@ -970,9 +968,9 @@ function defaultGame() {
 
     localStorage.setItem("jsstatSesh",JSON.stringify(0))
     localStorage.setItem("jsstatMins",JSON.stringify(0))
-    localStorage.setItem("power['Beta']",JSON.stringify(0))
-    localStorage.setItem("power['Alpha']",JSON.stringify(0))
-    localStorage.setItem("power['Theta']",JSON.stringify(0))
+    localStorage.setItem("jspowerBeta",JSON.stringify(0))
+    localStorage.setItem("jspowerAlpha",JSON.stringify(0))
+    localStorage.setItem("jspowerTheta",JSON.stringify(0))
     localStorage.setItem("jsCrankNum",JSON.stringify(0))
     localStorage.setItem("jscoinsBeta",JSON.stringify(17000))
     localStorage.setItem("jscoinsAlpha",JSON.stringify(7000))
