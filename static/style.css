@@ -139,6 +139,17 @@ body {
     justify-items: center;
     padding: 2px;
     margin-right: 10px;
+    overflow: hidden;
+}
+.console{
+    margin: 20px 8px 0px 8px;
+    height: 3em;
+    overflow:hidden;
+    color:darkred; font-weight: bolder;
+}
+.homesteadScrollable{
+    height: calc(90vh - 7em);
+    border-top: 1px solid black;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: thin;
@@ -162,18 +173,24 @@ body {
 .laborBin{
     width: 256px;
     display: grid;
-    grid-template-columns: 184px 72px;
+    grid-template-columns: 180px 76px;
     border: 3px solid black;
     border-radius: 10px;
     justify-items: center;
     margin: 5px 0px 5px 0px;
-    padding: 4px 4px 0px;
+    padding: 4px 4px ;
     text-align: center;
     align-items: center;
     justify-content: space-between;
 }
+.laborBin h5{
+    margin: 0px 2px;
+}
 .laborBinLvl2{
     display: grid;
+    border: 3px outset grey;
+    margin: 2px 2px;
+    padding: 1px;
     grid-template-columns: 58px 14px;
     align-items: center;
     text-align: center;
@@ -204,6 +221,9 @@ body {
 .crankIndicatorLight.active {
     background-color: red;
 }
+.laborBin.Alpha{
+    display: none;
+}
 .mindCircle {
     height: 48px;
     width: 48px;
@@ -228,20 +248,20 @@ body {
     display: none;
     position: relative;
 }
-.treeButtonContainer.slideRight{
+/*.treeButtonContainer.slideRight{
     -webkit-animation: slide-right 2s 1 linear;
     -moz-animation: slide-right 2s 1 linear;
     animation: slide-right 2s 1 linear;
 
     animation-fill-mode: forwards;
-}
+}*/
 .treeButton{
     width: 256px;
     height: auto;
     border: 3px solid black;
     border-radius: 10px;
     justify-items: center;
-    margin: 0px 5px 0px 5px;
+    margin: 5px 0px 5px 0px;
     padding: 4px;
     text-align: center;
     z-index: 1;
@@ -275,7 +295,8 @@ body {
 }
 .uploadBin {
     width: 256px;
-    display: grid;
+    /*display: grid;*/
+    display: none;
     border: 3px solid black;
     border-radius: 10px;
     justify-items: center;
@@ -354,8 +375,9 @@ body {
     margin: 0px 3px 0px 3px;
     padding: 4px;
 
-    position: relative;
+    /*position: relative;*/
     text-align: center;
+    z-index: 1;
 }
 .leaf:hover{
     filter:brightness(120%);
@@ -393,13 +415,13 @@ body {
     scrollbar-width: thin;
     scrollbar-color: black blanchedalmond;
 }
-.buildings.slideRight{
+/*.buildings.slideRight{
     -webkit-animation: slide-right 2s 1 linear;
     -moz-animation: slide-right 2s 1 linear;
     animation: slide-right 2s 1 linear;
 
     animation-fill-mode: forwards;
-}
+}*/
 .buildings h3{
     margin: 10px 0px 0px 0px;
 }
@@ -624,13 +646,13 @@ input:checked + .mint:before {
     grid-auto-rows: 40px;
     justify-items: center;
 }
-.theGrid.fadeIn{
+/*.theGrid.fadeIn{
     -webkit-animation: fade-in 2s 1 linear;
     -moz-animation: fade-in 2s 1 linear;
     animation: fade-in 2s 1 linear;
 
     animation-fill-mode: forwards;
-}
+}*/
 .theGrid div {
     &:nth-child(4n+1){
         margin-left: 30%;
@@ -675,8 +697,22 @@ input:checked + .mint:before {
     z-index: 900;
 }
 
+.upgradeTooltip-old {
+    display: none;
+    width: max-content;
+    font-weight: 200;
+    border: 25px solid transparent;
+    border-radius: 4px;
+    background-color: blanchedalmond;
+    border-image:
+        url("./assets/nouveauBorderSm.png") 25 / 1 / .15 round;
+    margin-top: 16px;
+    position: absolute;
+    z-index: 900;
+}
 .upgradeTooltip {
     display: none;
+    width: max-content;
     font-weight: 400;
     border: 25px solid transparent;
     border-radius: 4px;
@@ -689,6 +725,16 @@ input:checked + .mint:before {
 }
 .upgradeHov:hover .upgradeTooltip {
     display: block;
+}
+.upgradeHov:hover .tooltip {
+    display: block;
+    z-index: 1000;
+    
+}
+.leafTip{
+    width: 200px;
+    font-size:.8em;
+    text-align: left;
 }
 
 .tooltip {
@@ -721,14 +767,6 @@ input:checked + .mint:before {
 .particle {
     position: absolute;
     z-index: 10;
-}
-
-
-.console{
-    margin: 50px 8px 0px 8px;
-    height: 3em;
-    overflow:hidden;
-    color:darkred; font-weight: bolder;
 }
 
 @keyframes fade-in {
