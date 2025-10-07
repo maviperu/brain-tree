@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width", initial-scale=1.0>
     <title>Brain Tree</title>
+    <link rel="icon" type="image/x-icon" href="./assets/favicon_192.ico">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -42,7 +43,7 @@
                     <div class="pad containerSmFlex">
                         <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0</span>/s)<br>
                         <span class ="destBeta"><img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"></span><span class="powerBeta">0</span> kJ
-                        <div class="statBatCap">Capacity: <span class="batCapBeta">100</span> kJ - <span class="batCapPercentBeta">0</span> %
+                        <div class="statBatCap">Capacity: <span class="batCapBeta">10</span> kJ - <span class="batCapPercentBeta">0</span> %
                             <div class="battery Beta">
                                 <div class="batCapIndicatorLight Beta"></div>
                                 <div class="batCapIndicatorLight Beta"></div>
@@ -60,7 +61,7 @@
                     <div class="pad containerSmFlex">                        
                         <strong>Alpha Power: </strong> (<span class="kJpsAlpha rate">0</span>/s)<br>
                         <span class ="destAlpha"><img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"></span><span class="powerAlpha">0</span> kJ
-                        <div class="statBatCap">Capacity: <span class="batCapAlpha">100</span> kJ - <span class="batCapPercentAlpha">0</span> %
+                        <div class="statBatCap">Capacity: <span class="batCapAlpha">10</span> kJ - <span class="batCapPercentAlpha">0</span> %
                             <div class="battery Alpha">
                                 <div class="batCapIndicatorLight Alpha"></div>
                                 <div class="batCapIndicatorLight Alpha"></div>
@@ -78,7 +79,7 @@
                     <div class="pad containerSmFlex">
                         <strong>Theta Power: </strong> (<span class="kJpsTheta rate">0</span>/s)<br>
                         <span class ="destTheta"><img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"></span><span class="powerTheta">0</span> kJ
-                        <div class="statBatCap">Capacity: <span class="batCapTheta">100</span> kJ - <span class="batCapPercentTheta">0</span> %
+                        <div class="statBatCap">Capacity: <span class="batCapTheta">10</span> kJ - <span class="batCapPercentTheta">0</span> %
                             <div class="battery Theta">
                                 <div class="batCapIndicatorLight Theta"></div>
                                 <div class="batCapIndicatorLight Theta"></div>
@@ -197,34 +198,34 @@
                     <!--TREE UPGRADES-->
                     <div class="treeUpgradeBin">
                         <h3>Tree Upgrades</h3>
-                        <p style="font-size:.8em">Add leaves to your tree to get more out of each session!</p>
+                        <p style="font-size:.9em">Add leaves to your tree to get more out of each session!</p>
                         <div class="treeUpgrades">
-                            <div class="leaf Beta upgradeHov" onclick="buyBetaLeaf()" onmouseover="upgradeInfo('leaf','Beta')">
+                            <div class="leaf Beta upgradeHov" onclick="buyLeaf('Beta')" onmouseover="upgradeInfo('leaf','Beta')">
                                 <img src="./assets/BetaLeaf.png" alt="Beta" class="leafIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
                                         <div>Each leaf allows your tree to harvest 2% more energy</div>
-                                        <div>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="costLeafBeta">5</span></div>
+                                        <div>Cost: <img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"><span class="leafBetaCost">5</span></div>
                                         <div>Effect: <span class="upgradeEffect">0% => 2% Beta</span> Energy Harvesting</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="leaf Alpha upgradeHov" onclick="buyAlphaLeaf()" onmouseover="upgradeInfo('leaf','Alpha')">
+                            <div class="leaf Alpha upgradeHov" onclick="buyLeaf('Alpha')" onmouseover="upgradeInfo('leaf','Alpha')">
                                 <img src="./assets/AlphaLeaf.png" alt="Alpha" class="leafIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
                                         <div>Each leaf allows your tree to harvest 2% more energy</div>
-                                        <div>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="costLeafAlpha">5</span></div>
+                                        <div>Cost: <img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"><span class="leafAlphaCost">5</span></div>
                                         <div>Effect: <span class="upgradeEffect">0% => 2% Alpha</span> Energy Harvesting</div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="leaf Theta upgradeHov" onclick="buyThetaLeaf()" onmouseover="upgradeInfo('leaf','Theta')">
+                            <div class="leaf Theta upgradeHov" onclick="buyLeaf('Theta')" onmouseover="upgradeInfo('leaf','Theta')">
                                 <img src="./assets/ThetaLeaf.png" alt="Theta" class="leafIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
                                         <div>Each leaf allows your tree to harvest 2% more energy</div>
-                                        <div>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="costLeafTheta">5</span></div>
+                                        <div>Cost: <img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"><span class="leafThetaCost">5</span></div>
                                         <div>Effect: <span class="upgradeEffect">0% => 2% Theta</span> Energy Harvesting</div>
                                     </div>
                                 </div>
@@ -234,68 +235,74 @@
                     <!--BATTERY UPGRADES-->
                     <div class="batUpgradeBin">
                         <H3>Batteries</H3>
-                        <p>Batteries store Brainpower as Energy, but have a limited Capacity. Each upgrade gives +100 kJ</p>
+                        <p style="font-size:.9em">Batteries store Brainpower as Energy, but have a limited Capacity. Each upgrade gives +100 kJ</p>
                         <div class="batteryUpgrades">
-                            <div class="batCap Beta upgradeHov" onclick="buyBetaBatCap()" onmouseover="upgradeInfo('batCap','Beta')">
-                                <h5>Current Capacity: <span class="batCapBeta">100</span> kJ</h5>
-                                <div>
-                                    <img src="./assets/BetaBattery.png" alt="Beta" class="batIcons" draggable="false">
+                            <div class="batCap Beta upgradeHov" onclick="buyBattery('Beta')" onmouseover="upgradeInfo('batCap','Beta')">
+                                <img src="./assets/BetaBattery.png" alt="Beta" class="batIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each Battery raises capacity by +100 kj</div>
+                                        <div>Cost: <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="batCapBetaCost">500</span></div>
+                                        <div>Effect: <span class="upgradeEffect">100 => 200 Beta</span> Capacity</div>
+                                    </div>
                                 </div>
-                                <h5>Cost:</h5>
-                                <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costBatCapBeta"> 500</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="batCap Alpha upgradeHov" onclick="buyAlphaBatCap()" onmouseover="upgradeInfo('batCap','Alpha')">
-                                <h5>Current Capacity: <span class="batCapAlpha">100</span> kJ</h5>
-                                <div>
-                                    <img src="./assets/AlphaBattery.png" alt="Alpha" class="batIcons" draggable="false">
+                            <div class="batCap Alpha upgradeHov" onclick="buyBattery('Alpha')" onmouseover="upgradeInfo('batCap','Alpha')">
+                                <img src="./assets/AlphaBattery.png" alt="Alpha" class="batIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each Battery raises capacity by +100 kj</div>
+                                        <div>Cost: <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="batCapAlphaCost">500</span></div>
+                                        <div>Effect: <span class="upgradeEffect">100 => 200 Alpha</span> Capacity</div>
+                                    </div>
                                 </div>
-                                <h5>Cost:</h5>
-                                <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costBatCapAlpha"> 500</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="batCap Theta upgradeHov" onclick="buyThetaBatCap()" onmouseover="upgradeInfo('batCap','Theta')">
-                                <h5>Current Capacity: <span class="batCapTheta">100</span> kJ</h5>
-                                <div>
-                                    <img src="./assets/ThetaBattery.png" alt="Theta" class="batIcons" draggable="false">
+                            <div class="batCap Theta upgradeHov" onclick="buyBattery('Theta')" onmouseover="upgradeInfo('batCap','Theta')">
+                                <img src="./assets/ThetaBattery.png" alt="Theta" class="batIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each Battery raises capacity by +100 kj</div>
+                                        <div>Cost: <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="batCapThetaCost">500</span></div>
+                                        <div>Effect: <span class="upgradeEffect">100 => 200 Theta</span> Capacity</div>
+                                    </div>
                                 </div>
-                                <h5>Cost:</h5>
-                                <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costBatCapTheta"> 500</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                         </div>
                     </div>
                     <!--MINT UPGRADES-->
                     <div class="mintUpgradeBin">
                         <H3>Mints</H3>
-                        <p>Mints slowly produce Coins, but require Energy to operate. Each mint consumes 1 Watt and produces a coin every 9 seconds</p>
+                        <p style="font-size:.9em">Mints slowly produce Coins, but require Energy to operate.</p>
                         <div class="mintUpgrades">
-                            <div class="mintUp Beta upgradeHov" onclick="buyBetaMint()" onmouseover="upgradeInfo('mintUp','Beta')">
-                                <h5>Current Count: <span class="mintNumBeta">1</span></h5>
-                                <div>
-                                    <img src="./assets/BetaMint.png" alt="Beta" class="mintIcons" draggable="false">
+                            <div class="mintUp Beta upgradeHov" onclick="buyMint('Beta')" onmouseover="upgradeInfo('mintUp','Beta')">
+                                <img src="./assets/BetaMint.png" alt="Beta" class="mintIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each <span class="positive-value">Active</span> Mint consumes 1 Watt and produces a coin every 9 seconds</div>
+                                        <div>Cost: <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="mintUpBetaCost">4000</span></div>
+                                        <div>Effect: <span class="upgradeEffect">1 => 2 Beta</span> Mints</div>
+                                    </div>
                                 </div>
-                                <h5>Cost:</h5>
-                                <h5><img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"><span class="costMintUpBeta"> 4000</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="mintUp Alpha upgradeHov" onclick="buyAlphaMint()" onmouseover="upgradeInfo('mintUp','Alpha')">
-                                <h5>Current Count: <span class="mintNumAlpha">1</span></h5>
-                                <div>
-                                    <img src="./assets/AlphaMint.png" alt="Alpha" class="mintIcons" draggable="false">
+                            <div class="mintUp Alpha upgradeHov" onclick="buyMint('Alpha')" onmouseover="upgradeInfo('mintUp','Alpha')">
+                                <img src="./assets/AlphaMint.png" alt="Alpha" class="mintIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each <span class="positive-value">Active</span> Mint consumes 1 Watt and produces a coin every 9 seconds</div>
+                                        <div>Cost: <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="mintUpAlphaCost">4000</span></div>
+                                        <div>Effect: <span class="upgradeEffect">1 => 2 Alpha</span> Mints</div>
+                                    </div>
                                 </div>
-                                <h5>Cost:</h5>
-                                <h5><img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"><span class="costMintUpAlpha"> 4000</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
-                            <div class="mintUp Theta upgradeHov" onclick="buyThetaMint()" onmouseover="upgradeInfo('mintUp','Theta')">
-                                <h5>Current Count: <span class="mintNumTheta">1</span></h5>
-                                <div>
-                                    <img src="./assets/ThetaMint.png" alt="Theta" class="mintIcons" draggable="false">
+                            <div class="mintUp Theta upgradeHov" onclick="buyMint('Theta')" onmouseover="upgradeInfo('mintUp','Theta')">
+                                <img src="./assets/ThetaMint.png" alt="Theta" class="mintIcons" draggable="false">
+                                <div class="upgradeTooltip">
+                                    <div class="leafTip">
+                                        <div>Each <span class="positive-value">Active</span> Mint consumes 1 Watt and produces a coin every 9 seconds</div>
+                                        <div>Cost: <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="mintUpThetaCost">4000</span></div>
+                                        <div>Effect: <span class="upgradeEffect">1 => 2 Beta</span> Mints</div>
+                                    </div>
                                 </div>
-                                <h5>Cost:</h5>
-                                <h5><img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"><span class="costMintUpTheta"> 4000</span></h5>
-                                <span class="upgradeTooltip">Hello World</span>
                             </div>
                         </div>
                     </div>

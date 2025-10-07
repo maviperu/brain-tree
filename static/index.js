@@ -12,62 +12,50 @@ document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatS
 
 let jsTheGrid = document.querySelector('.theGrid')
 
-let getAllBetaPower = document.querySelectorAll('.powerBeta')
-let getAllAlphaPower = document.querySelectorAll('.powerAlpha')
-let getAllThetaPower = document.querySelectorAll('.powerTheta')
 const power = {
+    stat: "power",
     Beta: 0,
     Alpha: 0,
     Theta: 0,
 }
+const coins = {
+    stat: "coins",
+    Beta: 17000,
+    Alpha: 7000,
+    Theta: 7000,
+}
 
-let getAllBetaBatCap = document.querySelectorAll('.batCapBeta')
-let getAllAlphaBatCap = document.querySelectorAll('.batCapAlpha')
-let getAllThetaBatCap = document.querySelectorAll('.batCapTheta')
-let getBetaBatCap = document.querySelector('.batCapBeta')
-let getAlphaBatCap = document.querySelector('.batCapAlpha')
-let getThetaBatCap = document.querySelector('.batCapTheta')
-let jsbatCapBeta = parseFloat(getBetaBatCap.innerHTML)
-let jsbatCapAlpha = parseFloat(getAlphaBatCap.innerHTML)
-let jsbatCapTheta = parseFloat(getThetaBatCap.innerHTML)
-let getAllBetaMintNums = document.querySelectorAll('.mintNumBeta')
-let getAllAlphaMintNums = document.querySelectorAll('.mintNumAlpha')
-let getAllThetaMintNums = document.querySelectorAll('.mintNumTheta')
-let getBetaMintNums = document.querySelector('.mintNumBeta')
-let getAlphaMintNums = document.querySelector('.mintNumAlpha')
-let getThetaMintNums = document.querySelector('.mintNumTheta')
+const batCap = {
+    stat: "batCap",
+    Beta: 10,
+    Alpha: 10,
+    Theta: 10,
+}
 
-let getAllBetaCoins = document.querySelectorAll('.coinsBeta')
-let getAllAlphaCoins = document.querySelectorAll('.coinsAlpha')
-let getAllThetaCoins = document.querySelectorAll('.coinsTheta')
-let getBetaCoins = document.querySelector('.coinsBeta')
-let getAlphaCoins = document.querySelector('.coinsAlpha')
-let getThetaCoins = document.querySelector('.coinsTheta')
-let jscoinsBeta = parseFloat(getBetaCoins.innerHTML)
-let jscoinsAlpha = parseFloat(getAlphaCoins.innerHTML)
-let jscoinsTheta = parseFloat(getThetaCoins.innerHTML)
-
-let getBetaLeafCost = document.querySelector('.costLeafBeta')
-let getAlphaLeafCost = document.querySelector('.costLeafAlpha')
-let getThetaLeafCost = document.querySelector('.costLeafTheta')
-let jsLeafCostBeta = parseFloat(getBetaLeafCost.innerHTML)
-let jsLeafCostAlpha = parseFloat(getAlphaLeafCost.innerHTML)
-let jsLeafCostTheta = parseFloat(getThetaLeafCost.innerHTML)
-let getBetaBatCapCost = document.querySelector('.costBatCapBeta')
-let getAlphaBatCapCost = document.querySelector('.costBatCapAlpha')
-let getThetaBatCapCost = document.querySelector('.costBatCapTheta')
-let jsBatCapCostBeta = parseFloat(getBetaBatCapCost.innerHTML)
-let jsBatCapCostAlpha = parseFloat(getAlphaBatCapCost.innerHTML)
-let jsBatCapCostTheta = parseFloat(getThetaBatCapCost.innerHTML)
-let getBetaMintUpCost = document.querySelector('.costMintUpBeta')
-let getAlphaMintUpCost = document.querySelector('.costMintUpAlpha')
-let getThetaMintUpCost = document.querySelector('.costMintUpTheta')
-let jsMintUpCostBeta = parseFloat(getBetaMintUpCost.innerHTML)
-let jsMintUpCostAlpha = parseFloat(getAlphaMintUpCost.innerHTML)
-let jsMintUpCostTheta = parseFloat(getThetaMintUpCost.innerHTML)
+const cost = {
+    stat: "cost",
+    name: "leaf",
+    Beta: 5000,
+    Alpha: 5000,
+    Theta: 5000,
+}
+const batCapCost = {
+    stat: "cost",
+    name: "batCap",
+    Beta: 500,
+    Alpha: 500,
+    Theta: 500,
+}
+const mintUpCost = {
+    stat: "cost",
+    name: "mintUp",
+    Beta: 4000,
+    Alpha: 4000,
+    Theta: 4000,
+}
 
 let rateLeafCostGrowth = 1.07
-let baseLeafCost = 5
+let baseLeafCost = 5000
 let baseLeafProdBoost = 2
 
 let rateBatCapCostGrowth = 2
@@ -82,9 +70,17 @@ const boostLvl = {
     Alpha: 0,
     Theta: 0,
 }
-let batCapLvlBeta = 0
-let batCapLvlAlpha = 0
-let batCapLvlTheta = 0
+const batCapLvl = {
+    Beta: 0,
+    Alpha: 0,
+    Theta: 0,
+}
+const mintUpLvl = {
+    Beta: 1,
+    Alpha: 1,
+    Theta: 1,
+}
+
 let mintUpLvlBeta = 1
 let mintUpLvlAlpha = 1
 let mintUpLvlTheta = 1
@@ -142,14 +138,8 @@ function consoleMsg (i,decay) {
     timeout(msg,time)
 }
 
-function reparsefloats() {
-    jscoinsBeta = parseFloat(getBetaCoins.innerHTML)
-    jscoinsAlpha = parseFloat(getAlphaCoins.innerHTML)
-    jscoinsTheta = parseFloat(getThetaCoins.innerHTML)
-}
-
 function setAllInners(thingToSet,mathToDo) {
-    thingToSet.forEach(function(i) {
+    document.querySelectorAll(thingToSet).forEach(function(i) {
         i.innerHTML = mathToDo
     })
 }
@@ -202,9 +192,9 @@ function nextSeshInfo() {
         let nextTheta = nextSesh.thetaPower
         msg.innerHTML = `Your next session has...<br>${nextBeta} kJ Beta Power<br>${nextAlpha} kJ Alph Power<br>${nextTheta} kJ Theta Power`
 
-        let wasteBeta = Math.ceil(Math.max(nextBeta*1000 - ((jsbatCapBeta*1000) - power["Beta"]),0)/100)/10
-        let wasteAlpha = Math.ceil(Math.max(nextAlpha*1000 - ((jsbatCapAlpha*1000) - power["Alpha"]),0)/100)/10
-        let wasteTheta = Math.ceil(Math.max(nextTheta*1000 - ((jsbatCapTheta*1000) - power["Theta"]),0)/100)/10
+        let wasteBeta = Math.ceil(Math.max(nextBeta*1000 - ((batCap["Beta"]*1000) - power["Beta"]),0)/100)/10
+        let wasteAlpha = Math.ceil(Math.max(nextAlpha*1000 - ((batCap["Alpha"]*1000) - power["Alpha"]),0)/100)/10
+        let wasteTheta = Math.ceil(Math.max(nextTheta*1000 - ((batCap["Theta"]*1000) - power["Theta"]),0)/100)/10
         waste.innerHTML = `Waste<br>${wasteBeta} kJ<br>${wasteAlpha} kJ<br>${wasteTheta} kJ`
         
     }
@@ -344,21 +334,18 @@ const timeout = (div,time) => {
 }
 
 function incPower(be,al,th) {
-    console.log("beta: ",be,"alpha: ",al,"theta: ",th)
     power["Beta"] += be
     power["Alpha"] += al
     power["Theta"] += th
-    console.log("beta: ",power["Beta"],"alpha: ",power["Alpha"],"theta: ",power["Theta"])
-    power["Beta"] = Math.min(power["Beta"],jsbatCapBeta*1000)
-    power["Alpha"] = Math.min(power["Alpha"],jsbatCapAlpha*1000)
-    power["Theta"] = Math.min(power["Theta"],jsbatCapTheta*1000)
-    console.log("beta: ",power["Beta"],"alpha: ",power["Alpha"],"theta: ",power["Theta"])
+    power["Beta"] = Math.min(power["Beta"],batCap["Beta"]*1000)
+    power["Alpha"] = Math.min(power["Alpha"],batCap["Alpha"]*1000)
+    power["Theta"] = Math.min(power["Theta"],batCap["Theta"]*1000)
     let jpB = power["Beta"] / 1000
     let jpA = power["Alpha"] / 1000
     let jpT = power["Theta"] / 1000
-    setAllInners(getAllBetaPower,jpB)
-    setAllInners(getAllAlphaPower,jpA)
-    setAllInners(getAllThetaPower,jpT)
+    setAllInners('.powerBeta',jpB)
+    setAllInners('.powerAlpha',jpA)
+    setAllInners('.powerTheta',jpT)
     batCapPercent("Beta")
     batCapPercentIndicator("Beta")
     batCapPercent("Alpha")
@@ -551,156 +538,61 @@ function showTipCursor(event) {
 function upgradeInfo(upgrade,wave) {
     let upgradeButton = document.querySelector(`.${upgrade}.${wave}`)
     let buttonSpan = upgradeButton.querySelector(".upgradeEffect")
-    buttonSpan.innerHTML = `${boostLvl[wave] * baseLeafProdBoost}% => <span class="positive-value">${(boostLvl[wave]+1) * baseLeafProdBoost}%</span> ${wave}`
+    if (upgrade === "leaf") {buttonSpan.innerHTML = `${boostLvl[wave] * baseLeafProdBoost}% => <span class="positive-value">${(boostLvl[wave]+1) * baseLeafProdBoost}%</span> ${wave}`}
+    if (upgrade === "batCap") {buttonSpan.innerHTML = `${batCap[wave]} => <span class="positive-value">${batCap[wave] + baseBatCapBoost}</span> ${wave}`}
+    if (upgrade === "mintUp") {buttonSpan.innerHTML = `${mintUpLvl[wave]} => <span class="positive-value">${mintUpLvl[wave]+1}</span> ${wave}`}
 }
 
-//Functions for buying Leaf Upgrades
-function buyBetaLeaf() {
-    if (power["Beta"] >= (jsLeafCostBeta*1000)) {
-        boostLvl["Beta"] += 1
-        power["Beta"] -= (jsLeafCostBeta*1000)
-        jsLeafCostBeta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Beta"]))
-        getBetaLeafCost.innerHTML = jsLeafCostBeta
-        let jpB = power["Beta"] / 1000
-        setAllInners(getAllBetaPower,jpB)
-        batCapPercent("Beta")
-        batCapPercentIndicator("Beta")
-        makeLeaf("Beta")
-        upgradeInfo("leaf","Beta")
-    }
-}
-function buyAlphaLeaf() {
-    if (power["Alpha"] >= (jsLeafCostAlpha*1000)) {
-        boostLvl["Alpha"] += 1
-        power["Alpha"] -= (jsLeafCostAlpha*1000)
-        jsLeafCostAlpha = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Alpha"]))
-        getAlphaLeafCost.innerHTML = jsLeafCostAlpha
-        let jpA = power["Alpha"] / 1000
-        setAllInners(getAllAlphaPower,jpA)
-        batCapPercent("Alpha")
-        batCapPercentIndicator("Alpha")
-        makeLeaf("Alpha")
-        upgradeInfo("leaf","Alpha")
-    }
-}
-function buyThetaLeaf() {
-    if (power["Theta"] >= (jsLeafCostTheta*1000)) {
-        boostLvl["Theta"] += 1
-        power["Theta"] -= (jsLeafCostTheta*1000)
-        jsLeafCostTheta = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl["Theta"]))
-        getThetaLeafCost.innerHTML = jsLeafCostTheta
-        let jpT = power["Theta"] / 1000
-        setAllInners(getAllThetaPower,jpT)
-        batCapPercent("Theta")
-        batCapPercentIndicator("Theta")
-        makeLeaf("Theta")
-        upgradeInfo("leaf","Theta")
+
+function buyLeaf(wave) { //Function for buying Leaf Upgrades
+    if (power[wave] >= cost[wave]) {
+        boostLvl[wave] += 1
+        power[wave] -= cost[wave]
+        cost[wave] = Math.round(baseLeafCost*(rateLeafCostGrowth**boostLvl[wave]))
+        document.querySelector(`.leaf${wave}Cost`).innerHTML = cost[wave]/1000
+        let innerPower = power[wave] / 1000
+        setAllInners(`.power${wave}`,innerPower)
+        batCapPercent(wave)
+        batCapPercentIndicator(wave)
+        makeLeaf(wave)
+        upgradeInfo("leaf",wave)
     }
 }
 
-//Functions for buying Battery Upgrades
-function buyBetaBatCap() {
-    if(jscoinsBeta >= jsBatCapCostBeta) {
-        batCapLvlBeta += 1
-        jscoinsBeta -= jsBatCapCostBeta
-        jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
-        setAllInners(getAllBetaBatCap,jsbatCapBeta)
-        jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
-        getBetaBatCapCost.innerHTML = jsBatCapCostBeta
-        let jcB = jscoinsBeta
-        setAllInners(getAllBetaCoins,jcB)
-        makeBuilding("Battery","Beta")
-        jsuserBuildings.push({type:"Battery",wave:"Beta"})
+function buyBattery(wave) { //Function for buying Battery Upgrades
+    if(coins[wave] >= batCapCost[wave]) {
+        batCapLvl[wave] += 1
+        coins[wave] -= batCapCost[wave]
+        batCap[wave] = 10 + (batCapLvl[wave]*baseBatCapBoost)
+        setAllInners(`.batCap${wave}`,batCap[wave])
+        batCapCost[wave] = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvl[wave]))
+        document.querySelector(`.batCap${wave}Cost`).innerHTML = batCapCost[wave]
+        setAllInners(`.coins${wave}`,coins[wave])
+        makeBuilding("Battery",wave)
+        jsuserBuildings.push({type:"Battery",wave:`${wave}`})
     }
     if (progress.boughtABat.completed === false) {
         progress.boughtABat.completed = true
         dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
         consoleMsg("Some extra breathing room for all this power","long")
     }
-}
-function buyAlphaBatCap() {
-    if(jscoinsAlpha >= jsBatCapCostAlpha) {
-        batCapLvlAlpha += 1
-        jscoinsAlpha -= jsBatCapCostAlpha
-        jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
-        setAllInners(getAllAlphaBatCap,jsbatCapAlpha)
-        jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
-        getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
-        let jcA = jscoinsAlpha
-        setAllInners(getAllAlphaCoins,jcA)
-        makeBuilding("Battery","Alpha")
-        jsuserBuildings.push({type:"Battery",wave:"Alpha"})
-    }
-    if (progress.boughtABat.completed === false) {
-        progress.boughtABat.completed = true
-        dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
-        consoleMsg("Some extra breathing room for all this power","long")
-    }
-}
-function buyThetaBatCap() {
-    if(jscoinsTheta >= jsBatCapCostTheta) {
-        batCapLvlTheta += 1
-        jscoinsTheta -= jsBatCapCostTheta
-        jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
-        setAllInners(getAllThetaBatCap,jsbatCapTheta)
-        jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
-        getThetaBatCapCost.innerHTML = jsBatCapCostTheta
-        let jcT = jscoinsTheta
-        setAllInners(getAllThetaCoins,jcT)
-        makeBuilding("Battery","Theta")
-        jsuserBuildings.push({type:"Battery",wave:"Theta"})
-    }
-    if (progress.boughtABat.completed === false) {
-        progress.boughtABat.completed = true
-        dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
-        consoleMsg("Some extra breathing room for all this power","long")
-    }
+    upgradeInfo("batCap",wave)
 }
 
-//Functions for buying Mint Upgrades
-function buyBetaMint() {
-    if(jscoinsBeta >= jsMintUpCostBeta) {
-        mintUpLvlBeta += 1
-        producers.find(p => p.name === "mintBeta").numBuilt = mintUpLvlBeta
-        jscoinsBeta -= jsMintUpCostBeta
-        jsMintUpCostBeta = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvlBeta))
-        setAllInners(getAllBetaMintNums,mintUpLvlBeta)
-        getBetaMintUpCost.innerHTML = jsMintUpCostBeta
-        let jcB = jscoinsBeta
-        setAllInners(getAllBetaCoins,jcB)
-        makeBuilding("Mint","Beta")
-        jsuserBuildings.push({type:"Mint",wave:"Beta"})
+function buyMint(wave) { //Function for buying Mint Upgrades
+    if(coins[wave] >= mintUpCost[wave]) {
+        mintUpLvl[wave] += 1
+        producers.find(p => p.name === `mint${wave}`).numBuilt = mintUpLvl[wave]
+        coins[wave] -= mintUpCost[wave]
+        mintUpCost[wave] = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvl[wave]))
+        setAllInners('.mintNumBeta',mintUpLvl[wave])
+        document.querySelector(`.mintUp${wave}Cost`).innerHTML = mintUpCost[wave]
+        setAllInners(`.coins${wave}`,coins[wave])
+        makeBuilding("Mint",wave)
+        jsuserBuildings.push({type:"Mint",wave:`${wave}`})
     }
+    upgradeInfo("mintUp",wave)
 }
-function buyAlphaMint() {
-    if(jscoinsAlpha >= jsMintUpCostAlpha) {
-        mintUpLvlAlpha += 1
-        producers.find(p => p.name === "mintAlpha").numBuilt = mintUpLvlAlpha
-        jscoinsAlpha -= jsMintUpCostAlpha
-        jsMintUpCostAlpha = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvlAlpha))
-        setAllInners(getAllAlphaMintNums,mintUpLvlAlpha)
-        getAlphaMintUpCost.innerHTML = jsMintUpCostAlpha
-        let jcB = jscoinsAlpha
-        setAllInners(getAllAlphaCoins,jcB)
-        makeBuilding("Mint","Alpha")
-        jsuserBuildings.push({type:"Mint",wave:"Alpha"})
-    }
-}
-function buyThetaMint() {
-    if(jscoinsTheta >= jsMintUpCostTheta) {
-        mintUpLvlTheta += 1
-        producers.find(p => p.name === "mintTheta").numBuilt = mintUpLvlTheta
-        jscoinsTheta -= jsMintUpCostTheta
-        jsMintUpCostTheta = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvlTheta))
-        setAllInners(getAllThetaMintNums,mintUpLvlTheta)
-        getThetaMintUpCost.innerHTML = jsMintUpCostTheta
-        let jcB = jscoinsTheta
-        setAllInners(getAllThetaCoins,jcB)
-        makeBuilding("Mint","Theta")
-        jsuserBuildings.push({type:"Mint",wave:"Theta"})
-    }
-}
-
 
 /*
 ---------------------------
@@ -736,17 +628,15 @@ function getRates(stat,wave,pc) {
         }
 }
 function consume (stat,wave) {
-    let str = stat+wave
+    let str = stat["stat"]+wave
     let enoughStat = true
-    let getElement = document.querySelector(`.${str}`)
-    let jsElement = parseFloat(getElement.innerHTML)*1000
-    jsElement += getRates(stat,wave,"con")
-    if (jsElement <= 0) {
-        jsElement = 0
-        getElement.innerHTML = 0
+    stat[wave] += getRates(stat["stat"],wave,"con")
+    if (stat[wave] <= 0) {
+        stat[wave] = 0
+        setAllInners(`.${str}`,0)
         enoughStat = false
     } else {
-        getElement.innerHTML = jsElement/1000
+        setAllInners(`.${str}`,stat[wave]/1000)
         enoughStat = true
     }
     return enoughStat
@@ -785,9 +675,9 @@ let mintBeta = document.getElementById("mintBeta");
 let mintAlpha = document.getElementById("mintAlpha");
 let mintTheta = document.getElementById("mintTheta");
 setInterval(() => {
-    let enoughBeta = consume("power","Beta")
-    let enoughAlpha = consume("power","Alpha")
-    let enoughTheta = consume("power","Theta")
+    let enoughBeta = consume(power,"Beta")
+    let enoughAlpha = consume(power,"Alpha")
+    let enoughTheta = consume(power,"Theta")
     produce ("coins","Beta")
     produce ("coins","Alpha")
     produce ("coins","Theta")
@@ -819,7 +709,6 @@ setInterval(() => {
     getcoinspsAlpha.innerHTML = getRates("coins","Alpha","prod")
     getcoinspsTheta.innerHTML = getRates("coins","Theta","prod")
     ratecolors()
-    reparsefloats()
 },1000)
 
 /*
@@ -840,31 +729,31 @@ function save() {
 
     localStorage.setItem("jsstatSesh",JSON.stringify(jsstatSesh))
     localStorage.setItem("jsstatMins",JSON.stringify(jsstatMins))
-    localStorage.setItem("power['Beta']",JSON.stringify(power["Beta"]))
-    localStorage.setItem("power['Alpha']",JSON.stringify(power["Alpha"]))
-    localStorage.setItem("power['Theta']",JSON.stringify(power["Theta"]))
+    localStorage.setItem("power['Beta']",JSON.stringify(power['Beta']))
+    localStorage.setItem("power['Alpha']",JSON.stringify(power['Alpha']))
+    localStorage.setItem("power['Theta']",JSON.stringify(power['Theta']))
     localStorage.setItem("jsCrankNum",JSON.stringify(jsCrankNum))
-    localStorage.setItem("jscoinsBeta",JSON.stringify(jscoinsBeta))
-    localStorage.setItem("jscoinsAlpha",JSON.stringify(jscoinsAlpha))
-    localStorage.setItem("jscoinsTheta",JSON.stringify(jscoinsTheta))
-    localStorage.setItem("jsLeafCostBeta",JSON.stringify(jsLeafCostBeta))
-    localStorage.setItem("jsLeafCostAlpha",JSON.stringify(jsLeafCostAlpha))
-    localStorage.setItem("jsLeafCostTheta",JSON.stringify(jsLeafCostTheta))
-    localStorage.setItem("boostLvl['Beta']",JSON.stringify(boostLvl["Beta"]))
-    localStorage.setItem("boostLvl['Alpha']",JSON.stringify(boostLvl["Alpha"]))
-    localStorage.setItem("boostLvl['Theta']",JSON.stringify(boostLvl["Theta"]))
-    localStorage.setItem("batCapLvlBeta",JSON.stringify(batCapLvlBeta))
-    localStorage.setItem("batCapLvlAlpha",JSON.stringify(batCapLvlAlpha))
-    localStorage.setItem("batCapLvlTheta",JSON.stringify(batCapLvlTheta))
+    localStorage.setItem("coins['Beta']",JSON.stringify(coins['Beta']))
+    localStorage.setItem("coins['Alpha']",JSON.stringify(coins['Alpha']))
+    localStorage.setItem("coins['Theta']",JSON.stringify(coins['Theta']))
+    localStorage.setItem("cost['Beta']",JSON.stringify(cost['Beta']))
+    localStorage.setItem("cost['Alpha']",JSON.stringify(cost['Alpha']))
+    localStorage.setItem("cost['Theta']",JSON.stringify(cost['Theta']))
+    localStorage.setItem("boostLvl['Beta']",JSON.stringify(boostLvl['Beta']))
+    localStorage.setItem("boostLvl['Alpha']",JSON.stringify(boostLvl['Alpha']))
+    localStorage.setItem("boostLvl['Theta']",JSON.stringify(boostLvl['Theta']))
+    localStorage.setItem("batCapLvl['Beta']",JSON.stringify(batCapLvl['Beta']))
+    localStorage.setItem("batCapLvl['Alpha']",JSON.stringify(batCapLvl['Alpha']))
+    localStorage.setItem("batCapLvl['Theta']",JSON.stringify(batCapLvl['Theta']))
     localStorage.setItem("mintBeta",JSON.stringify(mintBeta.checked))
     localStorage.setItem("mintAlpha",JSON.stringify(mintAlpha.checked))
     localStorage.setItem("mintTheta",JSON.stringify(mintTheta.checked))
-    localStorage.setItem("mintUpLvlBeta",JSON.stringify(mintUpLvlBeta))
-    localStorage.setItem("mintUpLvlAlpha",JSON.stringify(mintUpLvlAlpha))
-    localStorage.setItem("mintUpLvlTheta",JSON.stringify(mintUpLvlTheta))
-    localStorage.setItem("jsMintUpCostBeta",JSON.stringify(jsMintUpCostBeta))
-    localStorage.setItem("jsMintUpCostAlpha",JSON.stringify(jsMintUpCostAlpha))
-    localStorage.setItem("jsMintUpCostTheta",JSON.stringify(jsMintUpCostTheta))
+    localStorage.setItem("mintUpLvl['Beta']",JSON.stringify(mintUpLvl['Beta']))
+    localStorage.setItem("mintUpLvl['Alpha']",JSON.stringify(mintUpLvl['Alpha']))
+    localStorage.setItem("mintUpLvl['Theta']",JSON.stringify(mintUpLvl['Theta']))
+    localStorage.setItem("mintUpCost['Beta']",JSON.stringify(mintUpCost['Beta']))
+    localStorage.setItem("mintUpCost['Alpha']",JSON.stringify(mintUpCost['Alpha']))
+    localStorage.setItem("mintUpCost['Theta']",JSON.stringify(mintUpCost['Theta']))
 
     localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
     localStorage.setItem("progress",JSON.stringify(progress))
@@ -876,31 +765,31 @@ console.log(localStorage)
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
     jsstatMins = JSON.parse(localStorage.getItem("jsstatMins"))
-    power["Beta"] = JSON.parse(localStorage.getItem("power['Beta']"))
-    power["Alpha"] = JSON.parse(localStorage.getItem("power['Alpha']"))
-    power["Theta"] = JSON.parse(localStorage.getItem("power['Theta']"))
+    power['Beta'] = JSON.parse(localStorage.getItem("power['Beta']"))
+    power['Alpha'] = JSON.parse(localStorage.getItem("power['Alpha']"))
+    power['Theta'] = JSON.parse(localStorage.getItem("power['Theta']"))
     jsCrankNum = JSON.parse(localStorage.getItem("jsCrankNum"))
-    jscoinsBeta = JSON.parse(localStorage.getItem("jscoinsBeta"))
-    jscoinsAlpha = JSON.parse(localStorage.getItem("jscoinsAlpha"))
-    jscoinsTheta = JSON.parse(localStorage.getItem("jscoinsTheta"))
-    jsLeafCostBeta = JSON.parse(localStorage.getItem("jsLeafCostBeta"))
-    jsLeafCostAlpha = JSON.parse(localStorage.getItem("jsLeafCostAlpha"))
-    jsLeafCostTheta = JSON.parse(localStorage.getItem("jsLeafCostTheta"))
-    boostLvl["Beta"] = JSON.parse(localStorage.getItem("boostLvl['Beta']"))
-    boostLvl["Alpha"] = JSON.parse(localStorage.getItem("boostLvl['Alpha']"))
-    boostLvl["Theta"] = JSON.parse(localStorage.getItem("boostLvl['Theta']"))
-    batCapLvlBeta = JSON.parse(localStorage.getItem("batCapLvlBeta"))
-    batCapLvlAlpha = JSON.parse(localStorage.getItem("batCapLvlAlpha"))
-    batCapLvlTheta = JSON.parse(localStorage.getItem("batCapLvlTheta"))
+    coins['Beta'] = JSON.parse(localStorage.getItem("coins['Beta']"))
+    coins['Alpha'] = JSON.parse(localStorage.getItem("coins['Alpha']"))
+    coins['Theta'] = JSON.parse(localStorage.getItem("coins['Theta']"))
+    cost['Beta'] = JSON.parse(localStorage.getItem("cost['Beta']"))
+    cost['Alpha'] = JSON.parse(localStorage.getItem("cost['Alpha']"))
+    cost['Theta'] = JSON.parse(localStorage.getItem("cost['Theta']"))
+    boostLvl['Beta'] = JSON.parse(localStorage.getItem("boostLvl['Beta']"))
+    boostLvl['Alpha'] = JSON.parse(localStorage.getItem("boostLvl['Alpha']"))
+    boostLvl['Theta'] = JSON.parse(localStorage.getItem("boostLvl['Theta']"))
+    batCapLvl['Beta'] = JSON.parse(localStorage.getItem("batCapLvl['Beta']"))
+    batCapLvl['Alpha'] = JSON.parse(localStorage.getItem("batCapLvl['Alpha']"))
+    batCapLvl['Theta'] = JSON.parse(localStorage.getItem("batCapLvl['Theta']"))
     mintBeta.checked = JSON.parse(localStorage.getItem("mintBeta"))
     mintAlpha.checked = JSON.parse(localStorage.getItem("mintAlpha"))
     mintTheta.checked = JSON.parse(localStorage.getItem("mintTheta"))
-    mintUpLvlBeta = JSON.parse(localStorage.getItem("mintUpLvlBeta"))
-    mintUpLvlAlpha = JSON.parse(localStorage.getItem("mintUpLvlAlpha"))
-    mintUpLvlTheta = JSON.parse(localStorage.getItem("mintUpLvlTheta"))
-    jsMintUpCostBeta = JSON.parse(localStorage.getItem("jsMintUpCostBeta"))
-    jsMintUpCostAlpha = JSON.parse(localStorage.getItem("jsMintUpCostAlpha"))
-    jsMintUpCostTheta = JSON.parse(localStorage.getItem("jsMintUpCostTheta"))
+    mintUpLvl['Beta'] = JSON.parse(localStorage.getItem("mintUpLvl['Beta']"))
+    mintUpLvl['Alpha'] = JSON.parse(localStorage.getItem("mintUpLvl['Alpha']"))
+    mintUpLvl['Theta'] = JSON.parse(localStorage.getItem("mintUpLvl['Theta']"))
+    mintUpCost['Beta'] = JSON.parse(localStorage.getItem("mintUpCost['Beta']"))
+    mintUpCost['Alpha'] = JSON.parse(localStorage.getItem("mintUpCost['Alpha']"))
+    mintUpCost['Theta'] = JSON.parse(localStorage.getItem("mintUpCost['Theta']"))
     
     getstatSesh.innerHTML = jsstatSesh
     document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
@@ -915,28 +804,25 @@ function load() {
     })
 
     let jpB = power["Beta"] / 1000
-    setAllInners(getAllBetaPower,jpB)
+    setAllInners('.powerBeta',jpB)
     let jpA = power["Alpha"] / 1000
-    setAllInners(getAllAlphaPower,jpA)
+    setAllInners('.powerAlpha',jpA)
     let jpT = power["Theta"] / 1000
-    setAllInners(getAllThetaPower,jpT)
-    setAllInners(getAllThetaPower,jpT)
-    setAllInners(getAllThetaPower,jpT)
-    setAllInners(getAllThetaPower,jpT)
+    setAllInners('.powerTheta',jpT)
 
-    setAllInners(getAllBetaMintNums,mintUpLvlBeta)
-    setAllInners(getAllAlphaMintNums,mintUpLvlAlpha)
-    setAllInners(getAllThetaMintNums,mintUpLvlTheta)
-    getBetaMintUpCost.innerHTML = jsMintUpCostBeta
-    getAlphaMintUpCost.innerHTML = jsMintUpCostAlpha
-    getThetaMintUpCost.innerHTML = jsMintUpCostTheta
+    setAllInners('.mintNumBeta',mintUpLvl['Beta'])
+    setAllInners('.mintNumAlpha',mintUpLvl['Alpha'])
+    setAllInners('.mintNumTheta',mintUpLvl['Theta'])
+    document.querySelector(`.batCapBetaCost`).innerHTML = mintUpCost['Beta']
+    document.querySelector(`.batCapAlphCost`).innerHTML = mintUpCost['Alpha']
+    document.querySelector(`.batCapThetaCost`).innerHTML = mintUpCost['Theta']
 
-    setAllInners(getAllBetaCoins,jscoinsBeta)
-    setAllInners(getAllAlphaCoins,jscoinsAlpha)
-    setAllInners(getAllThetaCoins,jscoinsTheta)
-    getBetaLeafCost.innerHTML = jsLeafCostBeta
-    getAlphaLeafCost.innerHTML = jsLeafCostAlpha
-    getThetaLeafCost.innerHTML = jsLeafCostTheta
+    setAllInners('.coinsBeta',coins['Beta'])
+    setAllInners('.coinsAlpha',coins['Alpha'])
+    setAllInners('.coinsTheta',coins['Theta'])
+    document.querySelector('.leafBetaCost').innerHTML = cost["Beta"]/1000
+    document.querySelector('.leafAlphaCost').innerHTML = cost["Alpha"]/1000
+    document.querySelector('.leafThetaCost').innerHTML = cost["Theta"]/1000
     
     makeAllLeaves(boostLvl["Beta"],boostLvl["Alpha"],boostLvl["Theta"])
 
@@ -949,20 +835,20 @@ function load() {
         if (progress[key].completed === true) {dispGameElem(progress[key].elem,progress[key].dispStyle)}
     }
 
-    jsbatCapBeta = 100 + (batCapLvlBeta*baseBatCapBoost)
-    setAllInners(getAllBetaBatCap,jsbatCapBeta)
-    jsBatCapCostBeta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlBeta))
-    getBetaBatCapCost.innerHTML = jsBatCapCostBeta
+    batCap["Beta"] = 10 + (batCapLvl["Beta"]*baseBatCapBoost)
+    setAllInners('.batCapBeta',batCap["Beta"])
+    batCapCost["Beta"] = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvl["Beta"]))
+    document.querySelector(`.batCapBetaCost`).innerHTML = batCapCost["Beta"]
 
-    jsbatCapAlpha = 100 + (batCapLvlAlpha*baseBatCapBoost)
-    setAllInners(getAllAlphaBatCap,jsbatCapAlpha)
-    jsBatCapCostAlpha = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlAlpha))
-    getAlphaBatCapCost.innerHTML = jsBatCapCostAlpha
+    batCap["Alpha"] = 10 + (batCapLvl["Alpha"]*baseBatCapBoost)
+    setAllInners('.batCapAlpha',batCap["Alpha"])
+    batCapCost["Alpha"] = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvl["Alpha"]))
+    document.querySelector(`.batCapAlphaCost`).innerHTML = batCapCost["Alpha"]
 
-    jsbatCapTheta = 100 + (batCapLvlTheta*baseBatCapBoost)
-    setAllInners(getAllThetaBatCap,jsbatCapTheta)
-    jsBatCapCostTheta = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvlTheta))
-    getThetaBatCapCost.innerHTML = jsBatCapCostTheta
+    batCap["Theta"] = 10 + (batCapLvl["Theta"]*baseBatCapBoost)
+    setAllInners('.batCapTheta',batCap["Theta"])
+    batCapCost["Theta"] = Math.round(baseBatCapCost*(rateBatCapCostGrowth**batCapLvl["Theta"]))
+    document.querySelector(`.batCapThetaCost`).innerHTML = batCapCost["Theta"]
 }
 
 function defaultGame() {
@@ -974,27 +860,27 @@ function defaultGame() {
     localStorage.setItem("power['Alpha']",JSON.stringify(0))
     localStorage.setItem("power['Theta']",JSON.stringify(0))
     localStorage.setItem("jsCrankNum",JSON.stringify(0))
-    localStorage.setItem("jscoinsBeta",JSON.stringify(17000))
-    localStorage.setItem("jscoinsAlpha",JSON.stringify(7000))
-    localStorage.setItem("jscoinsTheta",JSON.stringify(7000))
-    localStorage.setItem("jsLeafCostBeta",JSON.stringify(5))
-    localStorage.setItem("jsLeafCostAlpha",JSON.stringify(5))
-    localStorage.setItem("jsLeafCostTheta",JSON.stringify(5))
+    localStorage.setItem("coins['Beta']",JSON.stringify(17000))
+    localStorage.setItem("coins['Alpha']",JSON.stringify(7000))
+    localStorage.setItem("coins['Theta']",JSON.stringify(7000))
+    localStorage.setItem("cost['Beta']",JSON.stringify(5000))
+    localStorage.setItem("cost['Alpha']",JSON.stringify(5000))
+    localStorage.setItem("cost['Theta']",JSON.stringify(5000))
     localStorage.setItem("boostLvl['Beta']",JSON.stringify(0))
     localStorage.setItem("boostLvl['Alpha']",JSON.stringify(0))
     localStorage.setItem("boostLvl['Theta']",JSON.stringify(0))
-    localStorage.setItem("batCapLvlBeta",JSON.stringify(0))
-    localStorage.setItem("batCapLvlAlpha",JSON.stringify(0))
-    localStorage.setItem("batCapLvlTheta",JSON.stringify(0))
+    localStorage.setItem("batCapLvl['Beta']",JSON.stringify(0))
+    localStorage.setItem("batCapLvl['Alpha']",JSON.stringify(0))
+    localStorage.setItem("batCapLvl['Theta']",JSON.stringify(0))
     localStorage.setItem("mintBeta",JSON.stringify(false))
     localStorage.setItem("mintAlpha",JSON.stringify(false))
     localStorage.setItem("mintTheta",JSON.stringify(false))
     localStorage.setItem("mintUpLvlBeta",JSON.stringify(1))
     localStorage.setItem("mintUpLvlAlpha",JSON.stringify(1))
     localStorage.setItem("mintUpLvlTheta",JSON.stringify(1))
-    localStorage.setItem("jsMintUpCostBeta",JSON.stringify(500))
-    localStorage.setItem("jsMintUpCostAlpha",JSON.stringify(500))
-    localStorage.setItem("jsMintUpCostTheta",JSON.stringify(500))
+    localStorage.setItem("mintUpCost'[Beta']",JSON.stringify(500))
+    localStorage.setItem("mintUpCost'[Alpha']",JSON.stringify(500))
+    localStorage.setItem("mintUpCost'[Theta']",JSON.stringify(500))
     localStorage.setItem("jsuserBuildings",JSON.stringify(userBuildings))
 
     for (const key in progress) {
@@ -1020,15 +906,9 @@ window.nextSeshInfo = nextSeshInfo
 window.rotateCrank = rotateCrank
 window.countdown = countdown
 window.upgradeInfo = upgradeInfo
-window.buyBetaLeaf = buyBetaLeaf
-window.buyAlphaLeaf = buyAlphaLeaf
-window.buyThetaLeaf = buyThetaLeaf
-window.buyBetaBatCap = buyBetaBatCap
-window.buyAlphaBatCap = buyAlphaBatCap
-window.buyThetaBatCap = buyThetaBatCap
-window.buyBetaMint = buyBetaMint
-window.buyAlphaMint = buyAlphaMint
-window.buyThetaMint = buyThetaMint
+window.buyLeaf = buyLeaf
+window.buyBattery = buyBattery
+window.buyMint = buyMint
 window.save = save
 window.load = load
 window.reset = reset
