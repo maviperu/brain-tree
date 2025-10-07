@@ -585,7 +585,7 @@ function buyMint(wave) { //Function for buying Mint Upgrades
         producers.find(p => p.name === `mint${wave}`).numBuilt = mintUpLvl[wave]
         coins[wave] -= mintUpCost[wave]
         mintUpCost[wave] = Math.round(baseMintUpCost*(rateMintUpCostGrowth**mintUpLvl[wave]))
-        setAllInners('.mintNumBeta',mintUpLvl[wave])
+        setAllInners(`.mintNum${wave}`,mintUpLvl[wave])
         document.querySelector(`.mintUp${wave}Cost`).innerHTML = mintUpCost[wave]
         setAllInners(`.coins${wave}`,coins[wave])
         makeBuilding("Mint",wave)
@@ -756,6 +756,7 @@ function save() {
     localStorage.setItem("mintUpCost['Theta']",JSON.stringify(mintUpCost['Theta']))
 
     localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
+    localStorage.setItem("producers",JSON.stringify(producers))
     localStorage.setItem("progress",JSON.stringify(progress))
 
     consoleMsg("Saved!","short")
@@ -813,9 +814,9 @@ function load() {
     setAllInners('.mintNumBeta',mintUpLvl['Beta'])
     setAllInners('.mintNumAlpha',mintUpLvl['Alpha'])
     setAllInners('.mintNumTheta',mintUpLvl['Theta'])
-    document.querySelector(`.batCapBetaCost`).innerHTML = mintUpCost['Beta']
-    document.querySelector(`.batCapAlphCost`).innerHTML = mintUpCost['Alpha']
-    document.querySelector(`.batCapThetaCost`).innerHTML = mintUpCost['Theta']
+    document.querySelector(`.mintUpBetaCost`).innerHTML = mintUpCost['Beta']
+    document.querySelector(`.mintUpAlphaCost`).innerHTML = mintUpCost['Alpha']
+    document.querySelector(`.mintUpThetaCost`).innerHTML = mintUpCost['Theta']
 
     setAllInners('.coinsBeta',coins['Beta'])
     setAllInners('.coinsAlpha',coins['Alpha'])
@@ -828,6 +829,11 @@ function load() {
 
     jsuserBuildings = JSON.parse(localStorage.getItem("jsuserBuildings"))
     makeAllBuildings()
+
+    let loadproducers = JSON.parse(localStorage.getItem("producers"))
+    for (const key in loadproducers) {
+        producers[key] = loadproducers[key]
+    }
 
     let loadprogress = JSON.parse(localStorage.getItem("progress"))
     for (const key in loadprogress) {
@@ -878,9 +884,9 @@ function defaultGame() {
     localStorage.setItem("mintUpLvlBeta",JSON.stringify(1))
     localStorage.setItem("mintUpLvlAlpha",JSON.stringify(1))
     localStorage.setItem("mintUpLvlTheta",JSON.stringify(1))
-    localStorage.setItem("mintUpCost'[Beta']",JSON.stringify(500))
-    localStorage.setItem("mintUpCost'[Alpha']",JSON.stringify(500))
-    localStorage.setItem("mintUpCost'[Theta']",JSON.stringify(500))
+    localStorage.setItem("mintUpCost['Beta']",JSON.stringify(4000))
+    localStorage.setItem("mintUpCost['Alpha']",JSON.stringify(4000))
+    localStorage.setItem("mintUpCost['Theta']",JSON.stringify(4000))
     localStorage.setItem("jsuserBuildings",JSON.stringify(userBuildings))
 
     for (const key in progress) {
