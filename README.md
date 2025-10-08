@@ -1,7 +1,7 @@
 # brain-tree
 An incremental-style web game powered by your brain waves!
 
-<img width="1418" height="844" alt="image" src="https://github.com/user-attachments/assets/4c1293b0-2b1d-450b-9363-8dff0a24f63e" />
+<img width="1485" height="840" alt="image" src="https://github.com/user-attachments/assets/6cd50ac5-5f21-4277-90a5-ec86989f1fd1" />
 
 Basic loop:
 1) Generate Energy either through recording and processing brainwaves (EEG headset required!), or manually by turning a crank (Little clickable object in the "Batteries" pane. Then, store Energy as Power in your Batteries
@@ -10,10 +10,19 @@ Basic loop:
 4) Repeat!
 
 More features and flash to come
+---------------------------
+Version 0.027 || 2025/10/07 - Cloud Computing & New User Experience
+---------------------------
+* Created a short "New User Experience" (NUE) which reveals features over time. This will develop over time, and probably become the backbone of unlocking other features.
+* Began adding additional early-game / non-EEG-based features
+* Cleaned up and generalized a lot of JS code in prep for expanding buildings/upgrades
+* Changed original Tree Button to a "sample" file with 5 sessions for new users and those without headsets to experience the power of the Brain Tree
+* Added new button that allows users to upload brain data! This is processed and converted into energy
 
 ---------------------------
 Version 0.015 || 2025/09/26 - Major Update and Release of MVP!
 ---------------------------
+<img width="1418" height="844" alt="image" src="https://github.com/user-attachments/assets/4c1293b0-2b1d-450b-9363-8dff0a24f63e" />
 LOTS of updates since last time, but roughly...
 * Added more functionality to Mints, including upgrades
 * Added Battery visuals to stats pane to show how full the batteries are
