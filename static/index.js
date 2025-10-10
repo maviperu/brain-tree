@@ -5,10 +5,11 @@ console.log("PAGE INIT",localStorage)
 
 let getstatSesh = document.querySelector('.statSesh')
 let jsstatSesh = parseFloat(getstatSesh.innerHTML)
+let sampleSeshCount = 0
 let getstatMins = document.querySelector('.statMins')
 let jsstatMins = parseFloat(getstatMins.innerHTML)
 
-document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
+document.querySelector('.seshLen').innerHTML = recordedSessions.length - sampleSeshCount // sets the html # of sample sessions remaining on the tree button
 
 let jsTheGrid = document.querySelector('.theGrid')
 
@@ -32,6 +33,7 @@ const batCap = {
     Theta: 10,
 }
 
+// Starting Costs
 const cost = {
     stat: "cost",
     name: "leaf",
@@ -54,17 +56,7 @@ const mintUpCost = {
     Theta: 4000,
 }
 
-let rateLeafCostGrowth = 1.07
-let baseLeafCost = 5000
-let baseLeafProdBoost = 2
-
-let rateBatCapCostGrowth = 2
-let baseBatCapCost = 500
-let baseBatCapBoost = 100
-
-let rateMintUpCostGrowth = 2
-let baseMintUpCost = 2000
-
+// Starting Quantities
 const boostLvl = {
     Beta: 0,
     Alpha: 0,
@@ -81,9 +73,16 @@ const mintUpLvl = {
     Theta: 1,
 }
 
-let mintUpLvlBeta = 1
-let mintUpLvlAlpha = 1
-let mintUpLvlTheta = 1
+let rateLeafCostGrowth = 1.07
+let baseLeafCost = 5000
+let baseLeafProdBoost = 2
+
+let rateBatCapCostGrowth = 2
+let baseBatCapCost = 500
+let baseBatCapBoost = 100
+
+let rateMintUpCostGrowth = 2
+let baseMintUpCost = 2000
 
 let getkJpsBeta = document.querySelector('.kJpsBeta')
 let getkJpsAlpha = document.querySelector('.kJpsAlpha')
@@ -93,14 +92,46 @@ let getcoinspsAlpha = document.querySelector('.coinspsAlpha')
 let getcoinspsTheta = document.querySelector('.coinspsTheta')
 
 const progress = {
-    crankedTheCrank: {completed:false,elem:".stats",dispStyle:"block"},
-    crankedSomeMore: {completed:false,elem:".treeButtonContainer",dispStyle:"block"},
-    crankedSomeMore2: {completed:false,elem:".uploadBin",dispStyle:"grid"},
-    mindfulCranking: {completed:false,elem:".laborBin.Alpha",dispStyle:"grid"},
-    usedTheTree: {completed:false,elem:".buildings",dispStyle:"grid"},
-    boughtABat: {completed:false,elem:".theGrid",dispStyle:"grid"},
+    crankedTheCrank: {completed:false,unlocked:true,hint:"Click the crank a few times",elem:".stats",dispStyle:"block"},
+    mindfulCranking: {completed:false,unlocked:true,hint:"Click the crank a few more times",elem:".laborBin.Alpha",dispStyle:"grid"},
+    crankedSomeMore: {completed:false,unlocked:true,hint:"Click the crank lots of times!",elem:".treeButtonContainer",dispStyle:"block"},
+    crankedSomeMore2: {completed:false,unlocked:false,hint:"Click the crank lots of times!",elem:".uploadBin",dispStyle:"grid"},
+    usedTheTree: {completed:false,unlocked:false,hint:"Harvest some Brain Power",elem:".buildings",dispStyle:"grid"},
+    boughtABat: {completed:false,unlocked:false,hint:"Buy a Battery",elem:".theGrid",dispStyle:"grid"},
 }
 
+const cheevs = {
+    firstClick: {completed:false,msg:"The journey of 1000 clicks..."},
+    firstHarvest: {completed:false,msg:"Mmm... Brains..."},
+    clearedTheTut: {completed:false,msg:"Now the REAL fun begins!"},
+}
+
+function cheev(name) {
+    cheevs[name].completed = true
+    let elem = document.getElementById("cheevBox")
+    let div = document.createElement("div")
+    div.innerHTML = cheevs[name].msg
+    div.classList.add("cheev")
+    elem.appendChild(div)
+    timeout(div,5000)
+}
+
+let progHints = document.getElementById("hints")
+function dispHints() {
+    const cleanupProg = document.getElementById("hints")
+    while(cleanupProg.childNodes.length > 0){
+        cleanupProg.removeChild(cleanupProg.lastChild)
+    }
+    for (const k in progress) {
+        if (progress[k].unlocked === true) {
+            let testdiv = document.createElement("div")
+            testdiv.classList.add(`prog${k}`)
+            testdiv.innerHTML = progress[k].hint
+            progHints.appendChild(testdiv)
+        }
+    }
+}
+dispHints()
 
 function dispGame(val) {
     dispGameElem(".main","flex")
@@ -112,12 +143,24 @@ function dispGame(val) {
 function dispGameElem(elem, dispStyle) {
     let loadWindow = document.querySelector(`${elem}`)
     loadWindow.style.display = `${dispStyle}`
+    if (elem === ".laborBin.Alpha" && dispStyle != "none") {dispWaveElems(".contentAlpha")}
 }
-function skipTut() {
+function dispWaveElems(elem) {
+    document.querySelectorAll(`${elem}`).forEach(function(i) {
+        i.classList.toggle('hide')
+    })
+}
+function skipTut() { // [[[]]]can skip the homestead console stuff too
     for (const key in progress) {
         progress[key].completed = true
+        progress[key].unlocked = false
         dispGameElem(progress[key].elem,progress[key].dispStyle)
     }
+    jsCranksComplete = 10
+    cheev("firstClick")
+    cheev("firstHarvest")
+    cheev("clearedTheTut")
+    dispHints()
 }
 
 function consoleMsg (i,decay) {
@@ -150,15 +193,19 @@ ENERGY GENERATION
 -----------------
 */
 function logSessionFile(event) {
-    let sesh = recordedSessions[jsstatSesh]
+    let sesh = recordedSessions[sampleSeshCount]
 
     if (sesh === undefined) {
         consoleMsg("No Session to Log!","short")
     } else {
         if (progress.usedTheTree.completed === false) { //Checks for first Brain Tree Progress
             progress.usedTheTree.completed = true
+            progress.usedTheTree.unlocked = false
             dispGameElem(progress.usedTheTree.elem,progress.usedTheTree.dispStyle)
             consoleMsg("Ooh, upgrades! Now we're talking, let's get a battery!","long")
+            if (cheevs.firstHarvest.completed === false) {cheev("firstHarvest")}
+            progress.boughtABat.unlocked = true
+            dispHints()
         }
         let harvestBeta = sesh.betaPower*(1+(boostLvl["Beta"]*baseLeafProdBoost/100))*1000
         let harvestAlpha = sesh.alphaPower*(1+(boostLvl["Alpha"]*baseLeafProdBoost/100))*1000
@@ -168,10 +215,11 @@ function logSessionFile(event) {
         jsstatMins += sesh.sessionMinutes
         getstatMins.innerHTML = jsstatMins
 
-        jsstatSesh += 1
+        jsstatSesh += 1 //global sessions value
         getstatSesh.innerHTML = jsstatSesh
+        sampleSeshCount += 1 // sample sessions value
 
-        document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
+        document.querySelector('.seshLen').innerHTML = recordedSessions.length - sampleSeshCount
 
         makeBolts(sesh.betaPower,sesh.alphaPower,sesh.thetaPower)
         moveBolts (event)
@@ -180,7 +228,7 @@ function logSessionFile(event) {
 }
 
 function nextSeshInfo() {
-    let nextSesh = recordedSessions[jsstatSesh]
+    let nextSesh = recordedSessions[sampleSeshCount]
     let msg = document.querySelector(".nextSeshInfo")
     let waste = document.querySelector(".nextSeshWaste")
     if (nextSesh === undefined) {
@@ -221,13 +269,23 @@ async function uploadFile(event) {
             uploadReturn = await r.json()
             console.log(uploadReturn)
             incPower(uploadReturn.betaPower*1000,uploadReturn.alphaPower*1000,uploadReturn.thetaPower*1000)
+
+            jsstatMins += uploadReturn.sessionMinutes
+            getstatMins.innerHTML = jsstatMins
+            jsstatSesh += 1
+            getstatSesh.innerHTML = jsstatSesh
+
             makeBolts(uploadReturn.betaPower,uploadReturn.alphaPower,uploadReturn.thetaPower)
             moveBolts (event)
             bolts.length = 0
             if (progress.usedTheTree.completed === false) {
                 progress.usedTheTree.completed = true
+                progress.usedTheTree.unlocked = false
                 dispGameElem(progress.usedTheTree.elem,progress.usedTheTree.dispStyle)
                 consoleMsg("Ooh, upgrades! Now we're talking, let's get a battery!","long")
+                if (cheevs.firstHarvest.completed === false) {cheev("firstHarvest")}
+                progress.boughtABat.unlocked = true
+                dispHints()
             }
         }
 
@@ -378,9 +436,12 @@ function rotateCrank(event) {
         crankIsCranking.classList.add("crankRot");
         
         jsCrankNum += 1
+        if (jsCrankNum == 1 && cheevs.firstClick.completed === false) {cheev("firstClick")}
         //Checks First Progress Milestone
         if (jsCrankNum == 5 && progress.crankedTheCrank.completed === false) {
             progress.crankedTheCrank.completed = true
+            progress.crankedTheCrank.unlocked = false
+            dispHints()
             dispGameElem(progress.crankedTheCrank.elem,progress.crankedTheCrank.dispStyle)
             consoleMsg("Ooh, a stats screen!","long")
         }
@@ -409,14 +470,20 @@ function rotateCrank(event) {
         //Checks Alpha Button Progress Milestone
         if (jsCranksComplete == 4 && progress.mindfulCranking.completed === false) {
             progress.mindfulCranking.completed = true
+            progress.mindfulCranking.unlocked = false
             dispGameElem(progress.mindfulCranking.elem,progress.mindfulCranking.dispStyle)
+            dispHints()
         }
         //Checks Tree Progress Milestone
         if (jsCranksComplete == 10 && progress.crankedSomeMore.completed === false) {
             progress.crankedSomeMore.completed = true
+            progress.crankedSomeMore.unlocked = false
             dispGameElem(progress.crankedSomeMore.elem,progress.crankedSomeMore.dispStyle)
             progress.crankedSomeMore2.completed = true
+            progress.crankedSomeMore2.unlocked = false
             dispGameElem(progress.crankedSomeMore2.elem,progress.crankedSomeMore2.dispStyle)
+            progress.usedTheTree.unlocked = true
+            dispHints()
         }
 
         setTimeout(() => {
@@ -471,7 +538,6 @@ function makeLeaf(type) {
         src.appendChild(img)
     }
 }
-
 function makeAllLeaves(BetaVal,AlphaVal,ThetaVal) {
     const cleanup = document.getElementById('treeButton')
     while(cleanup.childNodes.length > 7){
@@ -500,7 +566,6 @@ function makeBuilding(type,wave) {
     div.appendChild(span)
     jsTheGrid.appendChild(div)
 }
-
 let jsuserBuildings = userBuildings
 function makeAllBuildings() {
     const cleanupBuildings = document.getElementById('theGrid')
@@ -573,8 +638,11 @@ function buyBattery(wave) { //Function for buying Battery Upgrades
     }
     if (progress.boughtABat.completed === false) {
         progress.boughtABat.completed = true
+        progress.boughtABat.unlocked = false
         dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
         consoleMsg("Some extra breathing room for all this power","long")
+        if (cheevs.clearedTheTut.completed === false) {cheev("clearedTheTut")}
+        dispHints()
     }
     upgradeInfo("batCap",wave)
 }
@@ -725,51 +793,58 @@ document.onvisibilitychange = () => {
     }
 }
 function save() {
-    localStorage.clear()
+    if(document.querySelector(".main").style.display === "flex") {
+        localStorage.clear()
 
-    localStorage.setItem("jsstatSesh",JSON.stringify(jsstatSesh))
-    localStorage.setItem("jsstatMins",JSON.stringify(jsstatMins))
-    localStorage.setItem("power['Beta']",JSON.stringify(power['Beta']))
-    localStorage.setItem("power['Alpha']",JSON.stringify(power['Alpha']))
-    localStorage.setItem("power['Theta']",JSON.stringify(power['Theta']))
-    localStorage.setItem("jsCrankNum",JSON.stringify(jsCrankNum))
-    localStorage.setItem("coins['Beta']",JSON.stringify(coins['Beta']))
-    localStorage.setItem("coins['Alpha']",JSON.stringify(coins['Alpha']))
-    localStorage.setItem("coins['Theta']",JSON.stringify(coins['Theta']))
-    localStorage.setItem("cost['Beta']",JSON.stringify(cost['Beta']))
-    localStorage.setItem("cost['Alpha']",JSON.stringify(cost['Alpha']))
-    localStorage.setItem("cost['Theta']",JSON.stringify(cost['Theta']))
-    localStorage.setItem("boostLvl['Beta']",JSON.stringify(boostLvl['Beta']))
-    localStorage.setItem("boostLvl['Alpha']",JSON.stringify(boostLvl['Alpha']))
-    localStorage.setItem("boostLvl['Theta']",JSON.stringify(boostLvl['Theta']))
-    localStorage.setItem("batCapLvl['Beta']",JSON.stringify(batCapLvl['Beta']))
-    localStorage.setItem("batCapLvl['Alpha']",JSON.stringify(batCapLvl['Alpha']))
-    localStorage.setItem("batCapLvl['Theta']",JSON.stringify(batCapLvl['Theta']))
-    localStorage.setItem("mintBeta",JSON.stringify(mintBeta.checked))
-    localStorage.setItem("mintAlpha",JSON.stringify(mintAlpha.checked))
-    localStorage.setItem("mintTheta",JSON.stringify(mintTheta.checked))
-    localStorage.setItem("mintUpLvl['Beta']",JSON.stringify(mintUpLvl['Beta']))
-    localStorage.setItem("mintUpLvl['Alpha']",JSON.stringify(mintUpLvl['Alpha']))
-    localStorage.setItem("mintUpLvl['Theta']",JSON.stringify(mintUpLvl['Theta']))
-    localStorage.setItem("mintUpCost['Beta']",JSON.stringify(mintUpCost['Beta']))
-    localStorage.setItem("mintUpCost['Alpha']",JSON.stringify(mintUpCost['Alpha']))
-    localStorage.setItem("mintUpCost['Theta']",JSON.stringify(mintUpCost['Theta']))
+        localStorage.setItem("jsstatSesh",JSON.stringify(jsstatSesh))
+        localStorage.setItem("sampleSeshCount",JSON.stringify(sampleSeshCount))
+        localStorage.setItem("jsstatMins",JSON.stringify(jsstatMins))
+        localStorage.setItem("power['Beta']",JSON.stringify(power['Beta']))
+        localStorage.setItem("power['Alpha']",JSON.stringify(power['Alpha']))
+        localStorage.setItem("power['Theta']",JSON.stringify(power['Theta']))
+        localStorage.setItem("jsCrankNum",JSON.stringify(jsCrankNum))
+        localStorage.setItem("jsCranksComplete",JSON.stringify(jsCranksComplete))
+        localStorage.setItem("coins['Beta']",JSON.stringify(coins['Beta']))
+        localStorage.setItem("coins['Alpha']",JSON.stringify(coins['Alpha']))
+        localStorage.setItem("coins['Theta']",JSON.stringify(coins['Theta']))
+        localStorage.setItem("cost['Beta']",JSON.stringify(cost['Beta']))
+        localStorage.setItem("cost['Alpha']",JSON.stringify(cost['Alpha']))
+        localStorage.setItem("cost['Theta']",JSON.stringify(cost['Theta']))
+        localStorage.setItem("boostLvl['Beta']",JSON.stringify(boostLvl['Beta']))
+        localStorage.setItem("boostLvl['Alpha']",JSON.stringify(boostLvl['Alpha']))
+        localStorage.setItem("boostLvl['Theta']",JSON.stringify(boostLvl['Theta']))
+        localStorage.setItem("batCapLvl['Beta']",JSON.stringify(batCapLvl['Beta']))
+        localStorage.setItem("batCapLvl['Alpha']",JSON.stringify(batCapLvl['Alpha']))
+        localStorage.setItem("batCapLvl['Theta']",JSON.stringify(batCapLvl['Theta']))
+        localStorage.setItem("mintBeta",JSON.stringify(mintBeta.checked))
+        localStorage.setItem("mintAlpha",JSON.stringify(mintAlpha.checked))
+        localStorage.setItem("mintTheta",JSON.stringify(mintTheta.checked))
+        localStorage.setItem("mintUpLvl['Beta']",JSON.stringify(mintUpLvl['Beta']))
+        localStorage.setItem("mintUpLvl['Alpha']",JSON.stringify(mintUpLvl['Alpha']))
+        localStorage.setItem("mintUpLvl['Theta']",JSON.stringify(mintUpLvl['Theta']))
+        localStorage.setItem("mintUpCost['Beta']",JSON.stringify(mintUpCost['Beta']))
+        localStorage.setItem("mintUpCost['Alpha']",JSON.stringify(mintUpCost['Alpha']))
+        localStorage.setItem("mintUpCost['Theta']",JSON.stringify(mintUpCost['Theta']))
 
-    localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
-    localStorage.setItem("producers",JSON.stringify(producers))
-    localStorage.setItem("progress",JSON.stringify(progress))
+        localStorage.setItem("jsuserBuildings",JSON.stringify(jsuserBuildings))
+        localStorage.setItem("producers",JSON.stringify(producers))
+        localStorage.setItem("progress",JSON.stringify(progress))
+        localStorage.setItem("cheevs",JSON.stringify(cheevs))
 
-    consoleMsg("Saved!","short")
-console.log(localStorage)
+        consoleMsg("Saved!","short")
+    } else {console.log("autosave aborted")}
+    console.log(localStorage)
 }
 
 function load() {
     jsstatSesh = JSON.parse(localStorage.getItem("jsstatSesh"))
+    sampleSeshCount = JSON.parse(localStorage.getItem("sampleSeshCount"))
     jsstatMins = JSON.parse(localStorage.getItem("jsstatMins"))
     power['Beta'] = JSON.parse(localStorage.getItem("power['Beta']"))
     power['Alpha'] = JSON.parse(localStorage.getItem("power['Alpha']"))
     power['Theta'] = JSON.parse(localStorage.getItem("power['Theta']"))
     jsCrankNum = JSON.parse(localStorage.getItem("jsCrankNum"))
+    jsCranksComplete = JSON.parse(localStorage.getItem("jsCranksComplete"))
     coins['Beta'] = JSON.parse(localStorage.getItem("coins['Beta']"))
     coins['Alpha'] = JSON.parse(localStorage.getItem("coins['Alpha']"))
     coins['Theta'] = JSON.parse(localStorage.getItem("coins['Theta']"))
@@ -793,7 +868,7 @@ function load() {
     mintUpCost['Theta'] = JSON.parse(localStorage.getItem("mintUpCost['Theta']"))
     
     getstatSesh.innerHTML = jsstatSesh
-    document.querySelector('.seshLen').innerHTML = recordedSessions.length - jsstatSesh
+    document.querySelector('.seshLen').innerHTML = recordedSessions.length - sampleSeshCount
     getstatMins.innerHTML = jsstatMins
 
     let n=0
@@ -838,7 +913,15 @@ function load() {
     let loadprogress = JSON.parse(localStorage.getItem("progress"))
     for (const key in loadprogress) {
         progress[key] = loadprogress[key]
-        if (progress[key].completed === true) {dispGameElem(progress[key].elem,progress[key].dispStyle)}
+        if (progress[key].completed === true) {
+            dispGameElem(progress[key].elem,progress[key].dispStyle)
+        }
+    }
+    dispHints()
+
+    let loadcheevs = JSON.parse(localStorage.getItem("cheevs"))
+    for (const key in loadcheevs) {
+        cheevs[key] = loadcheevs[key]
     }
 
     batCap["Beta"] = 10 + (batCapLvl["Beta"]*baseBatCapBoost)
@@ -858,43 +941,48 @@ function load() {
 }
 
 function defaultGame() {
-    localStorage.clear()
+        localStorage.clear()
 
-    localStorage.setItem("jsstatSesh",JSON.stringify(0))
-    localStorage.setItem("jsstatMins",JSON.stringify(0))
-    localStorage.setItem("power['Beta']",JSON.stringify(0))
-    localStorage.setItem("power['Alpha']",JSON.stringify(0))
-    localStorage.setItem("power['Theta']",JSON.stringify(0))
-    localStorage.setItem("jsCrankNum",JSON.stringify(0))
-    localStorage.setItem("coins['Beta']",JSON.stringify(17000))
-    localStorage.setItem("coins['Alpha']",JSON.stringify(7000))
-    localStorage.setItem("coins['Theta']",JSON.stringify(7000))
-    localStorage.setItem("cost['Beta']",JSON.stringify(5000))
-    localStorage.setItem("cost['Alpha']",JSON.stringify(5000))
-    localStorage.setItem("cost['Theta']",JSON.stringify(5000))
-    localStorage.setItem("boostLvl['Beta']",JSON.stringify(0))
-    localStorage.setItem("boostLvl['Alpha']",JSON.stringify(0))
-    localStorage.setItem("boostLvl['Theta']",JSON.stringify(0))
-    localStorage.setItem("batCapLvl['Beta']",JSON.stringify(0))
-    localStorage.setItem("batCapLvl['Alpha']",JSON.stringify(0))
-    localStorage.setItem("batCapLvl['Theta']",JSON.stringify(0))
-    localStorage.setItem("mintBeta",JSON.stringify(false))
-    localStorage.setItem("mintAlpha",JSON.stringify(false))
-    localStorage.setItem("mintTheta",JSON.stringify(false))
-    localStorage.setItem("mintUpLvlBeta",JSON.stringify(1))
-    localStorage.setItem("mintUpLvlAlpha",JSON.stringify(1))
-    localStorage.setItem("mintUpLvlTheta",JSON.stringify(1))
-    localStorage.setItem("mintUpCost['Beta']",JSON.stringify(4000))
-    localStorage.setItem("mintUpCost['Alpha']",JSON.stringify(4000))
-    localStorage.setItem("mintUpCost['Theta']",JSON.stringify(4000))
-    localStorage.setItem("jsuserBuildings",JSON.stringify(userBuildings))
+        localStorage.setItem("jsstatSesh",JSON.stringify(0))
+        localStorage.setItem("sampleSeshCount",JSON.stringify(0))
+        localStorage.setItem("jsstatMins",JSON.stringify(0))
+        localStorage.setItem("power['Beta']",JSON.stringify(0))
+        localStorage.setItem("power['Alpha']",JSON.stringify(0))
+        localStorage.setItem("power['Theta']",JSON.stringify(0))
+        localStorage.setItem("jsCrankNum",JSON.stringify(0))
+        localStorage.setItem("jsCranksComplete",JSON.stringify(0))
+        localStorage.setItem("coins['Beta']",JSON.stringify(17000))
+        localStorage.setItem("coins['Alpha']",JSON.stringify(7000))
+        localStorage.setItem("coins['Theta']",JSON.stringify(7000))
+        localStorage.setItem("cost['Beta']",JSON.stringify(5000))
+        localStorage.setItem("cost['Alpha']",JSON.stringify(5000))
+        localStorage.setItem("cost['Theta']",JSON.stringify(5000))
+        localStorage.setItem("boostLvl['Beta']",JSON.stringify(0))
+        localStorage.setItem("boostLvl['Alpha']",JSON.stringify(0))
+        localStorage.setItem("boostLvl['Theta']",JSON.stringify(0))
+        localStorage.setItem("batCapLvl['Beta']",JSON.stringify(0))
+        localStorage.setItem("batCapLvl['Alpha']",JSON.stringify(0))
+        localStorage.setItem("batCapLvl['Theta']",JSON.stringify(0))
+        localStorage.setItem("mintBeta",JSON.stringify(false))
+        localStorage.setItem("mintAlpha",JSON.stringify(false))
+        localStorage.setItem("mintTheta",JSON.stringify(false))
+        localStorage.setItem("mintUpLvlBeta",JSON.stringify(1))
+        localStorage.setItem("mintUpLvlAlpha",JSON.stringify(1))
+        localStorage.setItem("mintUpLvlTheta",JSON.stringify(1))
+        localStorage.setItem("mintUpCost['Beta']",JSON.stringify(4000))
+        localStorage.setItem("mintUpCost['Alpha']",JSON.stringify(4000))
+        localStorage.setItem("mintUpCost['Theta']",JSON.stringify(4000))
+        localStorage.setItem("jsuserBuildings",JSON.stringify(userBuildings))
 
-    for (const key in progress) {
-        console.log(progress[key])
-        progress[key].completed = false
-        dispGameElem(progress[key].elem,"none")
-    }
-
+        for (const key in progress) {
+            progress[key].completed = false
+            dispGameElem(progress[key].elem,"none")
+        }
+        progress.crankedTheCrank.unlocked = true
+        progress.mindfulCranking.unlocked = true
+        progress.crankedSomeMore.unlocked = true
+        progress.crankedSomeMore2.unlocked = false
+        for (const key in cheevs) {cheevs[key].completed = false}
     console.log(localStorage)
 }
 function reset() {
@@ -959,3 +1047,4 @@ const treeNodes = [
 {x:60,y:78},
 {x:84,y:100},
 ]
+// [[[]]]

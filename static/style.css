@@ -11,6 +11,68 @@ body {
     font-style: normal;
 }
 
+
+
+.progressionBox{
+    position:fixed;
+    top:0;
+    right:0;
+    border: 1px solid black;
+    border-bottom-right-radius: 8px;
+    border-bottom-left-radius: 8px;
+    box-shadow: 0px 0px 8px #000000;
+    background-color: blanchedalmond;
+    width: 300px;
+    height: 1em;
+    padding: 4px;
+    overflow: hidden;
+}
+.progressionBox:hover{
+    height:max-content
+}
+.hints{
+    display:grid;
+    margin: 4px;
+}
+.hints div{
+    border: 2px solid black;
+    border-radius: 8px;
+    padding: 3px;
+    margin: 2px;
+}
+.cheevBox{
+    position:fixed;
+    top:15px;
+    right:25px;
+    width: 250px;
+    padding: 2px;
+    font-weight: 400;
+}
+.cheev {
+    border: 2px solid black;
+    border-radius: 8px;
+    text-align: center;
+    padding: 5px;
+    margin: 2px;
+    box-shadow: 0px 0px 8px #000000;
+    background-color: blanchedalmond;
+
+    -webkit-animation: cheev-slide-down 5s 1 linear;
+    -moz-animation: cheev-slide-down 5s 1 linear;
+    animation: cheev-slide-down 5s 1 linear;
+
+    animation-fill-mode: forwards;
+}
+
+@keyframes cheev-slide-down {
+  0%   { translate: 0 0%; opacity: .0 }
+  20%   { translate: 0 50%; opacity: .9 }
+  40%   { translate: 0 80%; opacity: 1 }
+  60%  { translate: 0 100%; opacity: 1}
+  95%  { translate: 0 100%; opacity: 1}
+  100% { translate: 0 -100%; opacity: .3}
+}
+
 .header{
     display: flex;
     font-weight: 400;
@@ -53,21 +115,6 @@ body {
     scrollbar-color: black powderblue;
     z-index: 10;
 }
-/*.stats.fadeIn{
-    -webkit-animation: fade-in 2s 1 linear;
-    -moz-animation: fade-in 2s 1 linear;
-    animation: fade-in 2s 1 linear;
-
-    animation-fill-mode: forwards;
-}
-.stats.slideRight{
-    -webkit-animation: slide-right 2s 1 linear;
-    -moz-animation: slide-right 2s 1 linear;
-    animation: slide-right 2s 1 linear;
-
-    animation-fill-mode: forwards;
-    z-index: 10;
-}*/
 .stats  div.pad{
     margin-bottom: 10px;
     margin-left: 10px;
@@ -653,13 +700,6 @@ input:checked + .mint:before {
     grid-auto-rows: 40px;
     justify-items: center;
 }
-/*.theGrid.fadeIn{
-    -webkit-animation: fade-in 2s 1 linear;
-    -moz-animation: fade-in 2s 1 linear;
-    animation: fade-in 2s 1 linear;
-
-    animation-fill-mode: forwards;
-}*/
 .theGrid div {
     &:nth-child(4n+1){
         margin-left: 30%;
@@ -790,4 +830,8 @@ input:checked + .mint:before {
   0%   { translate: 0 -50%; opacity: .3 }
   50%  { translate: 0 -15%; opacity: .9}
   100% { translate: 0%; opacity: 1}
+}
+
+.hide{
+    display: none;
 }

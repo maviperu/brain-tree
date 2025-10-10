@@ -20,6 +20,14 @@
     </section>
     <section class="game"> <!--MAIN GAME WINDOWS-->
         <div id="main" class="main">
+            <div id="cheevBox" class="cheevBox">
+
+            </div>
+            <div id="progressionBox" class="progressionBox">
+                <div>Progress hints:</div>
+                <div id="hints" class="hints"></div>
+            </div>
+            
             <!--STATS PANE-->
             <div class="holdForStats"><div class="stats slideRight">
                 <H3><u>Stats</u></H3>
@@ -58,7 +66,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pad containerSmFlex">                        
+                    <div class="pad containerSmFlex contentAlpha hide">                        
                         <strong>Alpha Power: </strong> (<span class="kJpsAlpha rate">0</span>/s)<br>
                         <span class ="destAlpha"><img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"></span><span class="powerAlpha">0</span> kJ
                         <div class="statBatCap">Capacity: <span class="batCapAlpha">10</span> kJ - <span class="batCapPercentAlpha">0</span> %
@@ -76,7 +84,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="pad containerSmFlex">
+                    <div class="pad containerSmFlex contentTheta hide">
                         <strong>Theta Power: </strong> (<span class="kJpsTheta rate">0</span>/s)<br>
                         <span class ="destTheta"><img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"></span><span class="powerTheta">0</span> kJ
                         <div class="statBatCap">Capacity: <span class="batCapTheta">10</span> kJ - <span class="batCapPercentTheta">0</span> %
@@ -106,7 +114,7 @@
                         </label>
                         <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons">
                     </div>
-                    <div class="pad mintAction">
+                    <div class="pad hide mintAction contentAlpha">
                         <span class="mintNums"><span class="mintNumAlpha">1</span>x </span>
                         <img src="./assets/AlphaWave.png" alt="Alpha" class="statsIcons">
                         <label class="switch">
@@ -115,7 +123,7 @@
                         </label>
                         <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons">
                     </div>
-                    <div class="pad mintAction">
+                    <div class="pad mintAction contentTheta hide">
                         <span class="mintNums"><span class="mintNumTheta">1</span>x </span>
                         <img src="./assets/ThetaWave.png" alt="Theta" class="statsIcons">
                         <label class="switch">
@@ -131,11 +139,11 @@
                         <strong>Beta Coins: </strong> (<span class="coinspsBeta rate">0.0</span>/s)<br>
                         <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">17000</span>
                     </div>
-                    <div class="pad containerSmFlex">                        
+                    <div class="pad containerSmFlex contentAlpha hide">                        
                         <strong>Alpha Coins: </strong> (<span class="coinspsAlpha rate">0.0</span>/s)<br>
                         <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">7000</span>
                     </div>
-                    <div class="pad containerSmFlex">
+                    <div class="pad containerSmFlex contentTheta hide">
                         <strong>Theta Coins: </strong> (<span class="coinspsTheta rate">0.0</span>/s)<br>
                         <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">7000</span>
                     </div>
@@ -210,7 +218,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="leaf Alpha upgradeHov" onclick="buyLeaf('Alpha')" onmouseover="upgradeInfo('leaf','Alpha')">
+                            <div class="leaf Alpha upgradeHov contentAlpha hide" onclick="buyLeaf('Alpha')" onmouseover="upgradeInfo('leaf','Alpha')">
                                 <img src="./assets/AlphaLeaf.png" alt="Alpha" class="leafIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
@@ -220,7 +228,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="leaf Theta upgradeHov" onclick="buyLeaf('Theta')" onmouseover="upgradeInfo('leaf','Theta')">
+                            <div class="leaf Theta upgradeHov contentTheta hide" onclick="buyLeaf('Theta')" onmouseover="upgradeInfo('leaf','Theta')">
                                 <img src="./assets/ThetaLeaf.png" alt="Theta" class="leafIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
@@ -247,7 +255,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="batCap Alpha upgradeHov" onclick="buyBattery('Alpha')" onmouseover="upgradeInfo('batCap','Alpha')">
+                            <div class="batCap Alpha upgradeHov contentAlpha hide" onclick="buyBattery('Alpha')" onmouseover="upgradeInfo('batCap','Alpha')">
                                 <img src="./assets/AlphaBattery.png" alt="Alpha" class="batIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
@@ -257,7 +265,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="batCap Theta upgradeHov" onclick="buyBattery('Theta')" onmouseover="upgradeInfo('batCap','Theta')">
+                            <div class="batCap Theta upgradeHov contentTheta hide" onclick="buyBattery('Theta')" onmouseover="upgradeInfo('batCap','Theta')">
                                 <img src="./assets/ThetaBattery.png" alt="Theta" class="batIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
@@ -284,7 +292,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mintUp Alpha upgradeHov" onclick="buyMint('Alpha')" onmouseover="upgradeInfo('mintUp','Alpha')">
+                            <div class="mintUp Alpha upgradeHov contentAlpha hide" onclick="buyMint('Alpha')" onmouseover="upgradeInfo('mintUp','Alpha')">
                                 <img src="./assets/AlphaMint.png" alt="Alpha" class="mintIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
@@ -294,7 +302,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="mintUp Theta upgradeHov" onclick="buyMint('Theta')" onmouseover="upgradeInfo('mintUp','Theta')">
+                            <div class="mintUp Theta upgradeHov contentTheta hide" onclick="buyMint('Theta')" onmouseover="upgradeInfo('mintUp','Theta')">
                                 <img src="./assets/ThetaMint.png" alt="Theta" class="mintIcons" draggable="false">
                                 <div class="upgradeTooltip">
                                     <div class="leafTip">
@@ -310,11 +318,8 @@
                 <!--BUILDING ASSETS ON DISPLAY-->
                 <div class="theGrid fadeIn" id="theGrid">
                     <div class="buildHov tooltipHover"><img  src="./assets/building-1House.png"><span class="buildTooltip">House</span></div>
-                    <div class="buildHov tooltipHover"><img  src="./assets/building-BetaBattery.png"><span class="buildTooltip">Battery</span></div>
                     <div class="buildHov tooltipHover"><img  src="./assets/building-AlphaMint.png"><span class="buildTooltip">Mint</span></div>
                     <div class="buildHov tooltipHover"><img  src="./assets/building-BetaMint.png"><span class="buildTooltip">Mint</span></div>
-                    <div class="buildHov tooltipHover"><img  src="./assets/building-AlphaBattery.png"><span class="buildTooltip">Battery</span></div>
-                    <div class="buildHov tooltipHover"><img  src="./assets/building-ThetaBattery.png"><span class="buildTooltip">Battery</span></div>
                     <div class="buildHov tooltipHover"><img  src="./assets/building-ThetaMint.png"><span class="buildTooltip">Mint</span></div>
                     
                 </div>
