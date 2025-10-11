@@ -1,7 +1,7 @@
 # brain-tree
 An incremental-style web game powered by your brain waves!
 
-<img width="1485" height="840" alt="image" src="https://github.com/user-attachments/assets/6cd50ac5-5f21-4277-90a5-ec86989f1fd1" />
+<img width="1394" height="840" alt="image" src="https://github.com/user-attachments/assets/074f517c-597e-45a2-9c39-a9f6c9a98903" />
 
 Basic loop:
 1) Generate Energy either through recording and processing brainwaves (EEG headset required!), or manually by turning a crank (Little clickable object in the "Batteries" pane. Then, store Energy as Power in your Batteries
@@ -11,8 +11,16 @@ Basic loop:
 
 More features and flash to come
 ---------------------------
+Version 0.029 || 2025/10/11
+---------------------------
+* All of the basic "manual" brainwave generating buttons exist in the game now, so players who do not have EEG headsets can play at least to some extent
+* New "Progress" feature currently exists to serve as a quick tutorial revealing sections of the game screen one at a time and provides simple hints in a drop-down menu for what to do next
+* New "Achievement" feature groundwork in place. This will supplement the "Progress" feature and add little goals / targets that may not be directly necessary for advancing the game
+
+---------------------------
 Version 0.027 || 2025/10/07 - Cloud Computing & New User Experience
 ---------------------------
+<img width="1485" height="840" alt="image" src="https://github.com/user-attachments/assets/6cd50ac5-5f21-4277-90a5-ec86989f1fd1" />
 * Created a short "New User Experience" (NUE) which reveals features over time. This will develop over time, and probably become the backbone of unlocking other features.
 * Began adding additional early-game / non-EEG-based features
 * Cleaned up and generalized a lot of JS code in prep for expanding buildings/upgrades
