@@ -97,10 +97,10 @@ body {
 }
 
 .holdForStats{
-    width: 248px;
+    width: 272px;
 }
 .stats{
-    width: 224px;
+    width: 248px;
     height: 90vh;
     /*display: block; */
     display: none;
@@ -109,34 +109,35 @@ body {
     justify-items: left;
     padding: 2px;
     margin-right: 10px;
-    overflow-x: visible;
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: black powderblue;
-    z-index: 10;
+    overflow: hidden;
 }
-.stats  div.pad{
+.paneScrollablePortion  div.pad{
     margin-bottom: 10px;
     margin-left: 10px;
 }
-
+.paneScrollablePortion  div.topPad{
+    margin-top: 5px;
+}
+.util-buttons{
+    height: 3em;
+}
 .util-button {
     border-radius: 10px;
 }
-
 .util-button.del{
-    margin-left: 18px;
-    margin-top: 8px;
+    margin-left: 15px;
+    margin-top: 4px;
     border-radius: 0px;
     background-color: rgb(226, 193, 193);
     color: darkred;
 }
 
 .stats-Container{
-    width: 190px;
+    width: 210px;
     border: 1px solid black;
     border-radius: 10px;
     padding: 5px;
+    margin-right: 5px;
 }
 
 .loader{
@@ -200,7 +201,7 @@ body {
     overflow:hidden;
     color:darkred; font-weight: bolder;
 }
-.homesteadScrollable{
+.paneScrollablePortion{
     height: calc(90vh - 7em);
     border-top: 1px solid black;
     overflow-x: hidden;
@@ -245,9 +246,24 @@ body {
     margin: 2px 2px;
     padding: 1px;
     grid-template-columns: 58px 14px;
+    min-height: 48px;
     align-items: center;
     text-align: center;
 }
+.laborBin.Beta {
+    background-color: #f6ccaa;
+}
+.laborBin.Alpha {
+    /*display: grid;*/
+    display: none;
+    background-color: #e7d98b;
+}
+.laborBin.Theta {
+    /*display: grid;*/    
+    display: none;
+    background-color: #c5db85;
+}
+
 .crank {
     height: 48px;
     width: 48px;
@@ -274,9 +290,6 @@ body {
 .crankIndicatorLight.active {
     background-color: red;
 }
-.laborBin.Alpha{
-    display: none;
-}
 .mindCircle {
     height: 48px;
     width: 48px;
@@ -285,12 +298,19 @@ body {
     border-radius: 24px;
     align-content: center;
 }
-.drainBar {
+.mindBar {
     height: 0%;
     min-width: 10px;
     background-color: #f7770a;
 }
-
+.meditateCircle {
+    height: 24px;
+    width: 24px;
+    background-color: #92bc1e;
+    border: 1px solid #3d4e0d;
+    border-radius: 12px;
+    align-content: center;
+}
 
 .treeIcon{
     width: 256px;
