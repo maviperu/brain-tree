@@ -14,7 +14,8 @@
         <div>Thanks for playing! Bugs? Feedback? <a href="mailto:gnomeofdoom314@gmail.com">Email us!</a></div>
     </section> 
     <section class ="menu">
-        <h1>Hello World</h1>
+        <h1>Welcome to Brain Tree</h1>
+        <p style="font-weight: 400;">The Incremental game powered by your brain waves!</p>
         <button class="util-button" onclick="dispGame('new')">New Game</button>
         <button class="util-button" onclick="dispGame('load')">Load Game</button>
     </section>
@@ -31,121 +32,125 @@
             <!--STATS PANE-->
             <div class="holdForStats"><div class="stats slideRight">
                 <H3><u>Stats</u></H3>
-                <div class="pad util-buttons">
+                <div class="pad util-buttons" style="padding: 0px">
                     <button class="util-button" onclick="save()">
                         Save
                     </button>
-                    <button class="util-button" onclick="load()">
-                        Load
+                    <button class="util-button" onclick="dispGame('menu')">
+                        Main Menu
                     </button>
                     <button class="util-button del" onclick="reset()">
                         Delete File
                     </button>
                 </div>
-                <div class="pad containerSmFlex">
-                    <strong>Sessions Logged: </strong><span class="statSesh">0</span><br>
-                    <strong>Brain Time: </strong><span class="statMins">0</span> minutes
-                </div>
-                <div class="pad stats-Container">
-                    <p><u>Energy</u><span class="infoHov"><img src="./assets/info.png" class="statsIconsSm"><span class="tooltip">The brain produces several different waves within specific frequency bands, and each serves a particular purpose in modulating brain activity. Your Brain Tree collects the energy output of three of these waves, much like a regular tree collects the sun's energy.</span></span></p>
+                <div class="paneScrollablePortion">
                     <div class="pad containerSmFlex">
-                        <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0</span>/s)<br>
-                        <span class ="destBeta"><img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"></span><span class="powerBeta">0</span> kJ
-                        <div class="statBatCap">Capacity: <span class="batCapBeta">10</span> kJ - <span class="batCapPercentBeta">0</span> %
-                            <div class="battery Beta">
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
-                                <div class="batCapIndicatorLight Beta"></div>
+                        <div class="topPad">
+                            <strong>Sessions Logged: </strong><span class="statSesh">0</span><br>
+                            <strong>Brain Time: </strong><span class="statMins">0</span> minutes
+                        </div>
+                    </div>
+                    <div class="pad stats-Container">
+                        <p><u>Energy</u><span class="infoHov"><img src="./assets/info.png" class="statsIconsSm"><span class="tooltip">The brain produces several different waves within specific frequency bands, and each serves a particular purpose in modulating brain activity. Your Brain Tree collects the energy output of three of these waves, much like a regular tree collects the sun's energy.</span></span></p>
+                        <div class="pad containerSmFlex">
+                            <strong>Beta Power: </strong> (<span class="kJpsBeta rate">0</span>/s)<br>
+                            <span class ="destBeta"><img src="./assets/BetaBolt.png" alt="Beta" class="statsIcons"></span><span class="powerBeta">0</span> kJ
+                            <div class="statBatCap">Capacity: <span class="batCapBeta">10</span> kJ - <span class="batCapPercentBeta">0</span> %
+                                <div class="battery Beta">
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                    <div class="batCapIndicatorLight Beta"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pad containerSmFlex contentAlpha hide">                        
+                            <strong>Alpha Power: </strong> (<span class="kJpsAlpha rate">0</span>/s)<br>
+                            <span class ="destAlpha"><img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"></span><span class="powerAlpha">0</span> kJ
+                            <div class="statBatCap">Capacity: <span class="batCapAlpha">10</span> kJ - <span class="batCapPercentAlpha">0</span> %
+                                <div class="battery Alpha">
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                    <div class="batCapIndicatorLight Alpha"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pad containerSmFlex contentTheta hide">
+                            <strong>Theta Power: </strong> (<span class="kJpsTheta rate">0</span>/s)<br>
+                            <span class ="destTheta"><img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"></span><span class="powerTheta">0</span> kJ
+                            <div class="statBatCap">Capacity: <span class="batCapTheta">10</span> kJ - <span class="batCapPercentTheta">0</span> %
+                                <div class="battery Theta">
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                    <div class="batCapIndicatorLight Theta"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="pad containerSmFlex contentAlpha hide">                        
-                        <strong>Alpha Power: </strong> (<span class="kJpsAlpha rate">0</span>/s)<br>
-                        <span class ="destAlpha"><img src="./assets/AlphaBolt.png" alt="Alpha" class="statsIcons"></span><span class="powerAlpha">0</span> kJ
-                        <div class="statBatCap">Capacity: <span class="batCapAlpha">10</span> kJ - <span class="batCapPercentAlpha">0</span> %
-                            <div class="battery Alpha">
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                                <div class="batCapIndicatorLight Alpha"></div>
-                            </div>
+                    <div class="pad stats-Container">
+                        <p><u>Mint</u></p>
+                        <div class="pad mintAction">
+                            <span class="mintNums"><span class="mintNumBeta">1</span>x </span>
+                            <img src="./assets/BetaWave.png" alt="Beta" class="statsIcons">
+                            <label class="switch">
+                                <input type="checkbox" id="mintBeta">
+                                <span class="mint Beta"></span>
+                            </label>
+                            <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons">
+                        </div>
+                        <div class="pad hide mintAction contentAlpha">
+                            <span class="mintNums"><span class="mintNumAlpha">1</span>x </span>
+                            <img src="./assets/AlphaWave.png" alt="Alpha" class="statsIcons">
+                            <label class="switch">
+                                <input type="checkbox" id="mintAlpha">
+                                <span class="mint Alpha"></span>
+                            </label>
+                            <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons">
+                        </div>
+                        <div class="pad mintAction contentTheta hide">
+                            <span class="mintNums"><span class="mintNumTheta">1</span>x </span>
+                            <img src="./assets/ThetaWave.png" alt="Theta" class="statsIcons">
+                            <label class="switch">
+                                <input type="checkbox" id="mintTheta">
+                                <span class="mint Theta"></span>
+                            </label>
+                            <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons">
                         </div>
                     </div>
-                    <div class="pad containerSmFlex contentTheta hide">
-                        <strong>Theta Power: </strong> (<span class="kJpsTheta rate">0</span>/s)<br>
-                        <span class ="destTheta"><img src="./assets/ThetaBolt.png" alt="Theta" class="statsIcons"></span><span class="powerTheta">0</span> kJ
-                        <div class="statBatCap">Capacity: <span class="batCapTheta">10</span> kJ - <span class="batCapPercentTheta">0</span> %
-                            <div class="battery Theta">
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                                <div class="batCapIndicatorLight Theta"></div>
-                            </div>
+                    <div class="pad stats-Container">
+                        <p><u>Coins</u></p>
+                        <div class="pad containerSmFlex">
+                            <strong>Beta Coins: </strong> (<span class="coinspsBeta rate">0.0</span>/s)<br>
+                            <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">17000</span>
                         </div>
-                    </div>
-                </div>
-                <div class="pad stats-Container">
-                    <p><u>Mint</u></p>
-                    <div class="pad mintAction">
-                        <span class="mintNums"><span class="mintNumBeta">1</span>x </span>
-                        <img src="./assets/BetaWave.png" alt="Beta" class="statsIcons">
-                        <label class="switch">
-                            <input type="checkbox" id="mintBeta">
-                            <span class="mint Beta"></span>
-                        </label>
-                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons">
-                    </div>
-                    <div class="pad hide mintAction contentAlpha">
-                        <span class="mintNums"><span class="mintNumAlpha">1</span>x </span>
-                        <img src="./assets/AlphaWave.png" alt="Alpha" class="statsIcons">
-                        <label class="switch">
-                            <input type="checkbox" id="mintAlpha">
-                            <span class="mint Alpha"></span>
-                        </label>
-                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons">
-                    </div>
-                    <div class="pad mintAction contentTheta hide">
-                        <span class="mintNums"><span class="mintNumTheta">1</span>x </span>
-                        <img src="./assets/ThetaWave.png" alt="Theta" class="statsIcons">
-                        <label class="switch">
-                            <input type="checkbox" id="mintTheta">
-                            <span class="mint Theta"></span>
-                        </label>
-                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons">
-                    </div>
-                </div>
-                <div class="pad stats-Container">
-                    <p><u>Coins</u></p>
-                    <div class="pad containerSmFlex">
-                        <strong>Beta Coins: </strong> (<span class="coinspsBeta rate">0.0</span>/s)<br>
-                        <img src="./assets/BetaCoin.png" alt="Beta" class="statsIcons"> <span class="coinsBeta">17000</span>
-                    </div>
-                    <div class="pad containerSmFlex contentAlpha hide">                        
-                        <strong>Alpha Coins: </strong> (<span class="coinspsAlpha rate">0.0</span>/s)<br>
-                        <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">7000</span>
-                    </div>
-                    <div class="pad containerSmFlex contentTheta hide">
-                        <strong>Theta Coins: </strong> (<span class="coinspsTheta rate">0.0</span>/s)<br>
-                        <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">7000</span>
+                        <div class="pad containerSmFlex contentAlpha hide">                        
+                            <strong>Alpha Coins: </strong> (<span class="coinspsAlpha rate">0.0</span>/s)<br>
+                            <img src="./assets/AlphaCoin.png" alt="Alpha" class="statsIcons"> <span class="coinsAlpha">7000</span>
+                        </div>
+                        <div class="pad containerSmFlex contentTheta hide">
+                            <strong>Theta Coins: </strong> (<span class="coinspsTheta rate">0.0</span>/s)<br>
+                            <img src="./assets/ThetaCoin.png" alt="Theta" class="statsIcons"> <span class="coinsTheta">7000</span>
+                        </div>
                     </div>
                 </div>
             </div></div>
@@ -154,8 +159,8 @@
                 <H3><u>Homestead</u></H3>
                 <div class="console">
                 </div>
-                <div class="homesteadScrollable">
-                    <div class="laborBin"> <!-- Beta Crank -->
+                <div class="paneScrollablePortion">
+                    <div class="laborBin Beta"> <!-- Beta Crank -->
                         <h5>Manual Labor: create a tiny amount of Beta energy by turning this crank!</h5>
                         <div class="laborBinLvl2">
                             <img src="./assets/crankBeta.png" class="crank" id="crankbutton" onclick="rotateCrank(event)">
@@ -175,7 +180,15 @@
                             <div class="mindCircle" onclick="countdown()">
                                 :<span class="countdownTimer">00</span>
                             </div>
-                            <div id="drainBar" class="drainBar"></div>
+                            <div id="mindBar" class="mindBar"></div>
+                        </div>
+                    </div>
+                    <div class="laborBin Theta"> <!-- Meditate -->
+                        <h5>Meditate: Click and hold for Theta waves. Stay a while...</h5>
+                        <div class="laborBinLvl2">
+                            <div id="meditateCircle" class="meditateCircle" onmousedown="meditate(event)">
+                                <span class="meditateMult">1</span>
+                            </div>
                         </div>
                     </div>
                     <div class="treeButtonContainer tooltipHover slideRight" onmouseover="nextSeshInfo()"> <!-- Brain Tree -->

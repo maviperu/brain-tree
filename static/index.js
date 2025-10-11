@@ -98,6 +98,7 @@ const progress = {
     crankedSomeMore2: {completed:false,unlocked:false,hint:"Click the crank lots of times!",elem:".uploadBin",dispStyle:"grid"},
     usedTheTree: {completed:false,unlocked:false,hint:"Harvest some Brain Power",elem:".buildings",dispStyle:"grid"},
     boughtABat: {completed:false,unlocked:false,hint:"Buy a Battery",elem:".theGrid",dispStyle:"grid"},
+    meditation: {completed:false,unlocked:false,hint:"Complete the tutorial",elem:".laborBin.Theta",dispStyle:"grid"},
 }
 
 const cheevs = {
@@ -134,16 +135,23 @@ function dispHints() {
 dispHints()
 
 function dispGame(val) {
-    dispGameElem(".main","flex")
-    dispGameElem(".menu","none")
-    consoleMsg ("Hello There!","short")
-    if (val === "load") {load()}
-    if (val === "new") {defaultGame()}
+    if (val === "menu") {
+        save()
+        dispGameElem(".main","none")
+        dispGameElem(".menu","block")
+    } else {
+        dispGameElem(".main","flex")
+        dispGameElem(".menu","none")
+        consoleMsg ("Hello There!","short")
+        if (val === "load") {load()}
+        if (val === "new") {defaultGame()}
+    }
 }
 function dispGameElem(elem, dispStyle) {
     let loadWindow = document.querySelector(`${elem}`)
     loadWindow.style.display = `${dispStyle}`
     if (elem === ".laborBin.Alpha" && dispStyle != "none") {dispWaveElems(".contentAlpha")}
+    if (elem === ".laborBin.Theta" && dispStyle != "none") {dispWaveElems(".contentTheta")}
 }
 function dispWaveElems(elem) {
     document.querySelectorAll(`${elem}`).forEach(function(i) {
@@ -151,16 +159,18 @@ function dispWaveElems(elem) {
     })
 }
 function skipTut() { // [[[]]]can skip the homestead console stuff too
-    for (const key in progress) {
-        progress[key].completed = true
-        progress[key].unlocked = false
-        dispGameElem(progress[key].elem,progress[key].dispStyle)
-    }
-    jsCranksComplete = 10
-    cheev("firstClick")
-    cheev("firstHarvest")
-    cheev("clearedTheTut")
-    dispHints()
+    if(document.querySelector(".main").style.display === "flex") {
+        for (const key in progress) {
+            progress[key].completed = true
+            progress[key].unlocked = false
+            dispGameElem(progress[key].elem,progress[key].dispStyle)
+        }
+        jsCranksComplete = 10
+        cheev("firstClick")
+        cheev("firstHarvest")
+        cheev("clearedTheTut")
+        dispHints()
+    } else {console.log("not on main screen")}
 }
 
 function consoleMsg (i,decay) {
@@ -205,6 +215,7 @@ function logSessionFile(event) {
             consoleMsg("Ooh, upgrades! Now we're talking, let's get a battery!","long")
             if (cheevs.firstHarvest.completed === false) {cheev("firstHarvest")}
             progress.boughtABat.unlocked = true
+            progress.meditation.unlocked = true
             dispHints()
         }
         let harvestBeta = sesh.betaPower*(1+(boostLvl["Beta"]*baseLeafProdBoost/100))*1000
@@ -285,6 +296,7 @@ async function uploadFile(event) {
                 consoleMsg("Ooh, upgrades! Now we're talking, let's get a battery!","long")
                 if (cheevs.firstHarvest.completed === false) {cheev("firstHarvest")}
                 progress.boughtABat.unlocked = true
+                progress.meditation.unlocked = true
                 dispHints()
             }
         }
@@ -412,6 +424,13 @@ function incPower(be,al,th) {
     batCapPercentIndicator("Theta")
 }
 
+/*
+---------------
+MANUAL ENERGY BUTTONS
+---------------
+*/
+
+// Manual Beta Energy Functions
 let jsCrankNum = 0
 let jsCranksComplete = 0
 let cranking = 0
@@ -493,11 +512,12 @@ function rotateCrank(event) {
 
     }
 }
+// Manual Alpha Energy Functions
 let counting = 0
 function countdown() {
     if (counting == 0) {
-        const drainBar = document.getElementById("drainBar")
-        drainBar.animate([
+        const mindBar = document.getElementById("mindBar")
+        mindBar.animate([
             {height:`100%`},
             {height:`0%`},
         ],{
@@ -517,6 +537,43 @@ function countdown() {
         },1000)
     }
 }
+// Manual Theta Energy Functions
+let countup = 0
+let medInt
+const meditateCircle = document.getElementById("meditateCircle")
+function meditate(event) {
+    document.querySelector(".meditateMult").innerHTML = "Breathe..."
+    meditateCircle.animate([
+            {height:`24px`,width:`24px`,filter:'brightness(100%)'},
+            {height:`40px`,width:`40px`,filter:'brightness(140%)'},
+        ],{
+            duration: 5000,
+            direction: 'alternate',
+            easing: 'ease-in-out',
+            iterations: Infinity,
+        })
+    medInt = setInterval(meditateEnergy, 1000, event);
+}
+document.addEventListener("mouseup",() => {
+    document.querySelector(".meditateMult").innerHTML = ""    
+    clearInterval(medInt)
+    if (meditateCircle.getAnimations()[0] != undefined) {meditateCircle.getAnimations()[0].cancel()}
+    countup = 0
+});
+function meditateEnergy(event) {
+    let mult = 0
+    countup += 1
+    console.log(countup)
+    if (countup >= 1) {incPower(0,0,1); makeBolts(0,0,1); mult = 1}
+    if (countup >= 4) {incPower(0,0,1); makeBolts(0,0,1); mult = 2}
+    if (countup >= 9) {incPower(0,0,1); makeBolts(0,0,1); mult = 3}
+    if (countup >= 17) {incPower(0,0,1); makeBolts(0,0,1); mult = 4}
+    if (countup == 30) {incPower(0,0,7); makeBolts(0,0,7);; mult = 'Great!'; countup = 0}
+    document.querySelector(".meditateMult").innerHTML = `x${mult}`
+    moveBolts (event)
+    bolts.length = 0
+}
+
 
 //Functions for adding art assets to the game after purchases
 function makeLeaf(type) {
@@ -639,7 +696,9 @@ function buyBattery(wave) { //Function for buying Battery Upgrades
     if (progress.boughtABat.completed === false) {
         progress.boughtABat.completed = true
         progress.boughtABat.unlocked = false
+        progress.meditation.unlocked = false
         dispGameElem(progress.boughtABat.elem,progress.boughtABat.dispStyle)
+        dispGameElem(progress.meditation.elem,progress.meditation.dispStyle)
         consoleMsg("Some extra breathing room for all this power","long")
         if (cheevs.clearedTheTut.completed === false) {cheev("clearedTheTut")}
         dispHints()
@@ -999,6 +1058,7 @@ window.uploadFile = uploadFile
 window.nextSeshInfo = nextSeshInfo
 window.rotateCrank = rotateCrank
 window.countdown = countdown
+window.meditate = meditate
 window.upgradeInfo = upgradeInfo
 window.buyLeaf = buyLeaf
 window.buyBattery = buyBattery
